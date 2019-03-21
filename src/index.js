@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
 
-
+////////////////////////////////////////////////////////////////////////////////
+const API_SIGNIN = 'http://messenger.westeurope.cloudapp.azure.com/api/authentication/signin'
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -15,20 +16,58 @@ class SignInPage extends Component {
     super(props);
 
     this.state = {
-      email : "",
-      password: "",
-      remember: true,
-      requestingServer: false
+      email : "",      // UI element
+      password: "",    // UI element
+      remember: true,  // UI element
+      requestingServer: false,  // page status
+      warning: null             // warning message to display
     };
 
-    this.onSignIn = this.onSignIn.bind(this);
+    this.onSignIn          = this.onSignIn.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.signInSuccess     = this.signInSuccess.bind(this);
+    this.setAlert          = this.setAlert.bind(this);
+    this.onRegister        = this.onRegister.bind(this);
+  }
+
+  setAlert(message) {
+    this.setState({ requestingServer: false, warning: message });
+  }
+
+  signInSuccess (json) {
+    this.props.callback("stop, token: " + json.token);
+  }
+
+  onRegister (event) {
+    event.preventDefault();
+    this.props.callback("register");
+  }
+
+
+  fetchStatusCheck (response){
+    switch (response.status) {
+      case 200:
+        return (response.json())
+      case 400:
+        return Promise.reject(response.text())
+      default:
+        return Promise.reject(Promise.resolve('Server reply: '+ response.status + '; ' + response.statusText))
+    }
   }
 
   onSignIn(event) {
-    //this.props.callback("stop");
-    this.setState({ requestingServer: true });
     event.preventDefault();
+    // переключаемся в состояние ожидания ответа сервера
+    this.setState({ requestingServer: true, warning: null });
+
+    fetch(API_SIGNIN, {
+        method: 'post',
+        body: JSON.stringify({login: this.state.email, password: this.state.password}),
+        headers: { 'content-type': 'application/json' }
+    })
+      .then(this.fetchStatusCheck)
+      .then(this.signInSuccess)
+      .catch(err => err.then(this.setAlert))
   }
 
   handleInputChange(event) {
@@ -48,8 +87,11 @@ class SignInPage extends Component {
   render() {
     return (
       <form className="form-signin text-center" onSubmit={this.onSignIn}>
-      	<h1 className="h3 mb-3 font-weight-normal">Please sign in</h1>
-      	<label htmlFor="inputEmail" className="sr-only">Email address</label>
+        <h3> Please sign in </h3>
+        <p> Or <a href="" onClick={this.onRegister}>register here</a>, if you have not yet. </p>
+      	<label htmlFor="inputEmail" className="sr-only">
+          Email address
+        </label>
       	<input type="email" id="inputEmail" className="form-control" placeholder="Email address" value={this.state.email} onChange={this.handleInputChange} required autoFocus />
       	<label htmlFor="inputPassword" className="sr-only">Password</label>
       	<input type="password" id="inputPassword" className="form-control" placeholder="Password" value={this.state.password} onChange={this.handleInputChange} required />
@@ -59,10 +101,15 @@ class SignInPage extends Component {
       		</label>
       	</div>
          { this.state.requestingServer === true ?
-           <button className="btn btn-lg btn-primary btn-block disabled">Signing in...</button> : 
+           <button className="btn btn-lg btn-primary btn-block disabled">Signing in...</button> :
            <button className="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
          }
-      	<p className="mt-5 mb-3 text-muted" style={{width: 330}}>&copy; Andrey Isaev 2017-2019</p>
+         { this.state.warning === null ||
+           <div className="alert alert-danger" role="alert">{this.state.warning}</div>
+         }
+      	<p className="mt-5 mb-3 text-muted" style={{width: 330}}>
+          &copy; Andrey Isaev, 2019
+        </p>
       </form>
     );
   }
