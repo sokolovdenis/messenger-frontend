@@ -108,8 +108,8 @@ class SignInPage extends Component {
           }
 
           { this.state.mode === 'signin' ?
-            <p> Or <a href="" onClick={this.linkRegister}>register</a>, if you have not yet. </p> :
-            <p> Already registered? <a href="" onClick={this.linkSignIn}>Sign in</a>. </p>
+            <p> Or <a href="/#" onClick={this.linkRegister}>register</a>, if you have not yet. </p> :
+            <p> Already registered? <a href="/#" onClick={this.linkSignIn}>Sign in</a>. </p>
           }
 
           {/* -----------------   поле User Name ----------------------*/}
