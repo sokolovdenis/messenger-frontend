@@ -97,75 +97,77 @@ class SignInPage extends Component {
 
   render() {
     return (
-      <form className="form-signin text-center" onSubmit={this.onButton}>
+      <div className="center-page">
+        <form className="form-signin text-center" onSubmit={this.onButton}>
 
-        {/* -----------------   Приветсвие ----------------------*/}
+          {/* -----------------   Приветсвие ----------------------*/}
 
-        { this.state.mode === 'signin' ?
-          <h3> Please sign in </h3> :
-          <h3> Please register </h3>
-        }
+          { this.state.mode === 'signin' ?
+            <h3> Please sign in </h3> :
+            <h3> Please register </h3>
+          }
 
-        { this.state.mode === 'signin' ?
-          <p> Or <a href="" onClick={this.linkRegister}>register</a>, if you have not yet. </p> :
-          <p> Already registered? <a href="" onClick={this.linkSignIn}>Sign in</a>. </p>
-        }
+          { this.state.mode === 'signin' ?
+            <p> Or <a href="" onClick={this.linkRegister}>register</a>, if you have not yet. </p> :
+            <p> Already registered? <a href="" onClick={this.linkSignIn}>Sign in</a>. </p>
+          }
 
-        {/* -----------------   поле User Name ----------------------*/}
-        { this.state.mode === 'signin' ||
-          <label htmlFor="inputUser" className="sr-only">
-            User name
-          </label> }
+          {/* -----------------   поле User Name ----------------------*/}
+          { this.state.mode === 'signin' ||
+            <label htmlFor="inputUser" className="sr-only">
+              User name
+            </label> }
 
-        { this.state.mode === 'signin' ||
-        	<input type="text" id="inputUser" className="form-control"
-            placeholder="User name" value={this.state.user}
-            onChange={this.handleInputChange} required autoFocus /> }
+          { this.state.mode === 'signin' ||
+          	<input type="text" id="inputUser" className="form-control"
+              placeholder="User name" value={this.state.user}
+              onChange={this.handleInputChange} required autoFocus /> }
 
-        {/* -----------------   поле Email  ----------------------*/}
-      	<label htmlFor="inputEmail" className="sr-only">
-          Email address
-        </label>
-      	<input type="email" id="inputEmail" className="form-control"
-          placeholder="Email address" value={this.state.email}
-          onChange={this.handleInputChange} required autoFocus />
+          {/* -----------------   поле Email  ----------------------*/}
+        	<label htmlFor="inputEmail" className="sr-only">
+            Email address
+          </label>
+        	<input type="email" id="inputEmail" className="form-control"
+            placeholder="Email address" value={this.state.email}
+            onChange={this.handleInputChange} required autoFocus />
 
-        {/* -----------------   поле Password  ----------------------*/}
-        <label htmlFor="inputPassword" className="sr-only">
-          Password
-        </label>
-      	<input type="password" id="inputPassword" className="form-control"
-          placeholder="Password" value={this.state.password}
-          onChange={this.handleInputChange} required />
+          {/* -----------------   поле Password  ----------------------*/}
+          <label htmlFor="inputPassword" className="sr-only">
+            Password
+          </label>
+        	<input type="password" id="inputPassword" className="form-control"
+            placeholder="Password" value={this.state.password}
+            onChange={this.handleInputChange} required />
 
-        {/* -----------------   чекбокс Remember me  ----------------------*/}
-        { this.state.mode === 'signin' &&
-          <div className="checkbox mb-3">
-        		<label>
-        			<input type="checkbox" value="remember-me" checked={this.state.remember} onChange={this.handleInputChange} /> Remember me
-        		</label>
-        	</div>
-        }
+          {/* -----------------   чекбокс Remember me  ----------------------*/}
+          { this.state.mode === 'signin' &&
+            <div className="checkbox mb-3">
+          		<label>
+          			<input type="checkbox" value="remember-me" checked={this.state.remember} onChange={this.handleInputChange} /> Remember me
+          		</label>
+          	</div>
+          }
 
-        {/* -----------------   кнопка   ----------------------*/}
-        { this.state.mode === 'signin' ?
-          (
-            this.state.requestingServer === true ?
-              <button className="btn btn-lg btn-primary btn-block disabled">Signing in...</button> :
-              <button className="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-          ):
-          (
-            this.state.requestingServer === true ?
-              <button className="btn btn-lg btn-primary btn-block disabled">Registering...</button> :
-              <button className="btn btn-lg btn-primary btn-block" type="submit">Register</button>
-          )
-        }
+          {/* -----------------   кнопка   ----------------------*/}
+          { this.state.mode === 'signin' ?
+            (
+              this.state.requestingServer === true ?
+                <button className="btn btn-lg btn-primary btn-block disabled">Signing in...</button> :
+                <button className="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+            ):
+            (
+              this.state.requestingServer === true ?
+                <button className="btn btn-lg btn-primary btn-block disabled">Registering...</button> :
+                <button className="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+            )
+          }
 
-        {/* ----------------- сообщение об ошибке   ----------------------*/}
-        { this.state.warning === null ||
-           <div className="alert alert-danger" role="alert">{this.state.warning}</div>
-        }
-      </form>
+          {/* ----------------- сообщение об ошибке   ----------------------*/}
+          { this.state.warning === null ||
+             <div className="alert alert-danger" role="alert">{this.state.warning}</div>
+          }
+        </form>
+      </div>
     );
   }
 }
