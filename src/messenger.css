@@ -1,0 +1,44 @@
+
+.messenger {
+  display: grid;
+  grid-template-rows:55px auto 55px;
+  grid-template-columns: 300px auto;
+  grid-column-gap: 0px;
+
+  grid-template-areas:
+    "header search"
+    "list dialogue"
+    ". message";
+}
+
+.msg-header {
+  grid-area: header;
+  align-self: center;
+  padding:10px;
+  background: white;
+}
+
+.msg-search {
+  grid-area: search;
+  align-self: center;
+  padding: 5px;
+  background: white;
+}
+
+.msg-list {
+  grid-area: list;
+  padding: 5px;
+  background: gray;
+}
+
+.msg-dialogue {
+  grid-area: dialogue;
+  padding: 5px;
+  color: black;
+  background: gray;
+}
+
+.msg-message {
+  grid-area: message;
+  padding: 5px;
+}
