@@ -241,15 +241,19 @@ function Dialogue(props) {
     const id = props.messages[key].id;
     const convid = props.messages[key].conversationId;
     const participant = props.messages[key].user;
+    let bckg = 'lightgoldenrodyellow';
 
     console.log("Self:" + props.self);
     console.log("participant:" + participant);
+
+    if (props.self === participant)
+      bckg = 'lightblue';
 
     messages.push(
       <div className="row" style={{padding:'5px'}} key={id}>
         { props.self === participant && <div className="col-4"></div> }
         <div className="col-8 text-left">
-          <a className="list-group-item list-group-item-action">
+          <a className="list-group-item list-group-item-action" style={{background:bckg}}>
             <div className="d-flex justify-content-between">
               <h5 className="mb-1">{participant}</h5>
               <small>{time}</small>
