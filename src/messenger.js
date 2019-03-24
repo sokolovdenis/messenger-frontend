@@ -236,13 +236,17 @@ class Messenger extends Component {
 
     if (typeof json == 'string'){
       let json1 = JSON.parse(json);
-      json = {
-        conversationId: json1.ConversationId,
-        timestamp: json1.Timestamp,
-        user: json1.User,
-        content: json1.Content,
-        id: json1.Id
-      };
+      // автоматический патч неправильных имен в json
+      if ( json1.ConversationId !== undefined ) {
+        json = {
+          conversationId: json1.ConversationId,
+          timestamp: json1.Timestamp,
+          user: json1.User,
+          content: json1.Content,
+          id: json1.Id
+        };
+      }
+      else json = json1;
     }
 
     // обновляем обсуждения, свежее двигаем вверх
