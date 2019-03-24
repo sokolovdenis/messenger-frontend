@@ -9,6 +9,23 @@ import './signin.css';
 import Messenger from './messenger.js'
 import SignInPage from './signin.js'
 
+// возвращает cookie с именем name, если есть, если нет, то undefined
+function getCookie(name) {
+  var matches = document.cookie.match(new RegExp(
+    "(?:^|; )" + name.replace(/([.$?*|{}()[]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+  ));
+  return matches ? decodeURIComponent(matches[1]) : undefined;
+}
+
+// устанавливаем новое значение cookie
+function setCookie(name,value,expires) {
+    document.cookie = name + "=" + (value || "")  + "; expires=" + expires + "; path=/";
+}
+
+function eraseCookie(name) {
+    document.cookie = name+'=; Max-Age=-99999999;';
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Основной класс, который отвечает за переключение между режимами
@@ -17,16 +34,30 @@ import SignInPage from './signin.js'
 class App extends Component {
   constructor(props) {
     super(props);
+
+    let token = getCookie('token') || '';
     this.state = {
-      page: "messenger",
-      token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjMwZmM3MzNhLTFlMWItNDdhZS04YWI0LWZjYzY0ZmM2N2Q0MSIsImV4cCI6MTU1MzQyNTkwN30.dL4eEvJh9HjkZ2B7Dt4uvAJKVrxPJrCeRFHXJk_GaqI"
+      token:      token,
+      page:       (token === '') ? 'login' : 'messenger'
     };
+
     this.switchPage = this.switchPage.bind(this);
   }
 
   // коллбэк для вызова из вложенных элементов
   switchPage(p) {
     this.setState(p);
+
+    console.log('switch page:')
+    console.log(p);
+
+    // сохраняем токен в куки
+    if ( p.token !== undefined ){
+      if ( p.token === '' || p.token === null || p.remember === false )
+          eraseCookie('token');
+      else
+          setCookie('token',p.token,p.expires);
+    }
   }
 
   render() {
@@ -41,7 +72,6 @@ class App extends Component {
     }
   }
 }
-
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

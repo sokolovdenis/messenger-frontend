@@ -3,8 +3,10 @@ import { format } from 'timeago.js';
 
 const API_ME               = 'http://messenger.westeurope.cloudapp.azure.com/api/users/me'
 const API_CONVERSATIONS    = 'http://messenger.westeurope.cloudapp.azure.com/api/conversations'
+const API_GETUSERNAME      = 'http://messenger.westeurope.cloudapp.azure.com/api/users/'
+const API_SEARCH           = 'http://messenger.westeurope.cloudapp.azure.com/api/users'
 
-const MESSAGE_PREVIEW_MAXLEN = 50
+const MESSAGE_PREVIEW_MAXLEN = 35
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -22,8 +24,15 @@ class Messenger extends Component {
       current_conversation: 'public', // id of selected conversations
       dialogue: null,                 // текущий диалог
       dialogue_API: null,             // ссылка на URL для текущего диалога
-      message_text: ''                // текст, вводимый пользователем
+      message_text: '',               // текст, вводимый пользователем поле сообщения
+      search_string: '',              // текст, вводимый пользователем в строку поиска
+      search_results: null,           // результаты поиска
+      user_resolver: {}               // объект для резолвинга имен пользователей
     };
+
+    // массив ID, которые мы уже резолвим, (послали запрос на сервер, но возможно
+    // еще не получили ответ) - чтобы не резолвить мо много раз
+    this.resolver_block = [];
 
     this.linkLogOut           = this.linkLogOut.bind(this);
     this.setAlert             = this.setAlert.bind(this);
@@ -36,7 +45,10 @@ class Messenger extends Component {
     this.handleInputChange    = this.handleInputChange.bind(this);
     this.messageArrived       = this.messageArrived.bind(this);
     this.onSend               = this.onSend.bind(this);
-
+    this.resolveUser          = this.resolveUser.bind(this);
+    this.userResolved         = this.userResolved.bind(this);
+    this.loadedSearchResults  = this.loadedSearchResults.bind(this);
+    this.onUserSelection      = this.onUserSelection.bind(this);
   }
 
   componentWillMount() {
@@ -76,12 +88,49 @@ class Messenger extends Component {
     }
   }
 
+  // отложенное разрешение имен польщователй
+  resolveUser(id){
+    if ( id in this.state.user_resolver ){
+      return this.state.user_resolver[id];
+    }
+    else {
+      // отправляем запрос на резолв на сервер
+
+      if ( this.resolver_block.indexOf(id) === -1 ){
+        // запоминаем этот ID и больше не спрашиваем сервер про него
+        this.resolver_block.push(id);
+        // cпрашиваем сервер, но только один раз
+        fetch(API_GETUSERNAME+id, {
+            method: 'get',
+            headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + this.props.token }
+        })
+        .then(this.fetchStatusCheck)
+        .then(this.userResolved)
+        .catch(this.setAlert)
+      }
+      // а пока возвращаем пустышку
+      return '...';
+    }
+  }
+
+  // добавляем в список информацию об еще одном пользователе
+  userResolved(json){
+    let new_resolver = this.state.user_resolver;
+    new_resolver[json.id] = json.name;
+    this.setState({ user_resolver: new_resolver });
+  }
+
   loadedUserName(json) {
     this.setState({ username: json.name, userid: json.id });
+    this.userResolved(json);
   }
 
   loadedConversations(json) {
     this.setState({ conversations: json });
+  }
+
+  loadedSearchResults(json) {
+    this.setState({ search_results: json });
   }
 
   loadedDialogue(json) {
@@ -118,10 +167,30 @@ class Messenger extends Component {
     // TO DO... доделать переключение пользотелем между диалогами из списка
   }
 
+  onUserSelection(event){
+    event.preventDefault();
+    // TO DO... доделать переключение пользотелем между диалогами из списка
+  }
+
   handleInputChange(event) {
     switch (event.target.id){
       case 'messageText':
         this.setState({ message_text: event.target.value});
+        break;
+      case 'searchSting':
+        const query = event.target.value;
+        this.setState({ search_string: query, search_results: null});
+        // обновляем результаты поиска на сервере
+        if ( query.length > 0 )
+        {
+          fetch(API_SEARCH+'?query='+query, {
+              method: 'get',
+              headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + this.props.token }
+          })
+          .then(this.fetchStatusCheck)
+          .then(this.loadedSearchResults)
+          .catch(this.setAlert)
+        }
         break;
       default:
     }
@@ -160,16 +229,21 @@ class Messenger extends Component {
               <a href="/#" className="text-muted" onClick={this.linkLogOut}>(Log out)</a>
           </div>
 
-          <div className="msg-search">
-              <input type="text" className="form-control" id="searchSting" placeholder="Search user" />
+          <div className="msg-search dropdown">
+              <input type="text" className="form-control dropdown-toggle"
+                  id="searchSting" data-toggle="dropdown" placeholder="Search user"
+                  value={this.state.search_string} onChange={this.handleInputChange}/>
+              <SearchResults hits={this.state.search_results} selectUser={this.onUserSelections} />
           </div>
 
           <div className="msg-list" style={{ overflow:"hidden", overflowY:"scroll" }}>
-              <ConversationsList list={this.state.conversations} sel={this.state.current_conversation} onChange={this.onConverstaionChange} />
+              <ConversationsList list={this.state.conversations} sel={this.state.current_conversation}
+                  resolve={this.resolveUser} onChange={this.onConverstaionChange} />
           </div>
 
           <div className="msg-dialogue text-center" style={{ overflow:"hidden", overflowY:"scroll" }}>
-              <Dialogue messages={this.state.dialogue} self={this.state.userid}/>
+              <Dialogue messages={this.state.dialogue} self={this.state.userid} resolve={this.resolveUser}
+                  selectUser={this.onUserSelections}/>
           </div>
 
           <div className="msg-message container-fluid">
@@ -177,8 +251,8 @@ class Messenger extends Component {
                   <form className="form-inline w-100" onSubmit={this.onSend}>
                       <div className="col-10">
                           <input type="text" className="form-control w-100" id="messageText"
-                          placeholder="Enter message..." onChange={this.handleInputChange}
-                          value={this.state.message_text}/>
+                              placeholder="Enter message..." onChange={this.handleInputChange}
+                              value={this.state.message_text}/>
                       </div>
                       <div className="col">
                           { this.state.message_text.length === 0 ?
@@ -236,32 +310,38 @@ function Dialogue(props) {
 
   for (let key in props.messages){
 
-    const content = props.messages[key].content;
-    const time = format(props.messages[key].timestamp);
-    const id = props.messages[key].id;
-    const convid = props.messages[key].conversationId;
-    const participant = props.messages[key].user;
-    let bckg = 'lightgoldenrodyellow';
+    const msg     = props.messages[key];
+    const content = msg.content;
+    const time    = format(msg.timestamp);
+    const id      = msg.id;
+    //const convid = msg.conversationId;
+    const participant = msg.user;
+    let bckg      = 'lightgoldenrodyellow';
+    let itsme      = false;
 
-    console.log("Self:" + props.self);
-    console.log("participant:" + participant);
-
-    if (props.self === participant)
+    if (props.self === participant){
+      itsme = true;
       bckg = 'lightblue';
+    }
 
     messages.push(
       <div className="row" style={{padding:'5px'}} key={id}>
-        { props.self === participant && <div className="col-4"></div> }
+        { itsme && <div className="col-4"></div> }
         <div className="col-8 text-left">
-          <a className="list-group-item list-group-item-action" style={{background:bckg}}>
+          <div className="list-group-item list-group-item-action" style={{background:bckg}}>
             <div className="d-flex justify-content-between">
-              <h5 className="mb-1">{participant}</h5>
+              { itsme ?
+                <h5 className="mb-1">{props.resolve(participant)}</h5> :
+                <a href="/#" id={id} onClick={props.selectUser}>
+                  <h5 className="mb-1">{props.resolve(participant)}</h5>
+                </a>
+              }
               <small>{time}</small>
             </div>
             <p className="mb-1">{content}</p>
-          </a>
+          </div>
         </div>
-        { props.self === participant || <div className="col-4"></div> }
+        { itsme || <div className="col-4"></div> }
       </div>
     );
   }
@@ -272,6 +352,20 @@ function Dialogue(props) {
     return ( <div className="container-fluid">{messages}</div> );
 }
 
+function SearchResults(props) {
+  let hits = []
+  for (let key in props.hits){
+    const name = props.hits[key].name;
+    const id = props.hits[key].id;
+    hits.push(
+      <a className="dropdown-item" href="/#" id={id} onClick={props.selectUser}>{name}</a>
+    );
+  }
 
+  /*if (hits.length === 0)
+    return null;
+  else*/
+    return ( <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">{hits}</div> );
+}
 
 export default Messenger;

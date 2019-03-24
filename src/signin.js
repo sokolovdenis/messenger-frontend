@@ -50,12 +50,12 @@ class SignInPage extends Component {
   }
 
   signInSuccess (json) {
-    this.props.callback({page: 'messenger', token: json.token})
+    this.props.callback({page: 'messenger', token: json.token, expires: json.expires, remember: this.state.remember})
   }
 
   linkRegister (event) {
     event.preventDefault();
-    this.setState({ mode: 'register', url: API_REGISTER });
+    this.setState({ mode: 'register', url: API_REGISTER, remember: true });
   }
 
   linkSignIn (event) {
