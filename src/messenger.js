@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { format } from 'timeago.js';
+import Websocket from 'react-websocket';
 
 const API_ME               = 'http://messenger.westeurope.cloudapp.azure.com/api/users/me'
 const API_CONVERSATIONS    = 'http://messenger.westeurope.cloudapp.azure.com/api/conversations'
@@ -21,7 +22,7 @@ class Messenger extends Component {
       username: '...',                // display user name
       userid: 0,                      // this user id
       conversations: null,            // array of recent conversations
-      current_conversation: 'public', // id of selected conversations
+      current_conversation: 'public', // id of selected conversations (public, or GUID of user)
       dialogue: null,                 // текущий диалог
       dialogue_API: null,             // ссылка на URL для текущего диалога
       message_text: '',               // текст, вводимый пользователем поле сообщения
@@ -41,7 +42,6 @@ class Messenger extends Component {
     this.loadedDialogue       = this.loadedDialogue.bind(this);
     this.fetchStatusCheck     = this.fetchStatusCheck.bind(this);
     this.selectConverstaion   = this.selectConverstaion.bind(this);
-    this.onConverstaionChange = this.onConverstaionChange.bind(this);
     this.handleInputChange    = this.handleInputChange.bind(this);
     this.messageArrived       = this.messageArrived.bind(this);
     this.onSend               = this.onSend.bind(this);
@@ -95,7 +95,6 @@ class Messenger extends Component {
     }
     else {
       // отправляем запрос на резолв на сервер
-
       if ( this.resolver_block.indexOf(id) === -1 ){
         // запоминаем этот ID и больше не спрашиваем сервер про него
         this.resolver_block.push(id);
@@ -116,8 +115,18 @@ class Messenger extends Component {
   // добавляем в список информацию об еще одном пользователе
   userResolved(json){
     let new_resolver = this.state.user_resolver;
-    new_resolver[json.id] = json.name;
-    this.setState({ user_resolver: new_resolver });
+    if ( !( json.id in new_resolver) )
+    {
+      new_resolver[json.id] = json.name;
+      this.setState({ user_resolver: new_resolver });
+    }
+  }
+
+  loadedSearchResults(json) {
+    // заодно кэшируем именя в массив для резлова имен
+    for (let i in json)
+      this.userResolved(i);
+    this.setState({ search_results: json });
   }
 
   loadedUserName(json) {
@@ -126,17 +135,24 @@ class Messenger extends Component {
   }
 
   loadedConversations(json) {
+    // sort conversations by age
+    function compareTime(a, b){
+      let da = new Date(a.lastMessage.timestamp);
+      let db = new Date(b.lastMessage.timestamp);
+      if (da > db) {
+        return -1;
+      }
+      if (da < db) {
+        return 1;
+      }
+      return 0;
+    }
+    json.sort(compareTime);
     this.setState({ conversations: json });
-  }
-
-  loadedSearchResults(json) {
-    this.setState({ search_results: json });
   }
 
   loadedDialogue(json) {
     this.setState({ dialogue: json });
-    console.log("Dialugue: ");
-    console.log(json);
   }
 
   setAlert(message) {
@@ -150,26 +166,44 @@ class Messenger extends Component {
 
   selectConverstaion (id) {
     // новый урл для диалога
-    let api = 'http://messenger.westeurope.cloudapp.azure.com/api/conversations/' + id + '/messages';
-    this.setState({ dialogue_API: api, current_conversation: id });
-    // загружаем нужный диалог
-    fetch(api, {
-        method: 'get',
-        headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + this.props.token }
-    })
-    .then(this.fetchStatusCheck)
-    .then(this.loadedDialogue)
-    .catch(this.setAlert)
-  }
+    const api      = 'http://messenger.westeurope.cloudapp.azure.com/api/conversations/' + id + '/messages';
+    let   newstate = { dialogue_API: api, current_conversation: id };
+    let   to_load  = (id === 'public') ? id : null;
 
-  onConverstaionChange (event) {
-    event.preventDefault();
-    // TO DO... доделать переключение пользотелем между диалогами из списка
+    if ( id === this.state.userid )
+      return;
+
+    // ищем нужный диалог в списке
+    if ( this.state.conversations !== null )
+    {
+      for (let i in this.state.conversations){
+        if ( this.state.conversations[i].participant === id || this.state.conversations[i].id === id )
+            to_load = id;
+      }
+    }
+    if ( to_load === null )
+    {
+      // видимо, не нашли. Добавляем новый пустой диалог тогда
+      newstate.conversations = [{ participant: id, id: -1 }].concat(this.state.conversations);
+      newstate.dialogue = null;
+    }
+    else {
+      // загружаем нужный диалог
+      fetch(api, {
+          method: 'get',
+          headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + this.props.token }
+      })
+      .then(this.fetchStatusCheck)
+      .then(this.loadedDialogue)
+      .catch(this.setAlert)
+    }
+
+    this.setState(newstate);
   }
 
   onUserSelection(event){
     event.preventDefault();
-    // TO DO... доделать переключение пользотелем между диалогами из списка
+    this.selectConverstaion(event.target.id);
   }
 
   handleInputChange(event) {
@@ -198,8 +232,58 @@ class Messenger extends Component {
 
   messageArrived(json) {
     let messages = this.state.dialogue;
-    messages.push(json);
-    this.setState({ dialogue: messages});
+    let convs = this.state.conversations;
+
+    if (typeof json == 'string'){
+      let json1 = JSON.parse(json);
+      json = {
+        conversationId: json1.ConversationId,
+        timestamp: json1.Timestamp,
+        user: json1.User,
+        content: json1.Content,
+        id: json1.Id
+      };
+    }
+
+    // обновляем обсуждения, свежее двигаем вверх
+    if ( convs !== null ){
+      let remote_user = json.user;
+      for (let i in convs){
+        if (convs[i].id === json.conversationId ) {
+          // запоминаем id корреспондента (сообщение могло быть и от нас)
+          remote_user = convs[i].participant;
+          // удаляем старое
+          convs.splice(i,1);
+        }
+      }
+      // добавляем новое вперед списка
+      convs = [{ lastMessage: json, participant: remote_user, id: json.conversationId }].concat(convs);
+    }
+
+    // это сообщение из текущего диалога?
+    if ( (json.conversationId === 'public' && this.state.current_conversation === 'public') ||
+         (json.user === this.state.userid) ||
+         (json.user === this.state.current_conversation) )
+    {
+      // Обновляем текущий диалог
+      if ( messages === null )
+        messages = [json];
+      else{
+        // избегаем дублей (например, когда сообщение пришло и через сокет, и через REST)
+        let found = false;
+        for (let i in messages){
+          if (messages[i].id === json.id)
+          {
+            found = true;
+            break;
+          }
+        }
+        if ( !found )
+          messages.push(json);
+      }
+    }
+
+    this.setState({ dialogue: messages, conversations: convs});
   }
 
   onSend(event) {
@@ -233,17 +317,17 @@ class Messenger extends Component {
               <input type="text" className="form-control dropdown-toggle"
                   id="searchSting" data-toggle="dropdown" placeholder="Search user"
                   value={this.state.search_string} onChange={this.handleInputChange}/>
-              <SearchResults hits={this.state.search_results} selectUser={this.onUserSelections} />
+              <SearchResults hits={this.state.search_results} selectUser={this.onUserSelection} />
           </div>
 
           <div className="msg-list" style={{ overflow:"hidden", overflowY:"scroll" }}>
               <ConversationsList list={this.state.conversations} sel={this.state.current_conversation}
-                  resolve={this.resolveUser} onChange={this.onConverstaionChange} />
+                  resolve={this.resolveUser} onChange={this.onUserSelection} />
           </div>
 
           <div className="msg-dialogue text-center" style={{ overflow:"hidden", overflowY:"scroll" }}>
               <Dialogue messages={this.state.dialogue} self={this.state.userid} resolve={this.resolveUser}
-                  selectUser={this.onUserSelections}/>
+                  selectUser={this.onUserSelection}/>
           </div>
 
           <div className="msg-message container-fluid">
@@ -263,6 +347,7 @@ class Messenger extends Component {
                   </form>
               </div>
           </div>
+          <Websocket url={'ws://messenger.westeurope.cloudapp.azure.com/socket/messages?token='+this.props.token } onMessage={this.messageArrived} />
       </div>
     );
   }
@@ -271,32 +356,40 @@ class Messenger extends Component {
 function ConversationsList(props) {
 
   let listItems = []
+  console.log(props.list);
+  console.log(props.sel);
+
   for (let key in props.list){
 
-    const cnv   = props.list[key];
-    const id    = cnv.id;
-    let participant = cnv.participant;
-    const time  = format(cnv.lastMessage.timestamp);
-    let message = cnv.lastMessage.content;
+    const cnv        = props.list[key];
 
+    const id         = cnv.id;
+    const name       = (id === 'public')?'Public chat' : props.resolve(cnv.participant);
+    const cnvid      = (id === 'public')?'public' : cnv.participant;
+
+    const wasmessage = (cnv.lastMessage !== undefined);
+    const time       = wasmessage ? format(cnv.lastMessage.timestamp) : '';
+    let message      = wasmessage ? cnv.lastMessage.content : '';
+
+    // cut message if needed
     if (message.length > MESSAGE_PREVIEW_MAXLEN)
      message = message.slice(0,MESSAGE_PREVIEW_MAXLEN-3) + '...'
 
-    if (id === 'public')
-      participant = 'Public chat'
-
     let clsname = "list-group-item list-group-item-action"
-    if ( props.sel === id)
+    if ( props.sel === cnvid )
       clsname += " active";
 
+    console.log('render li');
+    console.log(cnvid);
+
     listItems.push(
-      <a href="/#" className={clsname} key={id} onClick={props.onChange}>
-        <div className="d-flex w-100 justify-content-between">
-          <h5 className="mb-1">{participant}</h5>
-          <small>{time}</small>
+      <li href="/#" className={clsname} key={cnvid} id={cnvid} onClick={props.onChange}>
+        <div className="d-flex w-100 justify-content-between" id={cnvid}>
+          <h5 className="mb-1" id={cnvid}>{name}</h5>
+          <small id={cnvid}>{time}</small>
         </div>
-        <small>{message}</small>
-      </a>);
+        <small id={cnvid}>{message}</small>
+      </li>);
   }
 
   return (
@@ -330,12 +423,12 @@ function Dialogue(props) {
         <div className="col-8 text-left">
           <div className="list-group-item list-group-item-action" style={{background:bckg}}>
             <div className="d-flex justify-content-between">
-              { itsme ?
-                <h5 className="mb-1">{props.resolve(participant)}</h5> :
-                <a href="/#" id={id} onClick={props.selectUser}>
-                  <h5 className="mb-1">{props.resolve(participant)}</h5>
-                </a>
-              }
+              <h5 className="mb-1">
+                { itsme ?
+                  props.resolve(participant) :
+                  <a href="/#" id={participant} onClick={props.selectUser}> {props.resolve(participant)} </a>
+                }
+              </h5>
               <small>{time}</small>
             </div>
             <p className="mb-1">{content}</p>
@@ -358,7 +451,7 @@ function SearchResults(props) {
     const name = props.hits[key].name;
     const id = props.hits[key].id;
     hits.push(
-      <a className="dropdown-item" href="/#" id={id} onClick={props.selectUser}>{name}</a>
+      <a className="dropdown-item" href="/#" id={id} key={id} onClick={props.selectUser}>{name}</a>
     );
   }
 
