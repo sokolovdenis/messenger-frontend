@@ -184,7 +184,7 @@ class Messenger extends Component {
     if ( to_load === null )
     {
       // видимо, не нашли. Добавляем новый пустой диалог тогда
-      newstate.conversations = [{ participant: id, id: -1 }].concat(this.state.conversations);
+      newstate.conversations = [{ participant: id, id: null }].concat(this.state.conversations);
       newstate.dialogue = null;
     }
     else {
@@ -253,7 +253,8 @@ class Messenger extends Component {
     if ( convs !== null ){
       let remote_user = json.user;
       for (let i in convs){
-        if (convs[i].id === json.conversationId ) {
+        if (  (convs[i].id === json.conversationId) || // нужный диалог, полученный с сервера
+              (convs[i].id === null && json.user === this.state.userid && convs[i].participant === this.state.current_conversation ) ) { // нужная пустышка, которую мы сами создали
           // запоминаем id корреспондента (сообщение могло быть и от нас)
           remote_user = convs[i].participant;
           // удаляем старое
@@ -444,7 +445,7 @@ function Dialogue(props) {
   }
 
   if (messages.length === 0)
-    return ( <small>No conversation is loaged yet.</small> );
+    return ( <small>No conversations with this user so far.</small> );
   else
     return ( <div className="container-fluid">{messages}</div> );
 }
