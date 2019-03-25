@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import './App.css';
 import * as axios from "axios";
 
-class Heade extends React.Component {
+class Header extends React.Component {
     constructor(props) {
         super(props);
         // this.state = {is_done: this.props.is_done};
@@ -114,13 +114,26 @@ class Heade extends React.Component {
 class Main extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {messages: null};
+        this.state = {messages: null, content: ""};
 
+        this.handleChange = this.handleChange.bind(this);
+        this.handlePost = this.handlePost.bind(this);
+    }
 
+    handleChange(event) {
+        const name = event.target.id;
+
+        this.setState({
+            [name]: event.target.value
+        });
     }
 
     componentDidMount() {
         this.loadData();
+        console.log("THIIIIIIIS")
+        console.log(this);
+        // const node = ReactDOM.findDOMNode(this);
+        // node.scrollTop = node.scrollHeight;
     }
 
     loadData() {
@@ -129,7 +142,7 @@ class Main extends React.Component {
             url: 'http://messenger.westeurope.cloudapp.azure.com/api/conversations/public/messages',
             data: {
                 from: 0,
-                count: 10
+                count: 1000
             },
             headers: {
                 responseType: 'json',
@@ -149,90 +162,67 @@ class Main extends React.Component {
             });
     }
 
+    async handlePost(event) {
+        console.log(this.state);
+        event.preventDefault();
+        await axios({
+            method: 'post',
+            url: 'http://messenger.westeurope.cloudapp.azure.com/api/conversations/public/messages',
+            data: {
+                content: this.state.content
+            },
+            headers: {
+                responseType: 'json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
+            .then(function (response) {
+                console.log("Message sent successfully");
+                console.log(response);
+                //Perform action based on response
+            })
+            .catch(function (error) {
+                console.log(error);
+                //Perform action based on error
+            });
+        // this.setState({name: '', descr: '', formFields: []});
+        // await this.props.main.loadTasks();
+        // this.props.main.forceUpdate();
+
+    }
+
+    // componentWillUpdate: function() {
+    //     const node = this.getDOMNode();
+    //     this.shouldScrollBottom = node.scrollTop + node.offsetHeight === node.scrollHeight;
+    // },
+    //
+    // componentDidUpdate(prevProps) {
+    //     if (this.shouldScrollBottom) {
+    //         const node = ReactDOM.findDOMNode(this);
+    //         node.scrollTop = node.scrollHeight;
+    //     }
+    // }
+
     render() {
         console.log(this.state);
         return (
             <main>
-                {this.state.messages ? (
-                    <>
-                        {this.state.messages.map((message, i) => (
-                            <div className="message">
-                                <div className="message-username">{message.user.slice(0,5)}</div>
-                                <div className="message-text">{message.content}</div>
-                            </div>
-                        ))}
-                    </>
-                ) : (<p>No messages.</p>)}
-                <div className="message">
-                    <div className="message-username"> User</div>
-                    <div className="message-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sapien
-                        nisl, efficitur eget congue semper, condimentum ut dui. Ut massa ligula, vulputate sed maximus
-                        ut, ultrices quis neque. Maecenas lectus ex, placerat non sapien a, bibendum ornare justo.
-                        Aliquam eget quam accumsan, dignissim sapien at, posuere elit. Nulla in metus ullamcorper,
-                        molestie erat sed, luctus mauris. Vivamus finibus ante elit, vitae consectetur nunc porttitor
-                        ut. Maecenas at ligula est.
-                    </div>
+                <div className="messages" id="messages">
+                    {this.state.messages ? (
+                        <>
+                            {this.state.messages.map((message, i) => (
+                                <div className="message" key={"message__"+i}>
+                                    <div className="message-username" key={"message-username__"+message.uniqueId}>{message.user.slice(0, 5)}</div>
+                                    <div className="message-text" key={"message-text__"+message.uniqueId}>{message.content}</div>
+                                </div>
+                            ))}
+                        </>
+                    ) : (<p>No messages.</p>)}
                 </div>
-                <div className="message">
-                    <div className="message-username"> User</div>
-                    <div className="message-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sapien
-                        nisl, efficitur eget congue semper, condimentum ut dui. Ut massa ligula, vulputate sed maximus
-                        ut, ultrices quis neque. Maecenas lectus ex, placerat non sapien a, bibendum ornare justo.
-                        Aliquam eget quam accumsan, dignissim sapien at, posuere elit. Nulla in metus ullamcorper,
-                        molestie erat sed, luctus mauris. Vivamus finibus ante elit, vitae consectetur nunc porttitor
-                        ut. Maecenas at ligula est.
-                    </div>
-                </div>
-                <div className="message">
-                    <div className="message-username"> User</div>
-                    <div className="message-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sapien
-                        nisl, efficitur eget congue semper, condimentum ut dui. Ut massa ligula, vulputate sed maximus
-                        ut, ultrices quis neque. Maecenas lectus ex, placerat non sapien a, bibendum ornare justo.
-                        Aliquam eget quam accumsan, dignissim sapien at, posuere elit. Nulla in metus ullamcorper,
-                        molestie erat sed, luctus mauris. Vivamus finibus ante elit, vitae consectetur nunc porttitor
-                        ut. Maecenas at ligula est.
-                    </div>
-                </div>
-                <div className="message">
-                    <div className="message-username"> User</div>
-                    <div className="message-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sapien
-                        nisl, efficitur eget congue semper, condimentum ut dui. Ut massa ligula, vulputate sed maximus
-                        ut, ultrices quis neque. Maecenas lectus ex, placerat non sapien a, bibendum ornare justo.
-                        Aliquam eget quam accumsan, dignissim sapien at, posuere elit. Nulla in metus ullamcorper,
-                        molestie erat sed, luctus mauris. Vivamus finibus ante elit, vitae consectetur nunc porttitor
-                        ut. Maecenas at ligula est.
-                    </div>
-                </div>
-                <div className="message">
-                    <div className="message-username"> User</div>
-                    <div className="message-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sapien
-                        nisl, efficitur eget congue semper, condimentum ut dui. Ut massa ligula, vulputate sed maximus
-                        ut, ultrices quis neque. Maecenas lectus ex, placerat non sapien a, bibendum ornare justo.
-                        Aliquam eget quam accumsan, dignissim sapien at, posuere elit. Nulla in metus ullamcorper,
-                        molestie erat sed, luctus mauris. Vivamus finibus ante elit, vitae consectetur nunc porttitor
-                        ut. Maecenas at ligula est.
-                    </div>
-                </div>
-                <div className="message">
-                    <div className="message-username"> User</div>
-                    <div className="message-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sapien
-                        nisl, efficitur eget congue semper, condimentum ut dui. Ut massa ligula, vulputate sed maximus
-                        ut, ultrices quis neque. Maecenas lectus ex, placerat non sapien a, bibendum ornare justo.
-                        Aliquam eget quam accumsan, dignissim sapien at, posuere elit. Nulla in metus ullamcorper,
-                        molestie erat sed, luctus mauris. Vivamus finibus ante elit, vitae consectetur nunc porttitor
-                        ut. Maecenas at ligula est.
-                    </div>
-                </div>
-                <div className="message">
-                    <div className="message-username"> User</div>
-                    <div className="message-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sapien
-                        nisl, efficitur eget congue semper, condimentum ut dui. Ut massa ligula, vulputate sed maximus
-                        ut, ultrices quis neque. Maecenas lectus ex, placerat non sapien a, bibendum ornare justo.
-                        Aliquam eget quam accumsan, dignissim sapien at, posuere elit. Nulla in metus ullamcorper,
-                        molestie erat sed, luctus mauris. Vivamus finibus ante elit, vitae consectetur nunc porttitor
-                        ut. Maecenas at ligula est.
-                    </div>
-                </div>
+                <form id="inputMessage" onSubmit={this.handleSignUp}>
+                    <input type="text" id="content" value={this.state.content} onChange={this.handleChange}/>
+                    <button onClick={this.handlePost} value="post">Send</button>
+                </form>
             </main>
         );
     }
@@ -284,7 +274,7 @@ class SideMenu extends React.Component {
                 {this.state.conversations ? (
                     <>
                         {this.state.conversations.map((conversation, i) => (
-                            <a className="side-menu-elem" href="#">
+                            <a className="side-menu-elem" href="#" key={"message__"+conversation.uniqueId}>
                                 {conversation.lastMessage.id}
                             </a>
                         ))}
@@ -323,7 +313,7 @@ class App extends Component {
     render() {
         return (
             <div>
-                <Heade app={this}/>
+                <Header app={this}/>
                 <div className="container">
                     <SideMenu app={this}/>
                     <Main app={this}/>
