@@ -1,6 +1,5 @@
 body {
     height: 100vh;
-    /*width: 100%;*/
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -30,17 +29,15 @@ header {
 footer {
     padding: 5px;
     background: lightseagreen;
-    width: 100%;
+    width: 100vw;
 }
 
 main {
     overflow-y: scroll;
-    /*height: 50%;*/
 }
 
 aside {
-    width: 20%;
-    /*height: 50%;*/
+    width: 20vw;
     background: lemonchiffon;
 }
 
@@ -52,9 +49,9 @@ aside {
 .main-menu {
     flex-grow: 1;
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-end;
     flex-wrap: wrap;
-    align-content: space-around;
+    align-content: center;
 }
 
 .side-menu {
