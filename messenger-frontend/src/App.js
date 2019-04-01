@@ -114,7 +114,7 @@ class Header extends React.Component {
 class Main extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {messages: null, content: ""};
+        this.state = {messages: null, content: "", users: null};
 
         this.handleChange = this.handleChange.bind(this);
         this.handlePost = this.handlePost.bind(this);
@@ -130,8 +130,6 @@ class Main extends React.Component {
 
     componentDidMount() {
         this.loadData();
-        console.log("THIIIIIIIS")
-        console.log(this);
         // const node = ReactDOM.findDOMNode(this);
         // node.scrollTop = node.scrollHeight;
     }
@@ -153,13 +151,42 @@ class Main extends React.Component {
                 console.log(response);
                 //Perform action based on response
                 this.setState({'messages': response.data});
-                console.log("MESSAGES");
-                console.log(response.data);
+                var users = {};
+                var keys = Array.from(new Set(this.state.messages.map(message => message.user)));
+
+                for (var i in keys) {
+                    const user = keys[i];
+                    axios({
+                        method: 'get',
+                        url: 'http://messenger.westeurope.cloudapp.azure.com/api/users/' + user,
+                        data: {
+                            //id: user
+                        },
+                        headers: {
+                            responseType: 'json',
+                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                        }
+                    })
+                        .then((response) => {
+                            // console.log(response);
+                            //Perform action based on response
+                            users[user] = response.data.name;
+                            this.setState({users: users});
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                            //Perform action based on error
+                        });
+
+                }
+                //self.state.setState()
+                this.setState({users: users});
             })
             .catch(function (error) {
                 console.log(error);
                 //Perform action based on error
             });
+
     }
 
     async handlePost(event) {
@@ -211,9 +238,11 @@ class Main extends React.Component {
                     {this.state.messages ? (
                         <>
                             {this.state.messages.map((message, i) => (
-                                <div className="message" key={"message__"+i}>
-                                    <div className="message-username" key={"message-username__"+message.uniqueId}>{message.user.slice(0, 5)}</div>
-                                    <div className="message-text" key={"message-text__"+message.uniqueId}>{message.content}</div>
+                                <div className="message" key={"message__" + i}>
+                                    <div className="message-username"
+                                         key={"message-username__" + message.uniqueId}>{this.state.users == null ? message.id : this.state.users[message.user]}</div>
+                                    <div className="message-text"
+                                         key={"message-text__" + message.uniqueId}>{message.content}</div>
                                 </div>
                             ))}
                         </>
@@ -274,7 +303,7 @@ class SideMenu extends React.Component {
                 {this.state.conversations ? (
                     <>
                         {this.state.conversations.map((conversation, i) => (
-                            <a className="side-menu-elem" href="#" key={"message__"+conversation.uniqueId}>
+                            <a className="side-menu-elem" href="#" key={"message__" + conversation.uniqueId}>
                                 {conversation.lastMessage.id}
                             </a>
                         ))}
