@@ -1,0 +1,7 @@
+Header {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    min-height: 60px;
+    padding: 0 0 0 30px;
+}
