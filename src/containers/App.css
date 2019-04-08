@@ -6,7 +6,7 @@
     height: 100%;
 }
 
-.wrapper {
+.App__layout {
     display: flex;
     flex-direction: row;
     flex-grow: 1;
