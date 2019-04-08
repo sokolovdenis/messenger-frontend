@@ -29,7 +29,7 @@ class App extends Component {
     render() {
         var token = localStorage.getItem('token');
         var expires = localStorage.getItem('expires');
-        if ( token != undefined && Date.now() - Date.parse(expires) < 0) {
+        if ( token !== undefined && Date.now() - Date.parse(expires) < 0) {
             this.isSignedIn = true;
         }
         return ( this.isSignedIn? <Messenger app={this} token={this.state.token}/>:<SignIn onTokenReceive={this.tokenReceiveHandler}/> );

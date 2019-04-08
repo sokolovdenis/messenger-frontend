@@ -12,32 +12,22 @@ class Header extends React.Component {
             <header>
                 <div className="logo">My Wonderful Messenger</div>
                 <div className="main-menu">
-                    <button className="side-menu-elem" onClick={this.props.app.logout}> Logout </button>
+                    <button className="side-menu-elem" onClick={this.props.app.logout}> Logout</button>
                 </div>
             </header>
         );
     }
 }
 
-class Main extends React.Component {
+class MessagesList extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {messages: null, content: "", users: null};
-
-        this.handleChange = this.handleChange.bind(this);
-        this.handlePost = this.handlePost.bind(this);
-    }
-
-    handleChange(event) {
-        const name = event.target.id;
-
-        this.setState({
-            [name]: event.target.value
-        });
+        this.state = {messages: null, users: null};
     }
 
     componentDidMount() {
         this.loadData();
+        this.scrollToBottom();
         // const node = ReactDOM.findDOMNode(this);
         // node.scrollTop = node.scrollHeight;
     }
@@ -73,7 +63,7 @@ class Main extends React.Component {
                         'Authorization': 'Bearer ' + localStorage.getItem('token')
                     }
                 }).then((response) => {
-                    if (response.status == 200) {
+                    if (response.status === 200) {
                         // console.log(response);
                         users[user] = response.data.name;
                         this.setState({users: users});
@@ -87,6 +77,68 @@ class Main extends React.Component {
             console.log(error);
         });
 
+    }
+
+    // componentWillUpdate: function() {
+    //     const node = this.getDOMNode();
+    //     this.shouldScrollBottom = node.scrollTop + node.offsetHeight === node.scrollHeight;
+    // },
+    //
+    // componentDidUpdate(prevProps) {
+    //     if (this.shouldScrollBottom) {
+    //         const node = ReactDOM.findDOMNode(this);
+    //         node.scrollTop = node.scrollHeight;
+    //     }
+    // }
+
+    componentDidUpdate() {
+        this.scrollToBottom();
+    }
+
+    scrollToBottom() {
+        this.el.scrollIntoView({behavior: 'smooth'});
+    }
+
+    render() {
+        return (
+            <>
+                <div className="messages" id="messages">
+                    {this.state.messages ? (
+                        <>
+                            {this.state.messages.map((message, i) => (
+                                <div className="message" key={"message__" + i}>
+                                    <div className="message-username"
+                                         key={"message-username__" + message.uniqueId}>{this.state.users == null ? message.id : this.state.users[message.user]}</div>
+                                    <div className="message-text"
+                                         key={"message-text__" + message.uniqueId}>{message.content}</div>
+                                </div>
+                            ))}
+                        </>
+                    ) : (<p>No messages.</p>)}
+                </div>
+                <div ref={el => {
+                    this.el = el;
+                }}>
+                </div>
+            </>
+        );
+    }
+}
+
+class MessageSubmit extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {content: ""};
+        this.handleChange = this.handleChange.bind(this);
+        this.handlePost = this.handlePost.bind(this);
+    }
+
+    handleChange(event) {
+        const name = event.target.id;
+
+        this.setState({
+            [name]: event.target.value
+        });
     }
 
     async handlePost(event) {
@@ -118,52 +170,57 @@ class Main extends React.Component {
 
     }
 
-    // componentWillUpdate: function() {
-    //     const node = this.getDOMNode();
-    //     this.shouldScrollBottom = node.scrollTop + node.offsetHeight === node.scrollHeight;
-    // },
-    //
-    // componentDidUpdate(prevProps) {
-    //     if (this.shouldScrollBottom) {
-    //         const node = ReactDOM.findDOMNode(this);
-    //         node.scrollTop = node.scrollHeight;
-    //     }
-    // }
+    render() {
+        return (
+            <form id="inputMessage" onSubmit={this.handleSignUp}>
+                <input type="text" id="content" value={this.state.content} onChange={this.handleChange}/>
+                <button onClick={this.handlePost} value="post">Send</button>
+            </form>
+        );
+    }
+}
+
+class Main extends React.Component {
+    constructor(props) {
+        super(props);
+    }
 
     render() {
-        console.log(this.state);
         return (
             <main>
-                <div className="messages" id="messages">
-                    {this.state.messages ? (
-                        <>
-                            {this.state.messages.map((message, i) => (
-                                <div className="message" key={"message__" + i}>
-                                    <div className="message-username"
-                                         key={"message-username__" + message.uniqueId}>{this.state.users == null ? message.id : this.state.users[message.user]}</div>
-                                    <div className="message-text"
-                                         key={"message-text__" + message.uniqueId}>{message.content}</div>
-                                </div>
-                            ))}
-                        </>
-                    ) : (<p>No messages.</p>)}
-                </div>
-                <form id="inputMessage" onSubmit={this.handleSignUp}>
-                    <input type="text" id="content" value={this.state.content} onChange={this.handleChange}/>
-                    <button onClick={this.handlePost} value="post">Send</button>
-                </form>
+                <MessagesList/>
+                <MessageSubmit/>
             </main>
         );
+    }
+}
+
+class Conversation extends React.Component {
+    constructor(props) {
+        super(props);
+        this.onClickHandler = this.props.conversations.setCurrentConversation.bind(this.props.conversation.id);
+    }
+
+    render() {
+        return (
+            <a className="side-menu-elem" href="#"
+               onClick={this.onClickHandler}>
+                {this.props.conversation.participant == null ? "Public" : this.props.conversation.participant}
+            </a>
+        );
+
     }
 }
 
 class SideMenu extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {conversations: null};
-        //this.props.app.state.append("conversations", this)
+        this.state = {conversations: null, currentConversation: null};
+        this.setCurrentConversation = this.setCurrentConversation.bind(this);
+    }
 
-        //this.loadData = this.loadData.bind(this);
+    setCurrentConversation(id) {
+        this.setState({currentConversation : id});
     }
 
     componentDidMount() {
@@ -196,9 +253,7 @@ class SideMenu extends React.Component {
                 {this.state.conversations ? (
                     <>
                         {this.state.conversations.map((conversation, i) => (
-                            <a className="side-menu-elem" href="#" key={"message__" + conversation.uniqueId}>
-                                {conversation.participant == null ? "Public" : conversation.participant}
-                            </a>
+                            <Conversation conversation={conversation} conversations={this} key={"conversation__" + this.props.uniqueId}/>
                         ))}
                     </>
                 ) : (<p>No conversations.</p>)}
@@ -209,22 +264,10 @@ class SideMenu extends React.Component {
 }
 
 class Messenger extends Component {
-
     constructor(props) {
         super(props);
-        this.state = {conversations: null, currentConversation:null};
+        this.state = {conversations: null, currentConversation: null};
     }
-
-    // componentDidMount() {
-    //     fetch('https://jsonplaceholder.typicode.com/posts')
-    //         .then(response => {
-    //             return response.json();
-    //         }).then(result => {
-    //         this.setState({
-    //             users: result
-    //         });
-    //     });
-    // }
 
     updateAfterLogin() {
         this.state.conversations.loadData()
