@@ -4,7 +4,7 @@ import WhoIs from "../WhoIs/WhoIs";
 import SignOut from "../SignOut/SignOut";
 
 const TopBar = () => (
-    <div class="TopBar">
+    <div className="TopBar">
         <WhoIs/>
         <SignOut/>
     </div>
