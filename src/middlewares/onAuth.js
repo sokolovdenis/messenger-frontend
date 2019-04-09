@@ -1,14 +1,31 @@
-import api from "../constants/api";
 import {AUTH_FAILURE, AUTH_SUCCESS} from "../reducers/auth";
 
 export const AUTH = 'AUTH';
+
+const getErrorMessage = response => {
+    try {
+        const {errors} = JSON.parse(response);
+
+        let messages = [];
+
+        for (let key in errors) {
+            if (errors.hasOwnProperty(key)) {
+                messages = [...messages, ...errors[key]];
+            }
+        }
+
+        return messages.join(' ');
+    } catch {
+        return response;
+    }
+};
 
 const onAuth = store => next => action => {
     if (action.type !== AUTH) {
         return next(action);
     }
 
-    const { request, parameters} = action.payload;
+    const {request, parameters} = action.payload;
 
     fetch(request, {
         method: 'POST',
@@ -26,13 +43,13 @@ const onAuth = store => next => action => {
                 expires,
             },
         });
-    }).catch(error => {
-        error.then(message => {
+    }).catch(promise => {
+        promise.then(response => {
             store.dispatch({
                 type: AUTH_FAILURE,
-                payload: {error: message,}
+                payload: {error: getErrorMessage(response),}
             })
-        })
+        });
     });
 };
 

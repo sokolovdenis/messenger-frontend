@@ -63,29 +63,30 @@ class Authorization extends Component {
             return <Redirect to={pages.conversations}/>;
         }
 
+        const errorMessage = this.props.error
+            ? <div className="errorMessage">{this.props.error}</div>
+            : null;
+
         return (
             <div className="Authorization">
+                {errorMessage}
                 <Form onSubmit={this.handleSubmit}>
                     <FormField label='Логин ' name='login'>
                         <FormInput value={this.state.login} name='login' onChange={this.handleInputChange}/>
                     </FormField>
-
                     <FormField label='Пароль' name='password'>
                         <FormInput value={this.state.password} name='password' onChange={this.handleInputChange}/>
                     </FormField>
-
-                    <span onClick={this.changeAction}>{
+                    <span className="haveAccount" onClick={this.changeAction}>{
                         this.state.isSignUp
                             ? "У меня уже есть аккаунт"
                             : "Создать новый аккаунт"
                     }</span>
-
                     {this.state.isSignUp
                         ? (<FormField label='Имя пользователя' name='name'>
                             <FormInput value={this.state.name} name='name' onChange={this.handleInputChange}/>
                         </FormField>)
                         : null}
-
                     <br/>
                     <Button type='submit'>{this.state.isSignUp ? "Зарегистрироваться" : "Войти"}</Button>
                 </Form>
