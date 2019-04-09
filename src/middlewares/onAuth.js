@@ -41,13 +41,18 @@ const onAuth = store => next => action => {
             payload: {
                 token,
                 expires,
+                error: null,
             },
         });
     }).catch(promise => {
         promise.then(response => {
             store.dispatch({
                 type: AUTH_FAILURE,
-                payload: {error: getErrorMessage(response),}
+                payload: {
+                    token: null,
+                    expires: null,
+                    error: getErrorMessage(response),
+                }
             })
         });
     });

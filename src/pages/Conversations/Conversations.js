@@ -2,13 +2,19 @@ import React, {Component} from 'react';
 import './Conversations.css';
 import ChatsPanel from "../../components/ChatsPanel/ChatsPanel";
 import MessagesPanel from "../../components/MessagesPanel/MessagesPanel";
+import pages from "../../constants/pages"
+
+import {connect} from "react-redux";
+import {Redirect} from "react-router";
 
 class Conversations extends Component {
-
     render() {
-        console.log('convs');
+        if (!this.props.token) {
+            return <Redirect to={pages.authentication}/>;
+        }
+
         return (
-            <div class="Conversations">
+            <div className="Conversations">
                 <ChatsPanel/>
                 <MessagesPanel/>
             </div>
@@ -16,4 +22,13 @@ class Conversations extends Component {
     }
 }
 
-export default Conversations;
+const mapStateToProps = state => {
+    const {token, expires, error} = state.auth;
+    return ({
+        token,
+        expires,
+        error,
+    });
+};
+
+export default connect(mapStateToProps)(Conversations);

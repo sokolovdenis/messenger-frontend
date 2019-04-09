@@ -59,8 +59,6 @@ class Authorization extends Component {
     };
 
     render() {
-        console.log(this.props);
-
         if (this.props.token) {
             return <Redirect to={pages.conversations}/>;
         }
