@@ -6,9 +6,9 @@ import FormInput from '../../components/FormInput/FormInput';
 import FormField from '../../components/FormField/FormField';
 import pages from '../../constants/pages';
 import api from '../../constants/api';
+import {onAuthAction} from "../../middlewares/onAuth";
 
 import {connect} from 'react-redux';
-import {onAuthAction} from "../../middlewares/onAuth";
 import {Redirect} from "react-router";
 
 class Authorization extends Component {
@@ -59,12 +59,20 @@ class Authorization extends Component {
     };
 
     render() {
+        console.log(this.props);
+
         if (this.props.token) {
             return <Redirect to={pages.conversations}/>;
         }
 
         const errorMessage = this.props.error
             ? <div className="errorMessage">{this.props.error}</div>
+            : null;
+
+        const nameField = this.state.isSignUp
+            ? (<FormField label='Имя пользователя' name='name'>
+                <FormInput value={this.state.name} name='name' onChange={this.handleInputChange}/>
+            </FormField>)
             : null;
 
         return (
@@ -77,18 +85,17 @@ class Authorization extends Component {
                     <FormField label='Пароль' name='password'>
                         <FormInput value={this.state.password} name='password' onChange={this.handleInputChange}/>
                     </FormField>
-                    <span className="haveAccount" onClick={this.changeAction}>{
-                        this.state.isSignUp
+                    <span className="haveAccount" onClick={this.changeAction}>
+                        {this.state.isSignUp
                             ? "У меня уже есть аккаунт"
-                            : "Создать новый аккаунт"
-                    }</span>
-                    {this.state.isSignUp
-                        ? (<FormField label='Имя пользователя' name='name'>
-                            <FormInput value={this.state.name} name='name' onChange={this.handleInputChange}/>
-                        </FormField>)
-                        : null}
-                    <br/>
-                    <Button type='submit'>{this.state.isSignUp ? "Зарегистрироваться" : "Войти"}</Button>
+                            : "Создать новый аккаунт"}
+                    </span>
+                    {nameField}
+                    <Button type='submit'>
+                        {this.state.isSignUp
+                            ? "Зарегистрироваться"
+                            : "Войти"}
+                    </Button>
                 </Form>
             </div>
         );

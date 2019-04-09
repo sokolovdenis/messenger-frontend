@@ -1,10 +1,9 @@
 import React from 'react';
-import Title from '../Title/Title';
 import './Header.css';
 
 const Header = () => (
     <header className="Header">
-        <Title/>
+        <h1 className="Header__title">Messenger</h1>
     </header>
 );
 
