@@ -19,11 +19,11 @@ class Authorization extends Component {
             login: '',
             password: '',
             name: '',
-            isSignUp: true,
+            isSignUp: false,
         };
     }
 
-    formClear() {
+    formClear = () => {
         this.setState({
             login: '',
             password: '',
@@ -58,7 +58,7 @@ class Authorization extends Component {
         });
     };
 
-    render() {
+    render = () => {
         if (this.props.token) {
             return <Redirect to={pages.conversations}/>;
         }
@@ -97,7 +97,7 @@ class Authorization extends Component {
                 </Form>
             </div>
         );
-    }
+    };
 }
 
 const mapStateToProps = state => {

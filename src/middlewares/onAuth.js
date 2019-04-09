@@ -1,6 +1,6 @@
 import {AUTH_FAILURE, AUTH_SUCCESS} from "../reducers/auth";
 
-export const AUTH = 'AUTH';
+const AUTH = 'AUTH';
 
 const getErrorMessage = response => {
     try {

@@ -8,7 +8,7 @@ import {connect} from "react-redux";
 import {Redirect} from "react-router";
 
 class Conversations extends Component {
-    render() {
+    render = () => {
         if (!this.props.token) {
             return <Redirect to={pages.authentication}/>;
         }
@@ -19,16 +19,11 @@ class Conversations extends Component {
                 <MessagesPanel/>
             </div>
         );
-    }
+    };
 }
 
 const mapStateToProps = state => {
-    const {token, expires, error} = state.auth;
-    return ({
-        token,
-        expires,
-        error,
-    });
+    return ({ token : state.auth.token, });
 };
 
 export default connect(mapStateToProps)(Conversations);

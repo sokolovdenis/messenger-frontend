@@ -1,6 +1,29 @@
-import React from 'react';
+import React, {Component} from 'react';
 import './SignOut.css';
+import Button from "../Button/Button";
 
-const SignOut = () => <div>Sign Out</div>;
+import {connect} from "react-redux";
+import {onSignOutAction} from "../../middlewares/onSignOut";
 
-export default SignOut;
+class SignOut extends Component {
+    handleClick = event => {
+        event.preventDefault();
+        this.props.signOut();
+    };
+
+    render() {
+        return (
+            <div className="SignOut">
+                <Button class="SignOut__button" type="button" onClick={this.handleClick}>
+                    Выйти
+                </Button>
+            </div>
+        );
+    };
+}
+
+const mapDispatchToProps = dispatch => ({
+    signOut: () => dispatch(onSignOutAction()),
+});
+
+export default connect(null, mapDispatchToProps)(SignOut);
