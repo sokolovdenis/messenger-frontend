@@ -1,17 +1,19 @@
 import api from "../constants/api";
-import {AUTH_FAILURE, AUTH_SUCCESS} from "../reducers/onAuth";
+import {AUTH_FAILURE, AUTH_SUCCESS} from "../reducers/auth";
 
 export const AUTH = 'AUTH';
 
-const auth = store => next => action => {
+const onAuth = store => next => action => {
     if (action.type !== AUTH) {
         return next(action);
     }
 
-    fetch(api.signIn, {
+    const { request, parameters} = action.payload;
+
+    fetch(request, {
         method: 'POST',
         headers: {'content-type': 'application/json'},
-        body: JSON.stringify(action.payload)
+        body: JSON.stringify(parameters)
     }).then(response =>
         response.status === 200
             ? response.json()
@@ -34,9 +36,9 @@ const auth = store => next => action => {
     });
 };
 
-export const authAction = (payload) => ({
+export const onAuthAction = (payload) => ({
     type: AUTH,
     payload
 });
 
-export default auth;
+export default onAuth;

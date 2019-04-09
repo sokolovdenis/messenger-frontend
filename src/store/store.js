@@ -1,11 +1,11 @@
 import { createStore, applyMiddleware } from 'redux';
 import reducer from '../reducers';
 
-import auth from '../middlewares/auth';
+import onAuth from '../middlewares/onAuth';
 
 const store = createStore(
     reducer,
-    applyMiddleware(auth)
+    applyMiddleware(onAuth)
 );
 
 export default store;

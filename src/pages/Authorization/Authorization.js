@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
 import './Authorization.css';
-import Button from '../../components/Button/Button'
-import Form from '../../components/Form/Form'
-import FormInput from '../../components/FormInput/FormInput'
-import FormField from '../../components/FormField/FormField'
-import pages from '../../constants/pages'
+import Button from '../../components/Button/Button';
+import Form from '../../components/Form/Form';
+import FormInput from '../../components/FormInput/FormInput';
+import FormField from '../../components/FormField/FormField';
+import pages from '../../constants/pages';
+import api from '../../constants/api';
 
-import {connect} from 'react-redux'
-import {authAction} from "../../middlewares/auth";
+import {connect} from 'react-redux';
+import {onAuthAction} from "../../middlewares/onAuth";
 import {Redirect} from "react-router";
 
 class Authorization extends Component {
@@ -42,8 +43,8 @@ class Authorization extends Component {
         const {login, password, name} = this.state;
 
         this.state.isSignUp
-            ? this.props.auth({login, password, name})
-            : this.props.auth({login, password});
+            ? this.props.auth({ request: api.signUp, parameters: { login, password, name}})
+            : this.props.auth({ request: api.signIn, parameters: { login, password }});
 
         this.formClear();
     };
@@ -58,8 +59,6 @@ class Authorization extends Component {
     };
 
     render() {
-        console.log(this.props.token, this.props.expires, this.props.error);
-
         if (this.props.token) {
             return <Redirect to={pages.conversations}/>;
         }
@@ -96,8 +95,7 @@ class Authorization extends Component {
 }
 
 const mapStateToProps = state => {
-    console.log(state);
-    const {token, expires, error} = state.onAuth;
+    const {token, expires, error} = state.auth;
     return ({
         token,
         expires,
@@ -106,7 +104,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-    auth: (userData) => dispatch(authAction(userData)),
+    auth: (userData) => dispatch(onAuthAction(userData)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Authorization);
