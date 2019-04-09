@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
 import './Authorization.css';
-import Button from '../Button/Button'
-import Form from '../Form/Form'
-import FormInput from '../FormInput/FormInput'
-import FormField from '../FormField/FormField'
+import Button from '../../components/Button/Button'
+import Form from '../../components/Form/Form'
+import FormInput from '../../components/FormInput/FormInput'
+import FormField from '../../components/FormField/FormField'
+import pages from '../../constants/pages'
 
 import {connect} from 'react-redux'
-import {signUpAction} from "../../middleware/signUp";
-import {signInAction} from "../../middleware/signIn";
+import {authAction} from "../../middlewares/auth";
+import {Redirect} from "react-router";
 
 class Authorization extends Component {
     constructor(props) {
@@ -41,8 +42,8 @@ class Authorization extends Component {
         const {login, password, name} = this.state;
 
         this.state.isSignUp
-            ? this.props.signUp({login, password, name})
-            : this.props.signIn({login, password});
+            ? this.props.auth({login, password, name})
+            : this.props.auth({login, password});
 
         this.formClear();
     };
@@ -53,10 +54,16 @@ class Authorization extends Component {
         this.setState({
             isSignUp: !this.state.isSignUp,
             name: '',
-        })
+        });
     };
 
     render() {
+        console.log(this.props.token, this.props.expires, this.props.error);
+
+        if (this.props.token) {
+            return <Redirect to={pages.conversations}/>;
+        }
+
         return (
             <div className="Authorization">
                 <Form onSubmit={this.handleSubmit}>
@@ -88,9 +95,18 @@ class Authorization extends Component {
     }
 }
 
+const mapStateToProps = state => {
+    console.log(state);
+    const {token, expires, error} = state.onAuth;
+    return ({
+        token,
+        expires,
+        error,
+    });
+};
+
 const mapDispatchToProps = dispatch => ({
-    signIn: (userData) => dispatch(signInAction(userData)),
-    signUp: (userData) => dispatch(signUpAction(userData))
+    auth: (userData) => dispatch(authAction(userData)),
 });
 
-export default connect(null, mapDispatchToProps)(Authorization);
+export default connect(mapStateToProps, mapDispatchToProps)(Authorization);

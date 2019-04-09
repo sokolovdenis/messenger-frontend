@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
+import {Redirect, Route, Switch} from 'react-router';
+import {HashRouter} from 'react-router-dom';
+
 import './App.css';
 import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
-import Authorization from "../components/Authorization/Authorization";
-
-import {Route, Switch} from 'react-router';
-import {HashRouter} from 'react-router-dom';
+import Authorization from "../pages/Authorization/Authorization";
+import Conversations from '../pages/Conversations/Conversations';
+import pages from '../constants/pages'
 
 class App extends Component {
     render() {
@@ -15,7 +17,8 @@ class App extends Component {
                 <HashRouter>
                     <div className="App__layout">
                         <Switch>
-                            <Route path="/auth" component={Authorization}/>
+                            <Route path={pages.authentication} component={Authorization}/>
+                            <Route path={pages.conversations} component={Conversations}/>
                         </Switch>
                     </div>
                 </HashRouter>

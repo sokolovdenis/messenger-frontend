@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import onSignUp from './onSignUp';
+import onAuth from './onAuth';
 
 const reducer = combineReducers({
-    onSignUp
+    onAuth,
 });
 
 export default reducer;
