@@ -21,6 +21,7 @@ class Authorization extends Component {
             name: '',
             isSignUp: false,
         };
+
     }
 
     formClear = () => {
@@ -48,7 +49,6 @@ class Authorization extends Component {
 
         this.formClear();
     };
-
 
     changeAction = event => {
         event.preventDefault();
@@ -111,7 +111,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-    auth: (userData) => dispatch(onAuthAction(userData)),
+    auth: (payload) => dispatch(onAuthAction(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Authorization);
