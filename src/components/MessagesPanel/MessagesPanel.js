@@ -2,11 +2,11 @@ import React from 'react';
 import './MessagesPanel.css';
 import NewMessage from '../NewMessage/NewMessage';
 import Message from "../Message/Message";
-import TopBar from "../TopBar/TopBar";
+import ChatInfo from "../ChatInfo/ChatInfo";
 
 const MessagesPanel = () => (
     <div className="ChatsPanel">
-        <TopBar/>
+        <ChatInfo/>
         <ul>
             <Message/>
         </ul>

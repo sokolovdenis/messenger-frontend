@@ -49,6 +49,7 @@ class Authorization extends Component {
         this.formClear();
     };
 
+
     changeAction = event => {
         event.preventDefault();
 
