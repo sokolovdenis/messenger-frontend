@@ -1,9 +1,13 @@
 import React, {Component} from 'react';
 import './Authorization.css';
-import Form from '../Form/Form'
 import Button from '../Button/Button'
-import FormField from '../FormField/FormField'
+import Form from '../Form/Form'
 import FormInput from '../FormInput/FormInput'
+import FormField from '../FormField/FormField'
+
+import {connect} from 'react-redux'
+import {signUpAction} from "../../middleware/signUp";
+import {signInAction} from "../../middleware/signIn";
 
 class Authorization extends Component {
     constructor(props) {
@@ -32,6 +36,7 @@ class Authorization extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
+        this.props.signUp(this.state);
         this.formClear();
     };
 
@@ -57,4 +62,9 @@ class Authorization extends Component {
     }
 };
 
-export default Authorization;
+const mapDispatchToProps = dispatch => ({
+    signIn: (userData) => dispatch(signInAction(userData)),
+    signUp: (userData) => dispatch(signUpAction(userData))
+});
+
+export default connect(null, mapDispatchToProps)(Authorization);
