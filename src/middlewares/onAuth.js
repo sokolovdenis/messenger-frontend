@@ -1,5 +1,6 @@
 import {AUTH_FAILURE, AUTH_SUCCESS} from "../reducers/auth";
 import {getErrorMessage} from '../utils/getErrorMessage'
+import {apiRequest} from "../utils/apiRequest";
 
 const AUTH = 'AUTH';
 
@@ -10,15 +11,7 @@ const onAuth = store => next => action => {
 
     const {request, parameters} = action.payload;
 
-    fetch(request, {
-        method: 'POST',
-        headers: {'content-type': 'application/json'},
-        body: JSON.stringify(parameters)
-    }).then(response =>
-        response.status === 200
-            ? response.json()
-            : Promise.reject(response.text())
-    ).then(({token, expires}) => {
+    apiRequest(request, 'POST', null, parameters, ({token, expires}) => {
         store.dispatch({
             type: AUTH_SUCCESS,
             payload: {
@@ -27,18 +20,15 @@ const onAuth = store => next => action => {
                 error: null,
             },
         });
-    }).catch(promise => {
-        console.log(promise);
-        promise.then(response => {
-            store.dispatch({
-                type: AUTH_FAILURE,
-                payload: {
-                    token: null,
-                    expires: null,
-                    error: getErrorMessage(response),
-                }
-            })
-        });
+    }, response => {
+        store.dispatch({
+            type: AUTH_FAILURE,
+            payload: {
+                token: null,
+                expires: null,
+                error: getErrorMessage(response),
+            }
+        })
     });
 };
 

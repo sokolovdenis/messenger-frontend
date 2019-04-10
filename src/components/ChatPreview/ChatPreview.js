@@ -21,7 +21,7 @@ class ChatPreview extends Component {
                     <div className="ChatPreview__message">{cutString(content)}</div>
                 </div>
             </div>
-        )
+        );
     }
 }
 
