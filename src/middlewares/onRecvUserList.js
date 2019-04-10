@@ -1,16 +1,17 @@
-import {RECV_MESSAGE_LIST_SUCCESS, RECV_MESSAGE_LIST_FAILURE} from "../reducers/recvMessageList";
+import {RECV_USER_LIST_SUCCESS, RECV_USER_LIST_FAILURE} from "../reducers/recvUserList";
 import {getErrorMessage} from '../utils/getErrorMessage'
+import {addPathAndQueries} from "../utils/addPathAndQueries";
 
-const RECV_MESSAGE_LIST = 'RECV_MESSAGE_LIST';
+const RECV_USER_LIST = 'RECV_USER_LIST';
 
-const onRecvMessageList = store => next => action => {
-    if (action.type !== RECV_MESSAGE_LIST) {
+const onRecvUserList = store => next => action => {
+    if (action.type !== RECV_USER_LIST) {
         return next(action);
     }
 
-    const {request, token} = action.payload;
+    const {request, query, token} = action.payload;
 
-    fetch(request, {
+    fetch(addPathAndQueries(request, null, [{param: "query", query}]), {
         method: 'GET',
         headers: {
             'content-type': 'application/json',
@@ -20,20 +21,20 @@ const onRecvMessageList = store => next => action => {
         response.status === 200
             ? response.json()
             : Promise.reject(response.text())
-    ).then(messageList => {
+    ).then(userList => {
         store.dispatch({
-            type: RECV_MESSAGE_LIST_SUCCESS,
+            type: RECV_USER_LIST_SUCCESS,
             payload: {
-                messageList,
+                userList,
                 error: null,
             },
         });
     }).catch(promise => {
         promise.then(response => {
             store.dispatch({
-                type: RECV_MESSAGE_LIST_FAILURE,
+                type: RECV_USER_LIST_FAILURE,
                 payload: {
-                    messageList: [],
+                    userList: [],
                     error: getErrorMessage(response),
                 }
             })
@@ -41,9 +42,9 @@ const onRecvMessageList = store => next => action => {
     });
 };
 
-export const onRecvMessageListAction = (payload) => ({
-    type: RECV_MESSAGE_LIST,
+export const onRecvUserListAction = (payload) => ({
+    type: RECV_USER_LIST,
     payload
 });
 
-export default onRecvMessageList;
+export default onRecvUserList;

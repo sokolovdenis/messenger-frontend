@@ -6,6 +6,7 @@ import onAuth from '../middlewares/onAuth';
 import onSignOut from "../middlewares/onSignOut";
 import onRecvChatList from "../middlewares/onRecvChatList";
 import onRecvMessageList from "../middlewares/onRecvMessageList";
+import onRecvUserList from "../middlewares/onRecvUserList";
 
 const store = createStore(
     reducer,
@@ -14,6 +15,7 @@ const store = createStore(
         onSignOut,
         onRecvChatList,
         onRecvMessageList,
+        onRecvUserList,
         thunk
     )
 );

@@ -8,20 +8,20 @@ import Message from "../Message/Message";
 import ChatInfo from "../ChatInfo/ChatInfo";
 import {onRecvMessageListAction} from "../../middlewares/onRecvMessageList";
 import api from "../../constants/api";
+import WEBSOCKET from '../../constants/websocket';
+import Websocket from "react-websocket";
+import {addPathAndQueries} from "../../utils/addPathAndQueries";
 
 class MessagesPanel extends Component {
     componentDidMount() {
         this.props.recvMessageList({
             request: api.recvMessagesFromPublic,
-            parameters: {
-                path: null,
-                queries: [
-                    {param: "from", query: 0},
-                    {param: "count", query: 100},
-                ],
-            },
             token: this.props.token
         });
+    }
+
+    onMessage(data) {
+        console.log(data);
     }
 
     render() {
@@ -36,6 +36,11 @@ class MessagesPanel extends Component {
                     )}
                 </ul>
                 <NewMessage/>
+                <Websocket
+                    url={addPathAndQueries(WEBSOCKET, null, [{param: "token", query: this.props.token}])}
+                    onMessage={this.onMessage.bind(this)}
+                    debug={true}
+                />
             </div>
         );
     }
@@ -50,7 +55,7 @@ MessagesPanel.defaultProps = {
 };
 
 const mapStateToProps = state => ({
-    token : state.auth.token,
+    token: state.auth.token,
     messageList: state.recvMessageList.messageList,
 });
 

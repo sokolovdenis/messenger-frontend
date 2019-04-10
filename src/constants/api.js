@@ -10,7 +10,7 @@ const api = {
     sendMessagesToPublic: `${API_URL}/conversations/public/messages`,
     getSelf: `${API_URL}/users/me`,
     getUserById: userId => `${API_URL}/users/${userId}`,
-    getUserByName: `${API_URL}/users`
+    getUserByName: `${API_URL}/users`,
 };
 
 export default api;
