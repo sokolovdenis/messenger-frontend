@@ -12,25 +12,26 @@ import PropTypes from "prop-types";
 
 class SearchPanel extends Component {
     handleInputChange(event) {
-        const query = event.target.value;
-
-        if (query !== '') {
-            this.props.recvUserList({
-                request: api.getUserByName,
-                query,
-                token: this.props.token,
-            });
-        }
+        this.props.recvUserList({
+            request: api.getUserByName,
+            query: event.target.value,
+            token: this.props.token,
+        });
     }
 
     render () {
-        console.log(this.props.userList);
+
+        const emptyResult = this.props.message
+            ? <div className="SearchPanel__empty">{this.props.message}</div>
+            : null;
+
         return (
             <div className="SearchPanel">
-                <FormField class="SearchPanel__Query" label="Поиск" name="search">
+                <FormField class="SearchPanel__query" label="Поиск" name="search">
                     <FormInput name="search" onChange={this.handleInputChange.bind(this)}/>
                 </FormField>
-                <ul>
+                {emptyResult}
+                <ul className="SearchPanel__results">
                     {this.props.userList.map((user, index) => (
                         <li key={index}>
                             <User {...user}/>
@@ -53,6 +54,7 @@ SearchPanel.defaultProps = {
 const mapStateToProps = state => ({
     token: state.auth.token,
     userList: state.recvUserList.userList,
+    message: state.recvUserList.message,
 });
 
 const mapDispatchToProps = dispatch => ({

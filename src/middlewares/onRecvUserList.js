@@ -12,12 +12,25 @@ const onRecvUserList = store => next => action => {
 
     const {request, query, token} = action.payload;
 
+    if (query === '') {
+        store.dispatch({
+            type: RECV_USER_LIST_SUCCESS,
+            payload: {
+                userList: [],
+                message: null,
+                error: null,
+            }
+        });
+        return;
+    }
+
     apiRequest(addPathAndQueries(request, null, [{param: "query", query}]),
         'GET', token, null, userList => {
             store.dispatch({
                 type: RECV_USER_LIST_SUCCESS,
                 payload: {
                     userList,
+                    message: userList.length > 0 ? null : 'По вашему запросу ничего не нашлось',
                     error: null,
                 },
             });

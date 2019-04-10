@@ -1,4 +1,4 @@
-export const apiRequest = (request, method, token, body, onFulfilled, onRejected) => {
+export const apiRequest = (request, method, token, body, onFulfilled, onRejected) =>
     fetch(request, {
         method,
         headers: {
@@ -14,4 +14,3 @@ export const apiRequest = (request, method, token, body, onFulfilled, onRejected
     ).catch(promise => {
         promise.then(onRejected);
     });
-};
