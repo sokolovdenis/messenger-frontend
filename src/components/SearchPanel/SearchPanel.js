@@ -20,9 +20,8 @@ class SearchPanel extends Component {
     }
 
     render () {
-
         const emptyResult = this.props.message
-            ? <div className="SearchPanel__empty">{this.props.message}</div>
+            ? <li key="-1" className="SearchPanel__empty">{this.props.message}</li>
             : null;
 
         return (
@@ -30,8 +29,8 @@ class SearchPanel extends Component {
                 <FormField class="SearchPanel__query" label="Поиск" name="search">
                     <FormInput name="search" onChange={this.handleInputChange.bind(this)}/>
                 </FormField>
-                {emptyResult}
                 <ul className="SearchPanel__results">
+                    {emptyResult}
                     {this.props.userList.map((user, index) => (
                         <li key={index}>
                             <User {...user}/>
@@ -58,7 +57,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    recvUserList: debounce((payload) => dispatch(onRecvUserListAction(payload)), DEBOUNCE_TIMEOUT),
+    recvUserList: debounce(payload => dispatch(onRecvUserListAction(payload)), DEBOUNCE_TIMEOUT),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchPanel);

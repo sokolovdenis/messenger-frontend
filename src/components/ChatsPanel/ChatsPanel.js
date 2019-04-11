@@ -42,7 +42,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    recvChatList: (payload) => dispatch(onRecvChatListAction(payload)),
+    recvChatList: payload => dispatch(onRecvChatListAction(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatsPanel);

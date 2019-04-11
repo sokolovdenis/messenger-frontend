@@ -21,6 +21,7 @@ const onRecvUserList = store => next => action => {
                 error: null,
             }
         });
+
         return;
     }
 

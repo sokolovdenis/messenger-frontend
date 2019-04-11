@@ -16,21 +16,10 @@ class Authorization extends Component {
         super(props);
 
         this.state = {
-            login: '',
-            password: '',
-            name: '',
             isSignUp: false,
         };
 
     }
-
-    formClear = () => {
-        this.setState({
-            login: '',
-            password: '',
-            name: ''
-        });
-    };
 
     handleInputChange = event => {
         this.setState({
@@ -46,8 +35,6 @@ class Authorization extends Component {
         this.state.isSignUp
             ? this.props.auth({ request: api.signUp, parameters: { login, password, name}})
             : this.props.auth({ request: api.signIn, parameters: { login, password }});
-
-        this.formClear();
     };
 
     changeAction = event => {
@@ -55,7 +42,6 @@ class Authorization extends Component {
 
         this.setState({
             isSignUp: !this.state.isSignUp,
-            name: '',
         });
     };
 
@@ -70,7 +56,7 @@ class Authorization extends Component {
 
         const nameField = this.state.isSignUp
             ? (<FormField label='Имя пользователя' name='name'>
-                <FormInput value={this.state.name} name='name' onChange={this.handleInputChange}/>
+                <FormInput name='name' onChange={this.handleInputChange}/>
             </FormField>)
             : null;
 
@@ -79,10 +65,10 @@ class Authorization extends Component {
                 {errorMessage}
                 <Form onSubmit={this.handleSubmit}>
                     <FormField label='Логин ' name='login'>
-                        <FormInput value={this.state.login} name='login' onChange={this.handleInputChange}/>
+                        <FormInput name='login' onChange={this.handleInputChange}/>
                     </FormField>
                     <FormField label='Пароль' name='password'>
-                        <FormInput value={this.state.password} name='password' onChange={this.handleInputChange}/>
+                        <FormInput name='password' onChange={this.handleInputChange}/>
                     </FormField>
                     <span className="haveAccount" onClick={this.changeAction}>
                         {this.state.isSignUp
@@ -111,7 +97,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-    auth: (payload) => dispatch(onAuthAction(payload)),
+    auth: payload => dispatch(onAuthAction(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Authorization);

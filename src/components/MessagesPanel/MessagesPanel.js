@@ -5,7 +5,6 @@ import {connect} from "react-redux";
 import './MessagesPanel.css';
 import NewMessage from '../NewMessage/NewMessage';
 import Message from "../Message/Message";
-import ChatInfo from "../ChatInfo/ChatInfo";
 import {onRecvMessageListAction} from "../../middlewares/onRecvMessageList";
 import api from "../../constants/api";
 import WEBSOCKET from '../../constants/websocket';
@@ -27,7 +26,6 @@ class MessagesPanel extends Component {
     render() {
         return (
             <div className="MessagesPanel">
-                <ChatInfo/>
                 <ul>
                     {this.props.messageList.map((message, index) => (
                         <li key={index}>
@@ -39,7 +37,6 @@ class MessagesPanel extends Component {
                 <Websocket
                     url={addPathAndQueries(WEBSOCKET, null, [{param: "token", query: this.props.token}])}
                     onMessage={this.onMessage.bind(this)}
-                    debug={true}
                 />
             </div>
         );
@@ -60,7 +57,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    recvMessageList: (payload) => dispatch(onRecvMessageListAction(payload)),
+    recvMessageList: payload => dispatch(onRecvMessageListAction(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MessagesPanel);
