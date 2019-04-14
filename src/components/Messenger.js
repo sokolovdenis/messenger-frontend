@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import './Messenger.css';
 
 class Messenger extends Component {
-    constructor() {
+    /*constructor() {
         super();
 
-    }
+    }*/
 
     render() {
         return (

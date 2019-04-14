@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import './SignIn.css';
-import api from './../Api.js'
+import { signIn } from './../Api.js'
 import SignUp from './SignUp.js'
+import SelfUser from './SelfUser.js'
 
 
 class SignIn extends Component {
@@ -32,15 +33,28 @@ class SignIn extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        console.log('Login = ' + this.state.login + '\nPassword = ' + this.state.password);
+
         signIn(this.state.login, this.state.password)
-            .then(res => res.json())
-            .then(res => console.log(res))
-            .catch(error => console.log(error));
+            .then( response =>
+                response.json().then(user => ({user, response}))
+            ).then(({user, response}) => {
+                if (response.ok) {
+                    localStorage.setItem('token', user.token);
+                    localStorage.setItem('expires', user.expires);
+
+                    ReactDOM.render(
+                        <SelfUser />,
+                        document.getElementById('root')
+                    );
+                } else if (response.status === 400) {
+                    console.log("Some parameters aren't valid");
+                } else {
+                    console.log(response.statusText);
+                }
+            }).catch(e => console.log("Error: ", e));
     }
 
     signUp() {
-        console.log("Sign Up");
         ReactDOM.render(
             <SignUp />,
             document.getElementById('root')
@@ -49,43 +63,27 @@ class SignIn extends Component {
 
     render() {
         return (
-            <form className="SignIn" onSubmit={this.handleSubmit}>
-                <h2 className="SignIn-heading">Sign In</h2>
-                <label htmlFor="inputLogin" className="sr-only">Login: </label>
-                <input type="text" name="inputLogin" onChange={this.handleLoginChange} className="form-control" placeholder="Login" required autoFocus />
-                <br />
-                <br />
-                <label htmlFor="inputPassword" className="sr-only">Password: </label>
-                <input type="text" name="inputPassword" onChange={this.handlePasswordChange} className="form-control" placeholder="Password" required />
-                <br />
-                <br />
-                <button className="btn btn-default" type="submit">Sign In</button>
-                <br />
-                <br />
-                <br />
-                <br />
-                <button className="btn" type="button" onClick={this.signUp}>Sign Up</button>
-            </form>
+            <div>
+                <form className="SignIn" onSubmit={this.handleSubmit}>
+                    <h2 className="SignIn-heading">Sign In</h2>
+                    <label htmlFor="inputLogin" className="sr-only">Login: </label>
+                    <input type="text" name="inputLogin" onChange={this.handleLoginChange} className="form-control" placeholder="Login" required autoFocus />
+                    <br />
+                    <br />
+                    <label htmlFor="inputPassword" className="sr-only">Password: </label>
+                    <input type="text" name="inputPassword" onChange={this.handlePasswordChange} className="form-control" placeholder="Password" required />
+                    <br />
+                    <br />
+                    <button className="btn btn-default" type="submit">Sign In</button>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <button className="btn" type="button" onClick={this.signUp}>Sign Up</button>
+                </form>
+            </div>
         );
     }
-}
-
-function signIn(login, password) {
-    let model = {
-        'login' : login,
-        'password' : password
-    };
-
-    let url = api + '/api/authentication/signin';
-
-    return fetch(url, {
-        method : 'POST',
-        headers : {
-            'Accept': 'application/json, text/plain, */*',
-            'Content-Type' : 'application/json'
-        },
-        body : JSON.stringify(model)
-    });
 }
 
 export default SignIn;

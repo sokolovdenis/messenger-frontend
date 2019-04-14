@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import './SignUp.css';
-import SignIn from './SignIn.js'
-import api from './../Api.js'
+import SignIn from './SignIn.js';
+import { signUp } from './../Api.js';
+import SelfUser from './SelfUser.js';
 
 
 class SignUp extends Component {
@@ -38,17 +39,31 @@ class SignUp extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        console.log('Login = ' + this.state.login +
-            '\nPassword = ' + this.state.password +
-            '\nName = ' + this.state.name);
 
         signUp(this.state.login, this.state.password, this.state.name)
-            .then(res => console.log(res.json()))
-            .catch(error => console.log(error));
+            .then( response =>
+                response.json().then(user => ({user, response}))
+            ).then(({user, response}) => {
+                if (response.ok) {
+                    localStorage.setItem('token', user.token);
+                    localStorage.setItem('expires', user.expires);
+
+                    ReactDOM.render(
+                        <SelfUser />,
+                        document.getElementById('root')
+                    );
+                } else if (response.status === 400) {
+                    console.log("Some parameters aren't valid");
+                } else if (response.status === 409) {
+                    console.log("This Login already exists");
+                } else {
+                    console.log(response.statusText);
+                }
+            }).catch(e => console.log("Error: ", e)
+        );
     }
 
     signIn() {
-        console.log("Sign In");
         ReactDOM.render(
             <SignIn />,
             document.getElementById('root')
@@ -57,48 +72,31 @@ class SignUp extends Component {
 
     render() {
         return (
-            <form className="SignUp" onSubmit={this.handleSubmit}>
-                <h2 className="SignUp-heading">Sign Up</h2>
-                <label htmlFor="inputLogin" className="sr-only">Login: </label>
-                <input type="text" name="inputLogin" onChange={this.handleLoginChange} className="form-control" placeholder="Login" required autoFocus />
-                <br />
-                <br />
-                <label htmlFor="inputPassword" className="sr-only">Password: </label>
-                <input type="text" name="inputPassword" onChange={this.handlePasswordChange} className="form-control" placeholder="Password" required />
-                <br />
-                <br />
-                <label htmlFor="inputName" className="sr-only">Name: </label>
-                <input type="text" name="inputName" onChange={this.handleNameChange} className="form-control" placeholder="Name" required />
-                <br />
-                <br />
-                <button className="btn btn-default" type="submit">Sign Up</button>
-                <br />
-                <br />
-                <br />
-                <br />
-                <button className="btn" type="button" onClick={this.signIn}>Sign In</button>
-            </form>
+            <div>
+                <form className="SignUp" onSubmit={this.handleSubmit}>
+                    <h2 className="SignUp-heading">Sign Up</h2>
+                    <label htmlFor="inputLogin" className="sr-only">Login: </label>
+                    <input type="text" name="inputLogin" onChange={this.handleLoginChange} className="form-control" placeholder="Login" required autoFocus />
+                    <br />
+                    <br />
+                    <label htmlFor="inputPassword" className="sr-only">Password: </label>
+                    <input type="text" name="inputPassword" onChange={this.handlePasswordChange} className="form-control" placeholder="Password" required />
+                    <br />
+                    <br />
+                    <label htmlFor="inputName" className="sr-only">Name: </label>
+                    <input type="text" name="inputName" onChange={this.handleNameChange} className="form-control" placeholder="Name" required />
+                    <br />
+                    <br />
+                    <button className="btn btn-default" type="submit">Sign Up</button>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <button className="btn" type="button" onClick={this.signIn}>Sign In</button>
+                </form>
+            </div>
         );
     }
-}
-
-function signUp(login, password, name) {
-    let model = {
-        'login' : login,
-        'password' : password,
-        'name' : name
-    };
-
-    let url = api + '/api/authentication/signup';
-
-    return fetch(url, {
-        method : 'post',
-        headers : {
-            'Accept': 'application/json, text/plain, */*',
-            'Content-Type' : 'application/json'
-        },
-        body : JSON.stringify(model)
-    });
 }
 
 export default SignUp;
