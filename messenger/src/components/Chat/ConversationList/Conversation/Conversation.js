@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import './Conversartion.css'
+import './Conversation.css'
 
 
-class Conversartion extends Component {
+class Conversation extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -35,4 +35,4 @@ class Conversartion extends Component {
     }
 }
 
-export default Conversartion
+export default Conversation

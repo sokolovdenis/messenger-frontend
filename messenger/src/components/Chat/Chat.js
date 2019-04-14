@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ConversartionList from './ConversationList/ConversationList'
+import ConversationList from './ConversationList/ConversationList'
 import MessageList from './MessageList/MessageList';
 import SendMessageForm from './SendMessageForm/SendMessageForm';
 import './Chat.css';
@@ -66,7 +66,7 @@ class Chat extends Component {
                             </div>
                         </div>
                     </div>
-                    <ConversartionList
+                    <ConversationList
                         chats={this.state.chats}/>
                 </div>
                 <div className="mesgs">
