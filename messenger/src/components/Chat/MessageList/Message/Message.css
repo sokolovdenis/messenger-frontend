@@ -1,0 +1,72 @@
+/*Старая версия*/
+.message {
+    margin: 15px 0;
+}
+
+.own-message {
+    margin: 15px 0;
+    text-align: right;
+}
+
+.message div:nth-child(1),
+.own-message div:nth-child(1) {
+    font-size: 11px;
+    color: var(--main-text-color);
+    opacity: 0.9;
+    margin-bottom: 6px;
+}
+.message div:nth-child(2),
+.own-message div:nth-child(2)  {
+    background: var(--main-color);
+    color: var(--secondary-color);
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 8px;
+    white-space: pre-line;
+}
+/*Новая версия*/
+.incoming-msg-img {
+    display: inline-block;
+    width: 6%;
+}
+.received-msg {
+    display: inline-block;
+    padding: 0 0 0 10px;
+    vertical-align: top;
+    width: 92%;
+}
+.received-withd-msg p {
+    background: #ebebeb none repeat scroll 0 0;
+    border-radius: 3px;
+    color: #646464;
+    font-size: 14px;
+    margin: 0;
+    padding: 5px 10px 5px 12px;
+    width: 100%;
+    white-space: pre-line;
+}
+.time-date {
+    color: #747474;
+    display: block;
+    font-size: 12px;
+    margin: 8px 0 0;
+}
+.received-withd-msg { width: 57%;}
+
+.sent-msg p {
+    background: #05728f none repeat scroll 0 0;
+    border-radius: 3px;
+    font-size: 14px;
+    margin: 0; color:#fff;
+    padding: 5px 10px 5px 12px;
+    width:100%;
+    white-space: pre-line;
+}
+.outgoing-msg { 
+    overflow:hidden;
+    margin:26px 0 26px;
+}
+.sent-msg {
+    float: right;
+    width: 46%;
+}

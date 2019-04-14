@@ -1,0 +1,96 @@
+.mesgs {
+  float: left;
+  padding: 30px 15px 0 25px;
+  width: 60%;
+}
+.inbox-people {
+  background: #f8f8f8 none repeat scroll 0 0;
+  float: left;
+  overflow: hidden;
+  width: 40%; border-right:1px solid #c4c4c4;
+}
+.recent-heading {
+  float: left;
+  width:40%;}
+.srch-bar {
+  display: inline-block;
+  text-align: right;
+  width: 60%; 
+  padding: 2px 0 4px 6px;
+}
+.headind-srch { 
+  padding:10px 29px 10px 20px; 
+  overflow:hidden; 
+  border-bottom:1px solid #c4c4c4;
+}
+
+.recent-heading h4 {
+  color: #05728f;
+  font-size: 21px;
+  margin: auto;
+}
+.srch-bar input { 
+  border:1px solid #cdcdcd; 
+  border-width:0 0 1px 0; 
+  width:80%; 
+  padding:2px 0 4px 6px; 
+  background:none;
+}
+.srch-bar .input-group-addon button {
+  background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+  border: medium none;
+  padding: 0;
+  color: #707070;
+  font-size: 18px;
+}
+.srch-bar .input-group-addon { 
+  margin: 0 0 0 -27px;
+}
+:root {
+    --main-color: #5ea3d0;
+    --secondary-color: white;
+    --main-text-color: #3e5869;
+    --secondary-text-color: #b0c7d6;
+    --send-message-form: #F5F5F5;
+  }
+  
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: system-ui;
+    font-weight: 200;
+    color: #3e5869; 
+  }
+  
+  #root {
+    height: 100%;
+  }
+  
+  .messenger {
+    height: calc(100% - 100px); 
+  }
+  
+  .send-message-form {
+    background: var(--send-message-form);
+    display: flex;
+    box-sizing: border-box;
+    height: 60px;
+  }
+  
+  .send-message-form input {
+    width: 100%;
+    padding: 15px 10px;
+    border: none;
+    margin: 0;
+    background: var(--send-message-form);
+    font-weight: 200;
+  }
+  
+  .send-message-form input:focus {
+    outline-width: 0;
+  }
+  
+  .send-message-form input::placeholder {
+    color: black;
+  }
