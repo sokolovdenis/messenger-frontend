@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import './SignIn.css';
-import { signIn } from './../Api.js'
-import SignUp from './SignUp.js'
-import SelfUser from './SelfUser.js'
+import { signIn } from './../Api.js';
+import SignUp from './SignUp.js';
+import SelfUser from './SelfUser.js';
+import SignOut from './SignOut.js';
 
 
 class SignIn extends Component {
@@ -43,7 +44,10 @@ class SignIn extends Component {
                     localStorage.setItem('expires', user.expires);
 
                     ReactDOM.render(
-                        <SelfUser />,
+                        <div>
+                            <SignOut />
+                            <SelfUser />,
+                        </div>,
                         document.getElementById('root')
                     );
                 } else if (response.status === 400) {

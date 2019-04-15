@@ -4,6 +4,7 @@ import './SignUp.css';
 import SignIn from './SignIn.js';
 import { signUp } from './../Api.js';
 import SelfUser from './SelfUser.js';
+import SignOut from './SignOut.js';
 
 
 class SignUp extends Component {
@@ -49,7 +50,10 @@ class SignUp extends Component {
                     localStorage.setItem('expires', user.expires);
 
                     ReactDOM.render(
-                        <SelfUser />,
+                        <div>
+                            <SignOut />
+                            <SelfUser />,
+                        </div>,
                         document.getElementById('root')
                     );
                 } else if (response.status === 400) {

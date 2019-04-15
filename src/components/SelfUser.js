@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import './SelfUser.css';
 import { getSelfUser, findUsersByName } from './../Api.js';
+import UsersList from './UsersList.js';
 
 
 class SelfUser extends Component {
@@ -11,7 +12,10 @@ class SelfUser extends Component {
         this.state = {
             name : '',
             id : '',
-            templateName : ''
+            templateName : '',
+            findedUsers : [{
+                'name':'nady', 'id':'asdfdas'},
+                {'name':'aa', 'id':'fdsfafa'}]
         };
 
         this.handleNameChange = this.handleNameChange.bind(this);
@@ -43,19 +47,14 @@ class SelfUser extends Component {
     handleSubmit(event) {
         event.preventDefault();
 
+        console.log("It doesn't work");
         /*findUsersByName(this.state.templateName)
-            .then( response =>
-                response.json().then(users => ({users, response}))
-            ).then(({users, response}) => {
+            .then( response => {
+                console.log(response.data);
+            })/*.then(({usersList, response}) => {
                 if (response.ok) {
-                    console.log(users)
-                    /*localStorage.setItem('token', user.token);
-                    localStorage.setItem('expires', user.expires);
-
-                    ReactDOM.render(
-                        <SelfUser />,
-                        document.getElementById('root')
-                    );*//*
+                    console.log(usersList);
+                    //this.setState('findedUsers': response.data);
                 } else if (response.status === 400) {
                     console.log("Some parameters aren't valid");
                 } else if (response.status === 401) {
@@ -63,7 +62,7 @@ class SelfUser extends Component {
                 } else {
                     console.log(response.statusText);
                 }
-            }).catch(e => console.log("Error: ", e));*/
+            }).catch(e => console.log("Error: ", e))*/;
     }
 
     render() {
@@ -77,6 +76,8 @@ class SelfUser extends Component {
                     <br/>
                     <button className="btn btn-default" type="submit">Find user</button>
                 </form>
+
+                <UsersList users={this.state.findedUsers} />
             </div>
         );
     }
