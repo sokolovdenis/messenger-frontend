@@ -33,9 +33,14 @@ class MessagesList extends React.Component {
     }
 
     loadData() {
+        if (this.props.messenger.state.currentConversation === "public") {
+            var url = 'http://messenger.westeurope.cloudapp.azure.com/api/conversations/public/messages';
+        } else {
+            var url = `http://messenger.westeurope.cloudapp.azure.com/api/conversations/{this.props.messenger.state.currentConversation}/messages`;
+        }
         axios({
             method: 'get',
-            url: 'http://messenger.westeurope.cloudapp.azure.com/api/conversations/public/messages',
+            url: url,
             data: {
                 from: 0,
                 count: 1000
@@ -47,36 +52,38 @@ class MessagesList extends React.Component {
         }).then((response) => {
             console.log(response);
             this.setState({'messages': response.data});
-            var users = {};
-            var keys = Array.from(new Set(this.state.messages.map(message => message.user)));
 
-            for (var i in keys) {
-                const user = keys[i];
-                axios({
-                    method: 'get',
-                    url: 'http://messenger.westeurope.cloudapp.azure.com/api/users/' + user,
-                    data: {
-                        //id: user
-                    },
-                    headers: {
-                        responseType: 'json',
-                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                    }
-                }).then((response) => {
-                    if (response.status === 200) {
-                        // console.log(response);
-                        users[user] = response.data.name;
-                        this.setState({users: users});
-                    }
-                }).catch(function (error) {
-                    console.log(error);
-                });
-            }
-            this.setState({users: users});
+            var keys = Array.from(new Set(this.state.messages.map(message => message.user)));
+            this.setState({keys: keys});
+            this.loadUserInfo(keys);
         }).catch(function (error) {
             console.log(error);
         });
+    }
 
+    loadUserInfo(keys) {
+        var users = {};
+        for (var i in keys) {
+            const user = keys[i];
+            axios({
+                method: 'get',
+                url: 'http://messenger.westeurope.cloudapp.azure.com/api/users/' + user,
+                data: {},
+                headers: {
+                    responseType: 'json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
+            }).then((response) => {
+                if (response.status === 200) {
+                    // console.log(response);
+                    users[user] = response.data.name;
+                    this.setState({users: users});
+                }
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }
+        this.setState({users: users});
     }
 
     // componentWillUpdate: function() {
@@ -99,6 +106,26 @@ class MessagesList extends React.Component {
         this.el.scrollIntoView({behavior: 'smooth'});
     }
 
+    setCurrentUser(userId) {
+        axios({
+            method: 'get',
+            url: `http://messenger.westeurope.cloudapp.azure.com/api/conversations/{userId}/messages`,
+            data: {
+                from: 0,
+                count: 1
+            },
+            headers: {
+                responseType: 'json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        }).then((response) => {
+            console.log(response);
+            this.props.messenger.setState({currentConversation: response.data.conversationId});
+        }).catch(function (error) {
+            console.log(error);
+        });
+    }
+
     render() {
         return (
             <>
@@ -107,10 +134,13 @@ class MessagesList extends React.Component {
                         <>
                             {this.state.messages.map((message, i) => (
                                 <div className="message" key={"message__" + i}>
-                                    <div className="message-username"
-                                         key={"message-username__" + message.uniqueId}>{this.state.users == null ? message.id : this.state.users[message.user]}</div>
-                                    <div className="message-text"
-                                         key={"message-text__" + message.uniqueId}>{message.content}</div>
+                                    <div className="message-username" key={"message-username__" + message.uniqueId}
+                                         onClick={this.setCurrentUser.bind(this, message.user)}>
+                                        <a href="#" >{this.state.users == null ? message.id : this.state.users[message.user]} </a>
+                                    </div>
+                                    <div className="message-text" key={"message-text__" + message.uniqueId}>
+                                        {message.content}
+                                    </div>
                                 </div>
                             ))}
                         </>
@@ -188,8 +218,8 @@ class Main extends React.Component {
     render() {
         return (
             <main>
-                <MessagesList/>
-                <MessageSubmit/>
+                <MessagesList messenger={this.props.messenger}/>
+                <MessageSubmit messenger={this.props.messenger}/>
             </main>
         );
     }
@@ -198,12 +228,15 @@ class Main extends React.Component {
 class Conversation extends React.Component {
     constructor(props) {
         super(props);
-        this.onClickHandler = this.props.conversations.setCurrentConversation.bind(this.props.conversation.id);
+        this.onClickHandler = this.props.setCurrentConversation;
+        console.log("Conv" + this.props.conversation.id);
     }
 
     render() {
+        var className = this.props.active ? "active side-menu-elem" : "side-menu-elem";
+        console.log("active" + className);
         return (
-            <a className="side-menu-elem" href="#"
+            <a className={className} href="#"
                onClick={this.onClickHandler}>
                 {this.props.conversation.participant == null ? "Public" : this.props.conversation.participant}
             </a>
@@ -212,15 +245,15 @@ class Conversation extends React.Component {
     }
 }
 
-class SideMenu extends React.Component {
+class ConversationList extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {conversations: null, currentConversation: null};
-        this.setCurrentConversation = this.setCurrentConversation.bind(this);
+        this.state = {conversations: null};
     }
 
     setCurrentConversation(id) {
-        this.setState({currentConversation : id});
+        console.log("Set" + id);
+        this.props.messenger.setState({currentConversation: id});
     }
 
     componentDidMount() {
@@ -237,8 +270,6 @@ class SideMenu extends React.Component {
             }
         }).then((response) => {
             if (response.status === 200) {
-                // console.log("conversations");
-                // console.log(response);
                 this.setState({conversations: response.data});
             }
         }).catch(function (error) {
@@ -253,7 +284,10 @@ class SideMenu extends React.Component {
                 {this.state.conversations ? (
                     <>
                         {this.state.conversations.map((conversation, i) => (
-                            <Conversation conversation={conversation} conversations={this} key={"conversation__" + this.props.uniqueId}/>
+                            <Conversation conversation={conversation}
+                                          setCurrentConversation={this.setCurrentConversation.bind(this, conversation.id)}
+                                          active={conversation.id === this.props.messenger.state.currentConversation}
+                                          key={"conversation__" + this.props.uniqueId}/>
                         ))}
                     </>
                 ) : (<p>No conversations.</p>)}
@@ -266,11 +300,11 @@ class SideMenu extends React.Component {
 class Messenger extends Component {
     constructor(props) {
         super(props);
-        this.state = {conversations: null, currentConversation: null};
+        this.state = {currentConversation: "public"};
     }
 
     updateAfterLogin() {
-        this.state.conversations.loadData()
+        this.state.conversations.loadData();
     }
 
     render() {
@@ -278,7 +312,7 @@ class Messenger extends Component {
             <div>
                 <Header app={this.props.app}/>
                 <div className="container">
-                    <SideMenu app={this.props.app}/>
+                    <ConversationList app={this.props.app} messenger={this}/>
                     <Main app={this.props.app} messenger={this}/>
                     <aside>aside</aside>
                 </div>

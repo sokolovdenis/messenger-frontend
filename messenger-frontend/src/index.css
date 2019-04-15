@@ -81,6 +81,11 @@ aside {
     background: aliceblue;
 }
 
+/*BELOW side-menu-elem*/
+.active {
+    background: mediumaquamarine;
+}
+
 .message {
     display: flex;
     margin: 2em;
