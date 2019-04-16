@@ -1,13 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/App';
-import { CookiesProvider } from 'react-cookie';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-    <CookiesProvider>
-        <App />
-    </CookiesProvider>, document.getElementById('root')
+        <App />, document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change
