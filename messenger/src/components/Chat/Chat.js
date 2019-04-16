@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ConversationList from './ConversationList/ConversationList'
 import MessageList from './MessageList/MessageList';
 import SendMessageForm from './SendMessageForm/SendMessageForm';
+import SearchPanel from './SearchPanel/SearchPanel'
 import './Chat.css';
 
 
@@ -53,19 +54,7 @@ class Chat extends Component {
         return (
             <div className="messenger">
                 <div className="inbox-people">
-                    <div className="headind-srch">
-                        <div className="recent-heading">
-                            <h4>Recent</h4>
-                        </div>
-                        <div className="srch-bar">
-                            <div className="stylish-input-group">
-                                <input type="text" class="search-bar"  placeholder="Search" />
-                                <span className="input-group-addon">
-                                    <button type="button"> <i className="fa fa-search" aria-hidden="true"></i> </button>
-                                </span> 
-                            </div>
-                        </div>
-                    </div>
+                    <SearchPanel/>
                     <ConversationList
                         chats={this.state.chats}/>
                 </div>

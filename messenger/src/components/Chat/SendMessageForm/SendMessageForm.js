@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './SendMessageForm.css'
 
 
 class SendMessageForm extends Component {
@@ -27,15 +28,22 @@ class SendMessageForm extends Component {
     
     render() {
         return (
-            <form
-                onSubmit={this.handleSubmit}
-                className="send-message-form">
-                <input
-                    onChange={this.handleChange}
-                    value={this.state.message}
-                    placeholder="Type your message and hit ENTER"
-                    type="text" />
-            </form>
+            <div className="type-msg">
+                <div className="input-msg-write">
+                    <form
+                        onSubmit={this.handleSubmit}>
+                        <input 
+                            type="text" 
+                            className="write-msg" 
+                            placeholder="Type a message"
+                            onChange={this.handleChange}
+                            value={this.state.message} />
+                    </form>
+                    <button className="msg-send-btn" type="button">
+                        <i className="fa fa-paper-plane-o" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
         )
     }
 }

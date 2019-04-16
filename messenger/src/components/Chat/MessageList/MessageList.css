@@ -1,14 +1,3 @@
-/*Старая версия*/
-.message-list {
-    box-sizing: border-box;
-    padding: 0 6px 0 6px;
-    margin: 0;
-    width: 100%;
-    height: 100%;
-    overflow-y: auto;
-    background: white;
-}
-/*Новая версия*/
 .msg-history {
     height: 516px;
     overflow-y: auto;
