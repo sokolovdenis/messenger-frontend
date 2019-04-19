@@ -8,9 +8,11 @@ class Header extends React.Component {
     }
 
     render() {
+        let greetings = this.props.messenger.state.me !== undefined? `Hello, ${this.props.messenger.state.me.name}`: '';
         return (
             <header>
-                <div className="logo">My Wonderful Messenger</div>
+                <div className="logo">Messenger</div>
+                <h1> {greetings} </h1>
                 <div className="main-menu">
                     <button className="side-menu-elem" onClick={this.props.app.logout}> Logout</button>
                 </div>
@@ -22,73 +24,13 @@ class Header extends React.Component {
 class MessagesList extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {messages: null, currentUser: undefined};
+        this.state = {};
     }
 
     componentDidMount() {
-        this.loadData();
         this.scrollToBottom();
         // const node = ReactDOM.findDOMNode(this);
         // node.scrollTop = node.scrollHeight;
-    }
-
-    loadData() {
-        if (this.state.currentUser === this.props.currentUser) {
-            return;
-        } else {
-            this.state.currentUser = this.props.currentUser;
-        }
-        if (this.props.currentUser === null) {
-            var url = 'http://messenger.westeurope.cloudapp.azure.com/api/conversations/public/messages';
-        } else {
-            var url = `http://messenger.westeurope.cloudapp.azure.com/api/conversations/${this.props.currentUser}/messages`;
-        }
-        axios({
-            method: 'get',
-            url: url,
-            data: {
-                from: 0,
-                count: 1000
-            },
-            headers: {
-                responseType: 'json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
-            }
-        }).then((response) => {
-            this.setState({'messages': response.data});
-
-            // userId всех юзеров из текущей беседы (без повторений)
-            var userIds = Array.from(new Set(this.state.messages.map(message => message.user)));
-            this.loadUserInfo(userIds);
-        }).catch(function (error) {
-            console.log(error);
-        });
-    }
-
-    loadUserInfo(userIds) {
-        var users = this.props.messenger.state.users;
-        for (var i in userIds) {
-            const user = userIds[i];
-            if (!( user in users)) {
-                axios({
-                    method: 'get',
-                    url: 'http://messenger.westeurope.cloudapp.azure.com/api/users/' + user,
-                    data: {},
-                    headers: {
-                        responseType: 'json',
-                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                    }
-                }).then((response) => {
-                    if (response.status === 200) {
-                        // console.log(response);
-                        users[user] = response.data.name;
-                        this.props.messenger.setState({users: users});
-                    }
-                }).catch(function (error) {
-                    console.log(error);
-                });
-            }
-        }
     }
 
     // componentWillUpdate: function() {
@@ -104,6 +46,7 @@ class MessagesList extends React.Component {
     // }
 
     componentDidUpdate() {
+        this.props.messenger.loadMessages();
         this.scrollToBottom();
     }
 
@@ -114,7 +57,7 @@ class MessagesList extends React.Component {
     setCurrentUser(userId) {
         axios({
             method: 'get',
-            url: `http://messenger.westeurope.cloudapp.azure.com/api/conversations/{userId}/messages`,
+            url: `http://messenger.westeurope.cloudapp.azure.com/api/conversations/${userId}/messages`,
             data: {
                 from: 0,
                 count: 1
@@ -136,7 +79,6 @@ class MessagesList extends React.Component {
                     currentUser: userId
                 });
             }
-            this.loadData();
         }).catch(function (error) {
             console.log(error);
         });
@@ -148,17 +90,15 @@ class MessagesList extends React.Component {
         //     }
         // }
         // this.props.messenger.setState({currentUser: userId, currentConversation: null});
-
     }
 
     render() {
-        this.loadData();
         return (
             <>
                 <div className="messages" id="messages">
-                    {this.state.messages ? (
+                    {this.props.messagesList ? (
                         <>
-                            {this.state.messages.map((message, i) => (
+                            {this.props.messagesList.map((message, i) => (
                                 <div className="message" key={"message__" + i}>
                                     <div className="message-username" key={"message-username__" + message.uniqueId}
                                          onClick={this.setCurrentUser.bind(this, message.user)}>
@@ -216,14 +156,16 @@ class MessageSubmit extends React.Component {
                 responseType: 'json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             }
-        }).then(function (response) {
-            if (response.code !== 200) {
+        }).then((response) => {
+            if (response.status === 200) {
+                this.props.messagesList.push({content: this.state.content, user: this.props.messenger.me});
+                this.setState({content: ''});
+            } else {
                 console.log(response);
             }
         }).catch(function (error) {
             console.log(error);
         });
-        // this.setState({name: '', descr: '', formFields: []});
     }
 
     render() {
@@ -239,13 +181,80 @@ class MessageSubmit extends React.Component {
 class Messages extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {currentUser: undefined, messagesList: null};
+        this.props.messenger.loadMessages = this.loadMessagesData.bind(this);
+    }
+
+    componentDidMount() {
+        this.props.messenger.loadMessages();
+    }
+
+    loadMessagesData() {
+        if (this.state.currentUser === this.props.currentUser) {
+            return;
+        } else {
+            this.setState({currentUser : this.props.currentUser});
+        }
+        if (this.props.currentUser === null) {
+            var url = 'http://messenger.westeurope.cloudapp.azure.com/api/conversations/public/messages';
+        } else {
+            var url = `http://messenger.westeurope.cloudapp.azure.com/api/conversations/${this.props.currentUser}/messages`;
+        }
+        axios({
+            method: 'get',
+            url: url,
+            data: {
+                from: 0,
+                count: 1000
+            },
+            headers: {
+                responseType: 'json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        }).then((response) => {
+            this.setState({messagesList: response.data});
+
+            // userId всех юзеров из текущей беседы (без повторений)
+            var userIds = Array.from(new Set(this.state.messagesList.map(message => message.user)));
+            this.loadUserData(userIds);
+        }).catch(function (error) {
+            console.log(error);
+        });
+    }
+
+    loadUserData(userIds) {
+        var users = this.props.messenger.state.users;
+        for (var i in userIds) {
+            const user = userIds[i];
+            if (!( user in users)) {
+                axios({
+                    method: 'get',
+                    url: 'http://messenger.westeurope.cloudapp.azure.com/api/users/' + user,
+                    data: {},
+                    headers: {
+                        responseType: 'json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    }
+                }).then((response) => {
+                    if (response.status === 200) {
+                        // console.log(response);
+                        users[user] = response.data.name;
+                        this.props.messenger.setState({users: users});
+                    } else {
+                        console.log(response);
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            }
+        }
     }
 
     render() {
         return (
             <main>
-                <MessagesList messenger={this.props.messenger} currentUser={this.props.currentUser}/>
-                <MessageSubmit messenger={this.props.messenger} currentUser={this.props.currentUser}/>
+                <MessagesList messenger={this.props.messenger} currentUser={this.props.currentUser} messagesList={this.state.messagesList}/>
+                <MessageSubmit messenger={this.props.messenger} currentUser={this.props.currentUser} messagesList={this.state.messagesList}/>
             </main>
         );
     }
@@ -259,7 +268,6 @@ class Conversation extends React.Component {
 
     render() {
         var className = this.props.active ? "active side-menu-elem" : "side-menu-elem";
-        console.log(className + this.props.conversation.participant);
         return (
             <a className={className} href="#"
                onClick={this.onClickHandler}>
@@ -281,10 +289,14 @@ class ConversationList extends React.Component {
     }
 
     componentDidMount() {
-        this.loadData();
+        this.loadConversationsData();
     }
 
-    async loadData() {
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        this.props.messenger.loadMessages();
+    }
+
+    async loadConversationsData() {
         await axios({
             method: 'get',
             url: 'http://messenger.westeurope.cloudapp.azure.com/api/conversations',
@@ -324,17 +336,34 @@ class ConversationList extends React.Component {
 class Messenger extends Component {
     constructor(props) {
         super(props);
-        this.state = {currentConversation: "public", currentUser: null, users:{}};
+        this.state = {currentConversation: "public", currentUser: null, users:{}, me:undefined};
+        this.loadMessages = null;
     }
 
-    // updateAfterLogin() {
-    //     this.state.conversations.loadData();
-    // }
+    componentDidMount() {
+        axios({
+            method: 'get',
+            url: 'http://messenger.westeurope.cloudapp.azure.com/api/users/me',
+            data: {},
+            headers: {
+                responseType: 'json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        }).then( (response) => {
+            if (response.status === 200) {
+                this.setState({me: response.data});
+            } else {
+                console.log(response);
+            }
+        }).catch(function (error) {
+            console.log(error);
+        });
+    }
 
     render() {
         return (
             <div>
-                <Header app={this.props.app}/>
+                <Header app={this.props.app} messenger={this}/>
                 <div className="container">
                     <ConversationList app={this.props.app} messenger={this}/>
                     <Messages app={this.props.app} messenger={this} currentUser={this.state.currentUser}/>
