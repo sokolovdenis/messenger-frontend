@@ -7,32 +7,33 @@ class App extends Component {
 
     constructor(props) {
         super(props);
-        this.isSignedIn = false;
         this.state = {
-            token: null
+            //token: null,
+            isSignedIn: false
         };
         this.tokenReceiveHandler = this.tokenReceiveHandler.bind(this);
         this.logout = this.logout.bind(this);
     }
 
     tokenReceiveHandler(token) {
-        this.setState({token: token});
-        console.log(token);
-        this.isSignedIn = true;
+        //this.setState({token: token});
+        //console.log(token);
+        this.setState({isSignedIn: true});
     }
 
     logout() {
         localStorage.removeItem('token');
-        this.isSignedIn = false;
+        this.setState({token:null, isSignedIn:false});
     }
 
     render() {
         var token = localStorage.getItem('token');
         var expires = localStorage.getItem('expires');
-        if ( token !== undefined && Date.now() - Date.parse(expires) < 0) {
-            this.isSignedIn = true;
+        if ( token !== undefined && token !== null && Date.now() - Date.parse(expires) < 0) {
+            //this.setState({isSignedIn: true});
+            this.state.isSignedIn = true;
         }
-        return ( this.isSignedIn? <Messenger app={this} token={this.state.token}/>:<SignIn onTokenReceive={this.tokenReceiveHandler}/> );
+        return ( this.state.isSignedIn? <Messenger app={this} token={this.state.token}/>:<SignIn onTokenReceive={this.tokenReceiveHandler}/> );
     }
 }
 

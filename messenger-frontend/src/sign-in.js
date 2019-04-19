@@ -37,7 +37,7 @@ class SignIn extends Component {
             headers: {
                 responseType: 'json'
             }
-        }).then(function (response) {
+        }).then((response) => {
             //console.log(response);
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('expires', response.data.expires);
