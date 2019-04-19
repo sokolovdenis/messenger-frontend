@@ -66,4 +66,46 @@ function findUsersByName(query) {
     });
 }
 
-export { signUp, signIn, getSelfUser, findUsersByName };
+function getUser(id) {
+    let url = api + '/api/users/' + id;
+
+    return fetch(url, {
+        method : 'GET',
+        headers : {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type' : 'application/json',
+            'Authorization' : 'Bearer ' + localStorage.getItem('token'),
+            'id' : id
+        }
+    });
+}
+
+function getAllConversations() {
+    let url = api + '/api/conversations';
+
+    return fetch(url, {
+        method : 'GET',
+        headers : {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type' : 'application/json',
+            'Authorization' : 'Bearer ' + localStorage.getItem('token')
+        }
+    });
+}
+
+function getPublicConversation(from, count) {
+    let url = api + '/api/conversations/public/messages';
+
+    return fetch(url, {
+        method : 'GET',
+        headers : {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type' : 'application/json',
+            'Authorization' : 'Bearer ' + localStorage.getItem('token'),
+            'From' : from,
+            'Count' : count
+        }
+    });
+}
+
+export { signUp, signIn, getSelfUser, findUsersByName, getUser, getAllConversations, getPublicConversation };

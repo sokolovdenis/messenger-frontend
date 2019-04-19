@@ -1,12 +1,28 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import './UsersList.css';
+import {getUser} from "../Api";
 
 
 class UsersList extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
+        this.getUserPage = this.getUserPage.bind(this);
+    }
+
+    getUserPage() {
+        /*getUser()
+            .then( response =>
+                response.json().then(messages => ({messages, response}))
+            ).then(({messages, response}) => {
+            if (response.ok) {
+                this.setState({'messages': messages});
+            } else if (response.status === 401) {
+                console.log("Need authentication");
+            } else {
+                console.log(response.statusText);
+            }
+        }).catch(e => console.log("Error: ", e));*/
     }
 
     render() {
@@ -15,7 +31,7 @@ class UsersList extends Component {
                 <ul className='users-list'>
                     {this.props.users.map(user => {
                         return (
-                            <li key={user.id}>
+                            <li key={user.id} onClick={this.getUserPage}>
                                 <div>
                                     {user.name}
                                 </div>
@@ -28,4 +44,4 @@ class UsersList extends Component {
     }
 }
 
-export default UsersList;
+export default UsersList
