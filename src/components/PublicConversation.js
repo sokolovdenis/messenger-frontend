@@ -77,7 +77,8 @@ class PublicConversation extends Component {
                 }
             }).catch( e => console.log("Error: ", e));
 
-        document.getElementById('message-input').value = '';
+        document.getElementById('message').value = '';
+        document.getElementById('message').focus();
         this.setState({'yourMessage' : ''});
     }
 
@@ -101,7 +102,7 @@ class PublicConversation extends Component {
 
                     <form onSubmit={this.handleSubmit}>
                         <p>Your next message: </p>
-                        <input type="text" onChange={this.handleMessageChange} placeholder="" required autoFocus />
+                        <input id="message" type="text" onChange={this.handleMessageChange} placeholder="" required autoFocus />
                         <br/>
                         <br/>
                         <button type="submit">Send message</button>

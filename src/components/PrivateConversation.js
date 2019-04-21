@@ -21,10 +21,10 @@ class PrivateConversation extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.openMessenger = this.openMessenger.bind(this);
 
-        this.socket = new WebSocket("ws://messenger.westeurope.cloudapp.azure.com/socket/messages?token=" + localStorage.getItem('token'));
+/*        this.socket = new WebSocket("ws://messenger.westeurope.cloudapp.azure.com/socket/messages?token=" + localStorage.getItem('token'));
         this.socket.addEventListener('message', (event) => {
             this.setState({'messages': [JSON.parse(event.data), ...this.state.messages]});
-        });
+        });*/
     }
 
     componentDidMount() {
@@ -89,7 +89,8 @@ class PrivateConversation extends Component {
             }
         }).catch( e => console.log("Error: ", e));
 
-        document.getElementById('message-input').value = '';
+        document.getElementById('message').value = '';
+        document.getElementById('message').focus();
         this.setState({'yourMessage' : ''});
     }
 
@@ -113,7 +114,7 @@ class PrivateConversation extends Component {
 
                     <form onSubmit={this.handleSubmit}>
                         <p>Your next message: </p>
-                        <input type="text" onChange={this.handleMessageChange} placeholder="" required autoFocus />
+                        <input id="message" type="text" onChange={this.handleMessageChange} placeholder="" required autoFocus />
                         <br/>
                         <br/>
                         <button type="submit">Send message</button>
