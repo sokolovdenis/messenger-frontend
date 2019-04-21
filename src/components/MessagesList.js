@@ -18,23 +18,6 @@ class MessagesList extends Component {
         );
     }
 
-    /*componentWillMount() {
-        this.props.messages.map( message => {
-            getUser(message.user)
-                .then( response =>
-                    response.json().then( user => ({user, response}))
-                ).then(({user, response}) => {
-                if (response.ok) {
-                    this.setState({'users' : [...this.state.users, user.name]});
-                } else if (response.status === 401) {
-                    console.log("Need authentication");
-                } else {
-                    console.log(response.statusText);
-                }
-            }).catch(e => console.log("Error ", e));
-        });
-    }*/
-
     render() {
         return (
             <div>
@@ -44,18 +27,10 @@ class MessagesList extends Component {
                             <li key={message.id}>
                                 <section>
                                     <a id={message.user} onClick={this.openPrivateConversation}>
-                                        {
-                                            (this.props.users.length > i) ?
-                                            this.props.users[i] :
-                                            'Some person'
-                                        }
+                                        { (this.props.users.length > i) ? this.props.users[i] : 'Some person'}
                                     </a>
                                     <br/>
-                                    <p className="info">
-                                        {message.content}
-                                    </p>
-                                    <br/>
-                                    <br/>
+                                    <p className="info">{message.content}</p>
                                 </section>
                             </li>
                         );

@@ -25,6 +25,7 @@ class PublicConversation extends Component {
         this.handleMessageChange = this.handleMessageChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.openMessenger = this.openMessenger.bind(this);
+        this.addNewMessage = this.addNewMessage.bind(this);
     }
 
     componentDidMount() {
@@ -34,20 +35,7 @@ class PublicConversation extends Component {
             ).then(({messages, response}) => {
             if (response.ok) {
                 this.setState({'messages': messages.reverse()});
-                /*messages.map( mess => {
-                    getUser(mess.user)
-                        .then( res =>
-                            res.json().then(user => ({user, res}))
-                        ).then(({user, res}) => {
-                            if (res.ok) {
-                                this.setState({'users' : [...this.state.users, user.name]});
-                            } else if (res.status === 401) {
-                                console.log("Need authentication");
-                            } else {
-                                console.log(res.statusText);
-                            }
-                        }).catch(e => console.log("Error ", e));
-                });*/
+                messages.reverse().map( message => this.addNewMessage(message));
             } else if (response.status === 401) {
                 console.log("Need authentication");
             } else {
@@ -70,6 +58,7 @@ class PublicConversation extends Component {
                 if (response.ok) {
                     //this.socket.send(message);
                     this.setState({'messages' : [message, ...this.state.messages]});
+                    this.addNewMessage(message);
                 } else if (response.status === 401) {
                     console.log("Need authentication");
                 } else {
@@ -80,6 +69,21 @@ class PublicConversation extends Component {
         document.getElementById('message').value = '';
         document.getElementById('message').focus();
         this.setState({'yourMessage' : ''});
+    }
+
+    addNewMessage(message) {
+        /*getUser(message.user)
+            .then( res =>
+                res.json().then(user => ({user, res}))
+            ).then(({user, res}) => {
+                if (res.ok) {
+                    this.setState({'users' : [...this.state.users, user.name]});
+                } else if (res.status === 401) {
+                    console.log("Need authentication");
+                } else {
+                    console.log(res.statusText);
+                }
+            }).catch(e => console.log("Error ", e));*/
     }
 
     openMessenger() {

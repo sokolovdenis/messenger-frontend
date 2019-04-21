@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import SignOut from "./SignOut";
 import ConversationsList from "./ConversationsList";
-import {findUsersByName, getAllConversations} from "../Api";
+import {findUsersByName, getAllConversations, getUser} from "../Api";
 
 
 class Messenger extends Component {
@@ -10,8 +10,8 @@ class Messenger extends Component {
 
         this.state = {
             conversations : [],
-            templateName : '',
-            users : []
+            users : [],
+            templateName : ''
         };
 
         this.handleNameChange = this.handleNameChange.bind(this);
@@ -25,6 +25,15 @@ class Messenger extends Component {
             ).then(({conversations, response}) => {
                 if (response.ok) {
                     this.setState({'conversations': conversations});
+                    conversations.map(conversation => {
+                        if (conversation.participant === null) return;
+                        getUser(conversation.participant)
+                            .then(response =>
+                                response.json().then(user => ({user, response}))
+                            ).then(({user, response}) => {
+                                this.setState({'users' : [...this.state.users, response.ok ? user.name : "Some user"]});
+                        })
+                    });
                 } else if (response.status === 401) {
                     console.log("Need authentication");
                 } else {
@@ -79,7 +88,7 @@ class Messenger extends Component {
                         <button type="submit">Find conversations</button>
                     </form>
 
-                    <ConversationsList conversations={this.state.conversations} />
+                    <ConversationsList conversations={this.state.conversations} users={this.state.users}/>
                 </section>
             </section>
         );

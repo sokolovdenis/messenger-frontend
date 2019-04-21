@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import PublicConversation from "./PublicConversation";
 import PrivateConversation from "./PrivateConversation";
+import {getUser} from "../Api";
 
 
 class ConversationsList extends Component {
@@ -31,7 +32,7 @@ class ConversationsList extends Component {
         return (
             <div>
                 <ul className='conversations-list'>
-                    {this.props.conversations.map(conversation => {
+                    {this.props.conversations.map((conversation, i) => {
                         return conversation.participant === null ? (
                                 <li key={conversation.id}>
                                     <section>
@@ -43,23 +44,19 @@ class ConversationsList extends Component {
                                             Last message:
                                             {conversation.lastMessage.content}
                                         </p>
-                                        <br/>
-                                        <br/>
                                     </section>
                                 </li>
                             ) : (
                                 <li key={conversation.id}>
                                     <section>
                                         <a id={conversation.participant} onClick={this.openConversation}>
-                                            {conversation.participant}
+                                            {this.props.users[i]}
                                         </a>
                                         <br/>
                                         <p className="info">
                                             Last message:
                                             {conversation.lastMessage.content}
                                         </p>
-                                        <br/>
-                                        <br/>
                                     </section>
                                 </li>
                             );

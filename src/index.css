@@ -61,5 +61,5 @@ header a {
 }
 
 p.info {
-    float: left;
+    text-align: left;
 }
