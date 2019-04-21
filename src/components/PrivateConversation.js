@@ -1,52 +1,64 @@
 import React, { Component } from 'react';
-import {getPublicConversation, getUser, sendMessageToPublicConversation} from "../Api";
+import {getPrivateConversation, getUser, sendMessageToPrivateConversation} from "../Api";
 import SignOut from "./SignOut";
 import MessagesList from "./MessagesList";
 import ReactDOM from "react-dom";
 import Messenger from "./Messenger";
 
 
-class PublicConversation extends Component {
+class PrivateConversation extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
             messages : [],
             users : [],
+            userName : '',
             yourMessage : ''
         };
-/*
-        this.socket = new WebSocket("ws://messenger.westeurope.cloudapp.azure.com/socket/messages?token=" + localStorage.getItem('token'));
-        this.socket.onmessage = function (event) {
-            let newMessage = event.data;
-            this.setState({'messages' : [...this.state.messages, newMessage]})
-        };*/
 
         this.handleMessageChange = this.handleMessageChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.openMessenger = this.openMessenger.bind(this);
+
+        this.socket = new WebSocket("ws://messenger.westeurope.cloudapp.azure.com/socket/messages?token=" + localStorage.getItem('token'));
+        this.socket.addEventListener('message', (event) => {
+            this.setState({'messages': [...this.state.messages, JSON.parse(event.data)]});
+        });
     }
 
     componentDidMount() {
-        getPublicConversation(0, 100)
+        getUser(this.props.userId)
+            .then( response =>
+                response.json().then(user => ({user, response}))
+            ).then(({user, response}) => {
+                if (response.ok) {
+                    this.setState({'userName' : user.name});
+                } else if (response.status === 401) {
+                    console.log("Need authentication");
+                } else {
+                    console.log(response.statusText);
+                }
+            }).catch(e => console.log("Error ", e));
+        getPrivateConversation(this.props.userId, 0, 100)
             .then( response =>
                 response.json().then(messages => ({messages, response}))
             ).then(({messages, response}) => {
             if (response.ok) {
-                this.setState({'messages': messages.reverse()});
+                this.setState({'messages': messages});
                 /*messages.map( mess => {
                     getUser(mess.user)
                         .then( res =>
                             res.json().then(user => ({user, res}))
                         ).then(({user, res}) => {
-                            if (res.ok) {
-                                this.setState({'users' : [...this.state.users, user.name]});
-                            } else if (res.status === 401) {
-                                console.log("Need authentication");
-                            } else {
-                                console.log(res.statusText);
-                            }
-                        }).catch(e => console.log("Error ", e));
+                        if (res.ok) {
+                            this.setState({'users' : [...this.state.users, user.name]});
+                        } else if (res.status === 401) {
+                            console.log("Need authentication");
+                        } else {
+                            console.log(res.statusText);
+                        }
+                    }).catch(e => console.log("Error ", e));
                 });*/
             } else if (response.status === 401) {
                 console.log("Need authentication");
@@ -63,19 +75,18 @@ class PublicConversation extends Component {
     handleSubmit(event) {
         event.preventDefault();
 
-        sendMessageToPublicConversation(this.state.yourMessage)
+        sendMessageToPrivateConversation(this.props.userId, this.state.yourMessage)
             .then( response =>
                 response.json().then(message => ({message, response}))
             ).then(({message, response}) => {
-                if (response.ok) {
-                    //this.socket.send(message);
-                    this.setState({'messages' : [message, ...this.state.messages]});
-                } else if (response.status === 401) {
-                    console.log("Need authentication");
-                } else {
-                    console.log(response.statusText);
-                }
-            }).catch( e => console.log("Error: ", e));
+            if (response.ok) {
+                this.socket.send(JSON.stringify(message));
+            } else if (response.status === 401) {
+                console.log("Need authentication");
+            } else {
+                console.log(response.statusText);
+            }
+        }).catch( e => console.log("Error: ", e));
 
         document.getElementById('message-input').value = '';
         this.setState({'yourMessage' : ''});
@@ -93,10 +104,10 @@ class PublicConversation extends Component {
             <section>
                 <SignOut />
                 <section>
-                    <a onClick={this.openMessenger}>All conversations</a>
+                    <a float="left" onClick={this.openMessenger}>All conversations</a>
                     <br/>
                     <article>
-                        Public conversation
+                    Conversation with {this.state.userName}
                     </article>
 
                     <form onSubmit={this.handleSubmit}>
@@ -107,11 +118,11 @@ class PublicConversation extends Component {
                         <button type="submit">Send message</button>
                     </form>
 
-                    <MessagesList messages={this.state.messages} users={this.state.users} />
+                    <MessagesList messages={this.state.messages} users={this.state.users} addNewMessage={this.addNewMessage} socket={this.socket} />
                 </section>
             </section>
         );
     }
 }
 
-export default PublicConversation;
+export default PrivateConversation;

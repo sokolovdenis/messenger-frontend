@@ -1,0 +1,65 @@
+body {
+    background: #e0cfff;
+    background: url(styling/symphony.png);
+}
+
+section {
+    background-color: whitesmoke;
+    margin: 15px;
+    border: 1px dashed darkblue;
+    padding: 10px;
+}
+
+header {
+    background-color: #f7e8ff;
+    margin: 15px;
+    border: 1px dashed darkblue;
+    padding: 10px;
+}
+
+article {
+    font-size: 30px;
+    color: darkmagenta;
+}
+
+button {
+    height:30px;
+    border-color: blueviolet indigo indigo blueviolet;
+    border-style:solid;
+    border-width:1px;
+    background-color: #e0cfff;
+    cursor:pointer;
+}
+
+button:hover {
+    background-color: #f6e2ff;
+}
+
+button:focus {
+    background-color: #c5b1ff;
+}
+
+textarea {
+    width: 100%;
+}
+
+div {
+    text-align: center;
+}
+
+a {
+    color: darkmagenta;
+    float: left;
+}
+
+a:hover {
+    color: blueviolet;
+}
+
+header a {
+    float: right;
+}
+
+p.info {
+    float: left;
+}

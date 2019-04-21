@@ -108,4 +108,59 @@ function getPublicConversation(from, count) {
     });
 }
 
-export { signUp, signIn, getSelfUser, findUsersByName, getUser, getAllConversations, getPublicConversation };
+function getPrivateConversation(userId, from, count) {
+    let url = api + '/api/conversations/' + userId + '/messages';
+
+    return fetch(url, {
+        method : 'GET',
+        headers : {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type' : 'application/json',
+            'Authorization' : 'Bearer ' + localStorage.getItem('token'),
+            'userId' : userId,
+            'From' : from,
+            'Count' : count
+        }
+    });
+}
+
+function sendMessageToPublicConversation(request) {
+    let model = {
+        'content' : request
+    };
+
+    let url = api + '/api/conversations/public/messages';
+
+    return fetch(url, {
+        method : 'POST',
+        headers : {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type' : 'application/json',
+            'Authorization' : 'Bearer ' + localStorage.getItem('token')
+        },
+        body : JSON.stringify(model)
+    });
+}
+
+function sendMessageToPrivateConversation(userId, request) {
+    let model = {
+        'content' : request
+    };
+
+    let url = api + '/api/conversations/' + userId + '/messages';
+
+    return fetch(url, {
+        method : 'POST',
+        headers : {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type' : 'application/json',
+            'Authorization' : 'Bearer ' + localStorage.getItem('token'),
+            'userId' : userId
+        },
+        body : JSON.stringify(model)
+    });
+}
+
+export { signUp, signIn, getSelfUser, findUsersByName, getUser,
+    getAllConversations, getPublicConversation, getPrivateConversation,
+    sendMessageToPublicConversation, sendMessageToPrivateConversation};

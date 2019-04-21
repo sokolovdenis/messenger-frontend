@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './UsersList.css';
 import {getUser} from "../Api";
 
 

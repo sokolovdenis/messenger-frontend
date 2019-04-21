@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import './SelfUser.css';
 import { getSelfUser, findUsersByName } from './../Api.js';
 import UsersList from './UsersList.js';
 import SignOut from "./SignOut";
-import Menu from "./Menu";
 
 
 class SelfUser extends Component {
@@ -68,9 +66,8 @@ class SelfUser extends Component {
 
     render() {
         return (
-            <div>
+            <section>
                 <SignOut />
-                <Menu />
                 <form className="SelfUser" onSubmit={this.handleSubmit}>
                     <h2 className="SelfUser-heading">{this.state.name} Page</h2>
                     <label htmlFor="inputName" className="sr-only">Find user by name: </label>
@@ -81,7 +78,7 @@ class SelfUser extends Component {
                 </form>
 
                 <UsersList users={this.state.findedUsers} />
-            </div>
+            </section>
         );
     }
 }

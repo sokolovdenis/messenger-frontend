@@ -3,12 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "node-static": "^0.7.11",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-router": "^5.0.0",
     "react-router-config": "^5.0.0",
     "react-router-dom": "^5.0.0",
-    "react-scripts": "2.1.8"
+    "react-scripts": "2.1.8",
+    "react-websocket": "^2.0.1",
+    "ws": "^6.2.1"
   },
   "scripts": {
     "start": "react-scripts start",

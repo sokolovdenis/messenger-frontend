@@ -1,33 +1,39 @@
 import React, { Component } from 'react';
-import './MessagesList.css';
+import ReactDOM from "react-dom";
+import PrivateConversation from "./PrivateConversation";
+import {getUser} from "../Api";
 
 
 class MessagesList extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            yourMessage : ''
-        };
-
-        this.handleMessageChange = this.handleMessageChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.openPrivateConversation = this.openPrivateConversation.bind(this);
     }
 
-    handleMessageChange(event) {
-        this.setState({'yourMessage': event.target.value})
+    openPrivateConversation(event) {
+        ReactDOM.render(
+            <PrivateConversation userId={event.target.id}/>,
+            document.getElementById('root')
+        );
     }
 
-    handleSubmit(event) {
-        event.preventDefault();
-
-        console.log("It doesn't work");
-    }
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        let obj = document.getElementsByClassName('btn btn-default')[0];
-        obj.scrollIntoView(false);
-    }
+    /*componentWillMount() {
+        this.props.messages.map( message => {
+            getUser(message.user)
+                .then( response =>
+                    response.json().then( user => ({user, response}))
+                ).then(({user, response}) => {
+                if (response.ok) {
+                    this.setState({'users' : [...this.state.users, user.name]});
+                } else if (response.status === 401) {
+                    console.log("Need authentication");
+                } else {
+                    console.log(response.statusText);
+                }
+            }).catch(e => console.log("Error ", e));
+        });
+    }*/
 
     render() {
         return (
@@ -35,23 +41,26 @@ class MessagesList extends Component {
                 <ul className='messages-list'>
                     {this.props.messages.map((message, i) => {
                         return (
-                            <li key={message.id}>
-                                <div>
-                                    {this.props.users[i]}
-                                    {this.props.user}
+                            <lo key={message.id}>
+                                <section>
+                                    <a id={message.user} onClick={this.openPrivateConversation}>
+                                        {
+                                            (this.props.users.length > i) ?
+                                            this.props.users[i] :
+                                            'Some person'
+                                        }
+                                    </a>
                                     <br/>
-                                    {message.content}
+                                    <p className="info">
+                                        {message.content}
+                                    </p>
                                     <br/>
-                                </div>
-                            </li>
+                                    <br/>
+                                </section>
+                            </lo>
                         );
                     })}
                 </ul>
-                <label htmlFor="inputName" className="sr-only">Your message: </label>
-                <input type="text" name="inputName" onChange={this.handleMessageChange} className="form-control" placeholder="" required autoFocus />
-                <br/>
-                <br/>
-                <button className="btn btn-default" type="submit">Send message</button>
             </div>
         );
     }

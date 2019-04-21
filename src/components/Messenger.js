@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import './Messenger.css';
 import SignOut from "./SignOut";
-import Menu from "./Menu";
 import ConversationsList from "./ConversationsList";
 import {getAllConversations} from "../Api";
 
@@ -12,7 +10,6 @@ class Messenger extends Component {
         this.state = {
             conversations : []
         }
-
     }
 
     componentDidMount() {
@@ -32,13 +29,15 @@ class Messenger extends Component {
 
     render() {
         return (
-            <div>
+            <section>
                 <SignOut />
-                <Menu />
-                This is Messenger
-
-                <ConversationsList conversations={this.state.conversations} />
-            </div>
+                <section className="content">
+                    <article>
+                        Your best Messenger
+                    </article>
+                    <ConversationsList conversations={this.state.conversations} />
+                </section>
+            </section>
         );
     }
 }

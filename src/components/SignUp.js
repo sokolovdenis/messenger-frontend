@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import './SignUp.css';
 import SignIn from './SignIn.js';
 import { signUp } from './../Api.js';
-import SelfUser from './SelfUser.js';
 import SignOut from './SignOut.js';
+import Messenger from "./Messenger";
 
 
 class SignUp extends Component {
@@ -52,7 +51,7 @@ class SignUp extends Component {
                     ReactDOM.render(
                         <div>
                             <SignOut />
-                            <SelfUser />,
+                            <Messenger />
                         </div>,
                         document.getElementById('root')
                     );
@@ -76,29 +75,26 @@ class SignUp extends Component {
 
     render() {
         return (
-            <div>
-                <form className="SignUp" onSubmit={this.handleSubmit}>
-                    <h2 className="SignUp-heading">Sign Up</h2>
-                    <label htmlFor="inputLogin" className="sr-only">Login: </label>
-                    <input type="text" name="inputLogin" onChange={this.handleLoginChange} className="form-control" placeholder="Login" required autoFocus />
-                    <br />
-                    <br />
-                    <label htmlFor="inputPassword" className="sr-only">Password: </label>
-                    <input type="text" name="inputPassword" onChange={this.handlePasswordChange} className="form-control" placeholder="Password" required />
-                    <br />
-                    <br />
-                    <label htmlFor="inputName" className="sr-only">Name: </label>
-                    <input type="text" name="inputName" onChange={this.handleNameChange} className="form-control" placeholder="Name" required />
-                    <br />
-                    <br />
-                    <button className="btn btn-default" type="submit">Sign Up</button>
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <button className="btn" type="button" onClick={this.signIn}>Sign In</button>
-                </form>
-            </div>
+            <section>
+                <header>
+                    <a onClick={this.signIn}>Sign In</a>
+                    <br/>
+                </header>
+                <section>
+                    <form onSubmit={this.handleSubmit}>
+                        <article>Sign Up</article>
+                        <p>Login: </p>
+                        <input type="text" onChange={this.handleLoginChange} placeholder="Login" required autoFocus />
+                        <p>Password: </p>
+                        <input type="text" onChange={this.handlePasswordChange} placeholder="Password" required />
+                        <p>Name: </p>
+                        <input type="text" onChange={this.handleNameChange} placeholder="Name" required />
+                        <br />
+                        <br />
+                        <button type="submit">Sign Up</button>
+                    </form>
+                </section>
+            </section>
         );
     }
 }

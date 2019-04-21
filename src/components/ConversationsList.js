@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import './ConversationsList.css';
 import PublicConversation from "./PublicConversation";
+import PrivateConversation from "./PrivateConversation";
 
 
 class ConversationsList extends Component {
@@ -20,8 +20,11 @@ class ConversationsList extends Component {
     }
 
 
-    openConversation() {
-        console.log("private");
+    openConversation(event) {
+        ReactDOM.render(
+            <PrivateConversation userId={event.target.id} />,
+            document.getElementById('root')
+        );
     }
 
     render() {
@@ -29,29 +32,37 @@ class ConversationsList extends Component {
             <div>
                 <ul className='conversations-list'>
                     {this.props.conversations.map(conversation => {
-                        let isPublic = conversation.participant === null;
-                        if (isPublic) {
-                            return (
-                                <li key={conversation.id} onClick={this.openPublicConversation}>
-                                    <div>
-                                        Public conversation
+                        return conversation.participant === null ? (
+                                <lo key={conversation.id}>
+                                    <section>
+                                        <a onClick={this.openPublicConversation}>
+                                            Public conversation
+                                        </a>
                                         <br/>
-                                        Last message:
-                                        {conversation.lastMessage.content}
-                                    </div>
-                                </li>
-                            );
-                        } else {
-                            return (
-                                <li key={conversation.id} onClick={this.openConversation}>
-                                    <div>
-                                        {conversation.participant}
+                                        <p className="info">
+                                            Last message:
+                                            {conversation.lastMessage.content}
+                                        </p>
                                         <br/>
-                                        {conversation.lastMessage.content}
-                                    </div>
-                                </li>
+                                        <br/>
+                                    </section>
+                                </lo>
+                            ) : (
+                                <lo key={conversation.id}>
+                                    <section>
+                                        <a id={conversation.participant} onClick={this.openConversation}>
+                                            {conversation.participant}
+                                        </a>
+                                        <br/>
+                                        <p className="info">
+                                            Last message:
+                                            {conversation.lastMessage.content}
+                                        </p>
+                                        <br/>
+                                        <br/>
+                                    </section>
+                                </lo>
                             );
-                        }
                     })}
                 </ul>
             </div>

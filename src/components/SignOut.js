@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import './SignOut.css';
 import SignIn from './SignIn.js';
 
 
 class SignOut extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.signOut = this.signOut.bind(this);
     }
@@ -21,9 +20,10 @@ class SignOut extends Component {
 
     render() {
         return (
-            <div>
-                <button className="btn" type="button" onClick={this.signOut}>Sign Out</button>
-            </div>
+            <header>
+                <a onClick={this.signOut}>Sign Out</a>
+                <br/>
+            </header>
         );
     }
 }

@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import './SignIn.css';
 import { signIn } from './../Api.js';
 import SignUp from './SignUp.js';
-import SelfUser from './SelfUser.js';
-import SignOut from './SignOut.js';
+import Messenger from "./Messenger";
 
 
 class SignIn extends Component {
@@ -44,10 +42,7 @@ class SignIn extends Component {
                     localStorage.setItem('expires', user.expires);
 
                     ReactDOM.render(
-                        <div>
-                            <SignOut />
-                            <SelfUser />,
-                        </div>,
+                        <Messenger />,
                         document.getElementById('root')
                     );
                 } else if (response.status === 400) {
@@ -67,25 +62,24 @@ class SignIn extends Component {
 
     render() {
         return (
-            <div>
-                <form className="SignIn" onSubmit={this.handleSubmit}>
-                    <h2 className="SignIn-heading">Sign In</h2>
-                    <label htmlFor="inputLogin" className="sr-only">Login: </label>
-                    <input type="text" name="inputLogin" onChange={this.handleLoginChange} className="form-control" placeholder="Login" required autoFocus />
-                    <br />
-                    <br />
-                    <label htmlFor="inputPassword" className="sr-only">Password: </label>
-                    <input type="text" name="inputPassword" onChange={this.handlePasswordChange} className="form-control" placeholder="Password" required />
-                    <br />
-                    <br />
-                    <button className="btn btn-default" type="submit">Sign In</button>
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <button className="btn" type="button" onClick={this.signUp}>Sign Up</button>
-                </form>
-            </div>
+            <section>
+                <header>
+                    <a onClick={this.signUp}>Sign Up</a>
+                    <br/>
+                </header>
+                <section>
+                    <form onSubmit={this.handleSubmit}>
+                        <article>Sign In</article>
+                        <p>Login: </p>
+                        <input type="text" onChange={this.handleLoginChange} placeholder="Login" required autoFocus />
+                        <p>Password: </p>
+                        <input type="text" onChange={this.handlePasswordChange} placeholder="Password" required />
+                        <br />
+                        <br />
+                        <button type="submit">Sign In</button>
+                    </form>
+                </section>
+            </section>
         );
     }
 }
