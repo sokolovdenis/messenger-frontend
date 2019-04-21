@@ -41,7 +41,7 @@ class MessagesList extends Component {
                 <ul className='messages-list'>
                     {this.props.messages.map((message, i) => {
                         return (
-                            <lo key={message.id}>
+                            <li key={message.id}>
                                 <section>
                                     <a id={message.user} onClick={this.openPrivateConversation}>
                                         {
@@ -57,7 +57,7 @@ class MessagesList extends Component {
                                     <br/>
                                     <br/>
                                 </section>
-                            </lo>
+                            </li>
                         );
                     })}
                 </ul>

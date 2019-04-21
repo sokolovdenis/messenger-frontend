@@ -23,7 +23,7 @@ class PrivateConversation extends Component {
 
         this.socket = new WebSocket("ws://messenger.westeurope.cloudapp.azure.com/socket/messages?token=" + localStorage.getItem('token'));
         this.socket.addEventListener('message', (event) => {
-            this.setState({'messages': [...this.state.messages, JSON.parse(event.data)]});
+            this.setState({'messages': [JSON.parse(event.data), ...this.state.messages]});
         });
     }
 
@@ -45,7 +45,7 @@ class PrivateConversation extends Component {
                 response.json().then(messages => ({messages, response}))
             ).then(({messages, response}) => {
             if (response.ok) {
-                this.setState({'messages': messages});
+                this.setState({'messages': messages.reverse()});
                 /*messages.map( mess => {
                     getUser(mess.user)
                         .then( res =>
@@ -80,7 +80,8 @@ class PrivateConversation extends Component {
                 response.json().then(message => ({message, response}))
             ).then(({message, response}) => {
             if (response.ok) {
-                this.socket.send(JSON.stringify(message));
+                //this.socket.send(JSON.stringify(message));
+                this.setState({'messages': [message, ...this.state.messages]});
             } else if (response.status === 401) {
                 console.log("Need authentication");
             } else {

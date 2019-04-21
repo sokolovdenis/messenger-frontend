@@ -2,32 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8245a1f6-f1ad-4bf2-a2ac-5906713bae68" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Api.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Api.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ConversationsList.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PrivateConversation.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ConversationsList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ConversationsList.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Menu.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Menu.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/MessagesList.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/MessagesList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MessagesList.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Messenger.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Messenger.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Messenger.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/PublicConversation.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/PublicConversation.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PublicConversation.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/SelfUser.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/SelfUser.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/SelfUser.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/SignIn.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/SignIn.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/SignIn.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/SignOut.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/SignOut.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/SignOut.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/SignUp.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/SignUp.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/SignUp.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/UsersList.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/UsersList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/UsersList.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/PrivateConversation.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PrivateConversation.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -67,11 +43,10 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/components/PrivateConversation.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="226">
-              <caret line="110" column="21" selection-start-line="110" selection-start-column="21" selection-end-line="110" selection-end-column="21" />
+            <state relative-caret-position="448">
+              <caret line="47" column="61" selection-start-line="47" selection-start-column="61" selection-end-line="47" selection-end-column="61" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
-                <element signature="n#!!block;n#componentDidMount#0;n#PrivateConversation#0" />
                 <element signature="n#!!block;n#handleMessageChange#0;n#PrivateConversation#0" />
               </folding>
             </state>
@@ -206,7 +181,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
     <option name="width" value="773" />
@@ -422,12 +397,12 @@
       <workItem from="1555689509037" duration="18350000" />
       <workItem from="1555757862523" duration="327000" />
       <workItem from="1555758246806" duration="22159000" />
-      <workItem from="1555838560552" duration="30281000" />
+      <workItem from="1555838560552" duration="30651000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="95662000" />
+    <option name="totallyTimeSpent" value="96032000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="784" extended-state="6" />
@@ -650,11 +625,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/components/PrivateConversation.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="226">
-          <caret line="110" column="21" selection-start-line="110" selection-start-column="21" selection-end-line="110" selection-end-column="21" />
+        <state relative-caret-position="448">
+          <caret line="47" column="61" selection-start-line="47" selection-start-column="61" selection-end-line="47" selection-end-column="61" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
-            <element signature="n#!!block;n#componentDidMount#0;n#PrivateConversation#0" />
             <element signature="n#!!block;n#handleMessageChange#0;n#PrivateConversation#0" />
           </folding>
         </state>

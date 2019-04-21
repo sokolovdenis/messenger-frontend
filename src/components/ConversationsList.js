@@ -33,7 +33,7 @@ class ConversationsList extends Component {
                 <ul className='conversations-list'>
                     {this.props.conversations.map(conversation => {
                         return conversation.participant === null ? (
-                                <lo key={conversation.id}>
+                                <li key={conversation.id}>
                                     <section>
                                         <a onClick={this.openPublicConversation}>
                                             Public conversation
@@ -46,9 +46,9 @@ class ConversationsList extends Component {
                                         <br/>
                                         <br/>
                                     </section>
-                                </lo>
+                                </li>
                             ) : (
-                                <lo key={conversation.id}>
+                                <li key={conversation.id}>
                                     <section>
                                         <a id={conversation.participant} onClick={this.openConversation}>
                                             {conversation.participant}
@@ -61,7 +61,7 @@ class ConversationsList extends Component {
                                         <br/>
                                         <br/>
                                     </section>
-                                </lo>
+                                </li>
                             );
                     })}
                 </ul>
