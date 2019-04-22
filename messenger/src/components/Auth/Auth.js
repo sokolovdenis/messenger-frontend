@@ -29,7 +29,8 @@ class Auth extends Component {
       }
     
       handleError(message) {
-        this.setState({ requestingServer: false, warning: 'error' });
+        console.log(message);
+        this.setState({ requestingServer: false, warning: 'warning' });
       }
     
       linkRegister (event) {
@@ -46,16 +47,32 @@ class Auth extends Component {
         event.preventDefault();
         // переключаемся в состояние ожидания ответа сервера
         this.setState({ requestingServer: true, warning: null });
-        var response = authenticationService.signIn(
-          this.state.login, 
-          this.state.password
-          ).then(user => {
-            const { from } = this.props.location.state || { from: { pathname: "/" } };
-            this.props.history.push(from);
-          }).catch(err => {
-            this.handleError(err);
-            console.log("Error logging in", err);
-        });
+        if (this.state.mode === 'signin') {
+          authenticationService.signIn(
+            this.state.login, 
+            this.state.password
+            ).then(user => {
+              const { from } = this.props.location.state || { from: { pathname: "/" } };
+              this.props.history.push(from);
+            }).catch(err => {
+              this.handleError(err);
+              console.log("Error logging in", err);
+          });
+        } 
+        else {
+            console.log(this.state);
+            authenticationService.signUp(
+              this.state.login, 
+              this.state.password,
+              this.state.user
+              ).then(user => {
+                const { from } = this.props.location.state || { from: { pathname: "/" } };
+                this.props.history.push(from);
+              }).catch(err => {
+                this.handleError(err);
+                console.log("Error logging in", err);
+            });
+        }
       }
     
       handleInputChange(event) {

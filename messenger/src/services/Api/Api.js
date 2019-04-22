@@ -59,8 +59,21 @@ function signIn(login, password) {
     // не забыть поймать искючения в месте где вызываю метод
 }
 
-function signUp(name, login, password) {
-    return null;
+function signUp(login, password, name) {
+    return fetch(SERVER + API_SIGNUP, {
+        method: 'post',
+        body: JSON.stringify({login: login, password: password, name: name}),
+        headers: { 'content-type': 'application/json' }
+        })
+    .then(fetchStatusCheck)
+    .then(user => {
+        // запоминаем пользователя
+        localStorage.setItem('token', user.token);
+        localStorage.setItem('expires', user.expires);
+        return user;
+        })
+    ;
+    // не забыть поймать искючения в месте где вызываю метод
 }
 
 function logout() {
