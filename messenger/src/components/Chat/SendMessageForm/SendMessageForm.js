@@ -12,18 +12,20 @@ class SendMessageForm extends Component {
         this.handleSubmit = this.handleSubmit.bind(this)
     }
     
-    handleChange(e) {
+    handleChange(event) {
+        console.log("handleChange");
         this.setState({
-            message: e.target.value
+            message: event.target.value
         })
     }
     
     handleSubmit(e) {
-        e.preventDefault()
-        this.props.sendMessage(this.state.message)
+        console.log("handleSubmit");
+        e.preventDefault();
+        this.props.sendMessage(this.state.message);
         this.setState({
             message: ''
-        })
+        });
     }
     
     render() {
@@ -39,7 +41,7 @@ class SendMessageForm extends Component {
                             onChange={this.handleChange}
                             value={this.state.message} />
                     </form>
-                    <button className="msg-send-btn" type="button">
+                    <button className="msg-send-btn" type="button" onClick={this.handleSubmit}>
                         <i className="fa fa-paper-plane-o" aria-hidden="true"></i>
                     </button>
                 </div>

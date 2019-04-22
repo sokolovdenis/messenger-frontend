@@ -2,72 +2,150 @@ import React, { Component } from 'react';
 import ConversationList from './ConversationList/ConversationList'
 import MessageList from './MessageList/MessageList';
 import SendMessageForm from './SendMessageForm/SendMessageForm';
-import SearchPanel from './SearchPanel/SearchPanel'
+import SearchPanel from './SearchPanel/SearchPanel';
+import { authenticationService } from '../../services/Api/Api';
 import './Chat.css';
+import Header from './Header/Header';
 
 
 class Chat extends Component {
 	constructor(props) {
         super(props);
-    
+        // console.log(authenticationService.getCurrentUser());
         this.state = {
-            activeChatId: 1,
-            messages: [ {id:1, time:'2019', senderId:2, text:'Hello world!'},
-                        {id:2, time:'2019', senderId:1, text:'Privet, Yoba!'},
-                        {id:3, time:'2019', senderId:2, text:'Allo'},
-                        {id:4, time:'2019', senderId:1, text:'Eto ti?'},
-                        {id:5, time:'2019', senderId:2, text:'Net, Eby nety'},
-                        {id:6, time:'2019', senderId:1, text:'A kto eto?'},
-                        {id:7, time:'2019', senderId:2, text:'Ego mama'},
-                        {id:8, time:'2019', senderId:1, text:'Pust on vernet dengi'},
-                        {id:9, time:'2019', senderId:2, text:'A ti kto?'},
-                        {id:10, time:'2019', senderId:2, text:'malchik'},
-                        {id:11, time:'2019', senderId:1, text:'I ebal,  mne 9 let'},
-                        {id:12, time:'2019', senderId:2, text:'A i zalupa, mne 34'},
-                        {id:13, time:'2019', senderId:1, text:'Priyatno poznakomitsy'},
-                        {id:14, time:'2019', senderId:2, text:'Za chto Yoba dolgen deneg?'},
-                        {id:15, time:'2019', senderId:1, text:'Na penek sel, chirik dolgen'},
-                        {id:16, time:'2019', senderId:2, text:'Hahhahaha'},
-                        {id:17, time:'2019', senderId:1, text:'Chto smeshnogo?'},
-                        {id:18, time:'2019', senderId:2, text:'Ya tebya po IP vychisly'},
-                        {id:19, time:'2019', senderId:1, text:'Vo pervych: Ya iz drugovo goroda \n'+
-                                                'Vo vtorych: chto ni mne zdelaesh \n'+
-                                                'V tretich: za mat izveni'},
-                        {id:20, time:'2019', senderId:2, text:'Tobi pizda'},
-                        {id:21, time:'2019', senderId:1, text:'Prostite'},
-                        {id:22, time:'2019', senderId:2, text:'Ya zvony tvoei mame'},
-                        {id:23, time:'2019', senderId:1, text:'Neeeeeeeeet'},
-                        {id:24, time:'2019', senderId:2, text:'Zatralil lalku'}],
-            chats: [{id:1, name:'Ololo', text:'Zatralil lalku', date:'2019'},
-                    {id:2, name:'Mamki', text:'Vot eto prikol', date:'2019'},
-                    {id:3, name:'Yoba', text:'Ti gde?', date:'2019'}
-                    ],
+            activeChatId: 'public',  // активная чат комната
+            messages: [],  // сообщения в активной чат комнате
+            chats: [],  // список чат комнат
+            myId: null, // Id залогиненного пользователя
+            myName: "",  // Имя залогиненного пользователя
+            names: {}, // словарь id:имя
         };
 
-        this.foo= this.foo.bind(this);
-      }
+        this.showConversations  = this.showConversations.bind(this);
+        this.showMessages = this.showMessages.bind(this);
+        this.showPostedMessage = this.showPostedMessage.bind(this);
+        this.showMyUserName = this.showMyUserName.bind(this);
+        this.showName = this.showName.bind(this);
+        this.selectConversation  = this.selectConversation.bind(this);
+        this.showErrorMessage = this.showErrorMessage.bind(this);
+        this.sendMessage = this.sendMessage.bind(this);
+    }
     
-      foo() {
-      }
-    
-      render() {
+    componentDidMount() {    
+        // загружаем список чатов
+        authenticationService.getConversations()
+            .then(this.showConversations)
+            .catch(this.showErrorMessage);
+        // выбираем и загружаем диалог по умолчанию
+        this.selectConversation(this.state.activeChatId);
+        // загружаем данные о себе
+        authenticationService.getMe()
+            .then(this.showMyUserName)
+            .catch(this.setAlert)
+    }
+
+    showErrorMessage(msg) {
+        console.log(msg);
+    }
+
+    selectConversation(id) {
+        authenticationService.getPublicMessages()
+            .then(this.showMessages)
+            .catch(this.showErrorMessage);
+    }
+
+    showConversations(data) {
+        // сортируем по дате (можно еще по прочитанным и не прочитанным)
+        data.sort(function(x, y) {
+            x = new Date(x.lastMessage.timestamp);
+            y = new Date(y.lastMessage.timestamp);
+            if (x > y) {
+                return -1;
+            }
+            if (x < y) {
+                return 1;
+            }
+            return 0;
+        });
+        // console.log(data);
+        this.setState({ chats: data });
+    }
+
+    showMessages(data) {
+        // console.log(data);
+        this.setState({ messages: data });
+    }
+
+    showMyUserName(data) {
+        this.setState({ myName: data.name, myId: data.id });
+    }
+
+    sendMessage(message) {
+        // отправляем сообщение на сервер .
+        authenticationService.postPublicMessages(message)
+            .then(this.showPostedMessage)
+            .catch(this.showErrorMessage);
+    }
+
+    showPostedMessage(data) {
+        var messages = this.state.messages;
+
+        // обновляем обсуждения
+        
+        messages.push(data);
+
+        this.setState({ messages: messages});
+    }
+
+    // показываем имя по id
+    showName(id) {
+        if (id in this.state.names) {
+            return this.state.names[id];
+        }
+        else {
+            var newNames = this.state.names;
+            // отправляем запрос на сервер
+            if (!(id in newNames)) {
+                // запоминаем этот ID и больше не спрашиваем сервер про него
+                newNames[id] = '###';
+                this.setState({names: newNames});
+                // отправляем запрос, при его выполнении состояние изменится и все перерисуется
+                authenticationService.getUserInfo(id)
+                    .then(data => {
+                        var newNames = this.state.names;
+                        newNames[data.id] = data.name;
+                        this.setState({names: newNames});
+                    })
+                    .catch(this.showErrorMessage)
+            }
+            return '###';
+        }
+    }
+
+
+    render() {
         return (
-            <div className="messenger">
-                <div className="inbox-people">
-                    <SearchPanel/>
-                    <ConversationList
-                        chats={this.state.chats}/>
-                </div>
-                <div className="mesgs">
-                    <MessageList 
-                        activeChatId={this.state.chatId}
-                        messages={this.state.messages} />
-                    <SendMessageForm
-                        sendMessage={this.sendMessage} />
+            <div>
+                <Header name={this.state.myName} logout={this.props.logout} />
+                <div className="messenger">
+                    <div className="inbox-people">
+                        <SearchPanel/>
+                        <ConversationList
+                            chats={this.state.chats} />
+                    </div>
+                    <div className="mesgs">
+                        <MessageList 
+                            userId={this.state.myId}
+                            activeChatId={this.state.chatId}
+                            messages={this.state.messages}
+                            showName={this.showName} />
+                        <SendMessageForm
+                            sendMessage={this.sendMessage} />
+                    </div>
                 </div>
             </div>
         );
-      }
+    }
 }
 
 

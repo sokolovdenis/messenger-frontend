@@ -8,14 +8,15 @@ class ConversationList extends Component {
         super(props);
     }
     render() {
+        console.log(this.props.chats);
         return (
             <div className="inbox-chat">
                 {this.props.chats.map((chat, index) => (
                     <Conversation key={chat.id}
                             chatId={chat.id} 
-                            chatName={chat.name}
-                            text={chat.text}
-                            date={chat.date}
+                            chatName={chat.participant}
+                            text={chat.lastMessage.content}
+                            date={chat.lastMessage.timestamp}
                             />
                 ))}
             </div>

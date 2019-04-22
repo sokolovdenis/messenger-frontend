@@ -15,7 +15,7 @@ class SearchPanel extends Component {
             <div className="headind-srch">
                 <div className="srch-bar">
                     <div className="stylish-input-group">
-                        <input type="text" class="search-bar"  placeholder="Search" />
+                        <input type="text" className="search-bar"  placeholder="Search" />
                         <span className="input-group-addon">
                             <button type="button"> <i className="fa fa-search" aria-hidden="true"></i> </button>
                         </span> 

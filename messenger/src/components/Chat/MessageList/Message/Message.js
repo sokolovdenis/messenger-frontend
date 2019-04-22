@@ -1,22 +1,22 @@
 import React, { Component } from 'react';
+import TimeAgo from 'react-timeago'
 import './Message.css'
 
 
 class Message extends Component {
     constructor(props) {
         super(props)
-        this.state = {
-            ownerId: 1,
-        }
     }
 
     render() {
-        if (this.props.senderId===this.state.ownerId) {
+        if (this.props.senderId===this.props.ownerId) {
             return (
                 <div className="outgoing-msg" key={this.props.id}>
                     <div className="sent-msg">
                         <p>{this.props.text}</p>
-                        <span className="time-date">{this.props.time}</span> 
+                        <span className="time-date">
+                            <TimeAgo date={this.props.time}/>
+                        </span> 
                     </div>
                 </div>
             );
@@ -28,8 +28,11 @@ class Message extends Component {
                     </div>
                     <div className="received-msg">
                         <div className="received-withd-msg">
+                            {this.props.showName(this.props.senderId)}
                             <p>{this.props.text}</p>
-                            <span className="time-date">{this.props.time}</span>
+                            <span className="time-date">
+                                <TimeAgo date={this.props.time}/>
+                            </span>
                         </div>
                     </div>
                 </div>

@@ -6,7 +6,7 @@ class Header extends Component {
 		return (
 			<nav className="navbar navbar-expand navbar-dark bg-dark">
 				<div className="navbar-nav">
-					<Link to="/" className="nav-item nav-link">Home</Link>
+					<a className="nav-item nav-link">{this.props.name}</a>
 					<a onClick={this.props.logout} className="nav-item nav-link">Logout</a>
 				</div>
 			</nav>

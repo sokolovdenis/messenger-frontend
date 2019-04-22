@@ -11,10 +11,12 @@ class MessageList extends Component {
         return (
             <div className="msg-history">
                 {this.props.messages.map((message, index) => (
-                    <Message key={message.id} 
-                            senderId={message.senderId}
-                            text={message.text}
-                            time={message.time}
+                    <Message key={message.id + " " + index}
+                            ownerId={this.props.userId} 
+                            senderId={message.user}
+                            showName={this.props.showName}
+                            text={message.content}
+                            time={message.timestamp}
                             />
                 ))}
             </div>
