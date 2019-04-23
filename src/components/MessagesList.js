@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from "react-dom";
-import PrivateConversation from "./PrivateConversation";
+import PrivateConversation from "./Conversation";
 import {getUser} from "../Api";
 
 

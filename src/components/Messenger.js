@@ -49,12 +49,13 @@ class Messenger extends Component {
     handleSubmit(event) {
         event.preventDefault();
 
-        /*findUsersByName(this.state.templateName)
+        findUsersByName(this.state.templateName)
             .then( response =>
                 response.json().then(users => ({users, response}))
             ).then(({users, response}) => {
                 if (response.ok) {
                     this.setState({'findedUsers': users});
+                    console.log(this.state.findedUsers);
                 } else if (response.status === 400) {
                     console.log("Some parameters are not valid");
                 } else if (response.status === 401) {
@@ -62,7 +63,7 @@ class Messenger extends Component {
                 } else {
                     console.log(response.statusText);
                 }
-            }).catch(e => console.log("Error: ", e));*/
+            }).catch(e => console.log("Error: ", e));
 
         console.log("filter conversations, this method doesn't work now");
 

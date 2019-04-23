@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import PublicConversation from "./PublicConversation";
-import PrivateConversation from "./PrivateConversation";
+import Conversation from "./Conversation";
 import {getUser} from "../Api";
 
 
@@ -15,7 +14,7 @@ class ConversationsList extends Component {
 
     openPublicConversation() {
         ReactDOM.render(
-            <PublicConversation />,
+            <Conversation isPublic={true} />,
             document.getElementById('root')
         );
     }
@@ -23,7 +22,7 @@ class ConversationsList extends Component {
 
     openConversation(event) {
         ReactDOM.render(
-            <PrivateConversation userId={event.target.id} />,
+            <Conversation userId={event.target.id} isPublic={false} />,
             document.getElementById('root')
         );
     }
