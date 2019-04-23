@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
 import ReactDOM from "react-dom";
-import PrivateConversation from "./Conversation";
-import {getUser} from "../Api";
+import Conversation from "./Conversation";
+import {getPrivateConversation} from "../Api";
 
 
 class MessagesList extends Component {
     constructor(props) {
         super(props);
 
-        this.openPrivateConversation = this.openPrivateConversation.bind(this);
+        this.openConversation = this.openConversation.bind(this);
     }
 
-    openPrivateConversation(event) {
+    openConversation(event) {
         ReactDOM.render(
-            <PrivateConversation userId={event.target.id}/>,
+            <Conversation userId={event.target.id} isPublic={false} socket={this.props.socket} />,
             document.getElementById('root')
         );
     }
@@ -24,13 +24,13 @@ class MessagesList extends Component {
                 <ul className='messages-list'>
                     {this.props.messages.map((message, i) => {
                         return (
-                            <li key={message.id}>
+                            <li key={message.id !== undefined ? message.id : message.Id}>
                                 <section>
-                                    <a id={message.user} onClick={this.openPrivateConversation}>
+                                    <a id={message.user !== undefined ? message.user : message.User} onClick={this.openConversation}>
                                         { (this.props.users.length > i) ? this.props.users[i] : 'Some person'}
                                     </a>
                                     <br/>
-                                    <p className="info">{message.content}</p>
+                                    <p className="info">{message.content !== undefined ? message.content : message.Content}</p>
                                 </section>
                             </li>
                         );

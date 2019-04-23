@@ -14,66 +14,24 @@ class Conversation extends Component {
             messages : [],
             users : [],
             userName : '',
-            yourMessage : ''
+            yourMessage : '',
+
+            lastWasPublic : false
         };
 
         this.handleMessageChange = this.handleMessageChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.openMessenger = this.openMessenger.bind(this);
         this.addNewMessage = this.addNewMessage.bind(this);
+        this.loadAllData = this.loadAllData.bind(this);
 
-        //this.socket = new WebSocket("ws://messenger.westeurope.cloudapp.azure.com/socket/messages?token=" + localStorage.getItem('token'));
-        /*this.socket.addEventListener('message', (event) => {
-            let message = JSON.parse(event.data);
-            if (this.state.messages.find(mess => mess.id === message.id) === undefined) {
-                this.setState({'messages': [message, ...this.state.messages]});
-                this.addNewMessage(message);
-            }
-        });*/
+        this.props.socket.addEventListener("message", (event) => {
+            this.addNewMessage(JSON.parse(event.data));
+        });
     }
 
     componentDidMount() {
-        if (this.props.isPublic) {
-            getPublicConversation(0, 100)
-                .then( response =>
-                    response.json().then(messages => ({messages, response}))
-                ).then(({messages, response}) => {
-                if (response.ok) {
-                    this.setState({'messages': messages.reverse()});
-                    messages.map( message => this.addNewMessage(message));
-                } else if (response.status === 401) {
-                    console.log("Need authentication");
-                } else {
-                    console.log(response.statusText);
-                }
-            }).catch(e => console.log("Error: ", e));
-        } else {
-            getUser(this.props.userId)
-                .then(response =>
-                    response.json().then(user => ({user, response}))
-                ).then(({user, response}) => {
-                if (response.ok) {
-                    this.setState({'userName': user.name});
-                } else if (response.status === 401) {
-                    console.log("Need authentication");
-                } else {
-                    console.log(response.statusText);
-                }
-            }).catch(e => console.log("Error ", e));
-            getPrivateConversation(this.props.userId, 0, 100)
-                .then(response =>
-                    response.json().then(messages => ({messages, response}))
-                ).then(({messages, response}) => {
-                if (response.ok) {
-                    this.setState({'messages': messages.reverse()});
-                    messages.map(message => this.addNewMessage(message));
-                } else if (response.status === 401) {
-                    console.log("Need authentication");
-                } else {
-                    console.log(response.statusText);
-                }
-            }).catch(e => console.log("Error: ", e));
-        }
+        this.loadAllData();
     }
 
     handleMessageChange(event) {
@@ -89,9 +47,7 @@ class Conversation extends Component {
                     response.json().then(message => ({message, response}))
                 ).then(({message, response}) => {
                 if (response.ok) {
-                    //this.socket.send(message);
-                    this.setState({'messages' : [message, ...this.state.messages]});
-                    this.addNewMessage(message);
+                    this.props.socket.send(JSON.stringify(message));
                 } else if (response.status === 401) {
                     console.log("Need authentication");
                 } else {
@@ -104,9 +60,7 @@ class Conversation extends Component {
                     response.json().then(message => ({message, response}))
                 ).then(({message, response}) => {
                 if (response.ok) {
-                    //this.socket.send(message);
-                    this.setState({'messages': [message, ...this.state.messages]});
-                    this.addNewMessage(message);
+                    this.props.socket.send(JSON.stringify(message));
                 } else if (response.status === 401) {
                     console.log("Need authentication");
                 } else {
@@ -121,6 +75,13 @@ class Conversation extends Component {
     }
 
     addNewMessage(message) {
+        let id = message.id;
+        if (id === undefined) {
+            id = message.Id;
+        }
+        if (this.state.messages.find(function(mess) {return mess.id === id;}) === undefined) {
+            this.setState({'messages': [message, ...this.state.messages]});
+        }
         /*getUser(message.user)
             .then( res =>
                 res.json().then(user => ({user, res}))
@@ -142,6 +103,57 @@ class Conversation extends Component {
         );
     }
 
+    componentDidUpdate(nextProps, nextState, nextContext) {
+        if (this.props.isPublic !== this.state.lastWasPublic) {
+            this.loadAllData();
+        }
+    }
+
+    loadAllData() {
+        this.setState({'lastWasPublic' : this.props.isPublic});
+
+        if (this.props.isPublic) {
+            getPublicConversation(0, 1000)
+                .then( response =>
+                    response.json().then(messages => ({messages, response}))
+                ).then(({messages, response}) => {
+                if (response.ok) {
+                    this.setState({'messages': messages.reverse()});
+                } else if (response.status === 401) {
+                    console.log("Need authentication");
+                } else {
+                    console.log(response.statusText);
+                }
+            }).catch(e => console.log("Error: ", e));
+        } else {
+            getUser(this.props.userId)
+                .then(response =>
+                    response.json().then(user => ({user, response}))
+                ).then(({user, response}) => {
+                if (response.ok) {
+                    this.setState({'userName': user.name});
+                } else if (response.status === 401) {
+                    console.log("Need authentication");
+                } else {
+                    console.log(response.statusText);
+                }
+            }).catch(e => console.log("Error ", e));
+
+            getPrivateConversation(this.props.userId, 0, 1000)
+                .then(response =>
+                    response.json().then(messages => ({messages, response}))
+                ).then(({messages, response}) => {
+                if (response.ok) {
+                    this.setState({'messages': messages.reverse()});
+                } else if (response.status === 401) {
+                    console.log("Need authentication");
+                } else {
+                    console.log(response.statusText);
+                }
+            }).catch(e => console.log("Error: ", e));
+        }
+    }
+
     render() {
         let topic = this.props.isPublic ? "Public conversation" : "Conversation with " + this.state.userName;
         return (
@@ -160,7 +172,7 @@ class Conversation extends Component {
                         <button type="submit">Send message</button>
                     </form>
 
-                    <MessagesList messages={this.state.messages} users={this.state.users} />
+                    <MessagesList messages={this.state.messages} users={this.state.users} socket={this.props.socket}/>
                 </section>
             </section>
         );

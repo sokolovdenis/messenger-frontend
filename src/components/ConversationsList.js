@@ -14,7 +14,7 @@ class ConversationsList extends Component {
 
     openPublicConversation() {
         ReactDOM.render(
-            <Conversation isPublic={true} />,
+            <Conversation isPublic={true} socket={this.props.socket}/>,
             document.getElementById('root')
         );
     }
@@ -22,7 +22,7 @@ class ConversationsList extends Component {
 
     openConversation(event) {
         ReactDOM.render(
-            <Conversation userId={event.target.id} isPublic={false} />,
+            <Conversation userId={event.target.id} isPublic={false} socket={this.props.socket}/>,
             document.getElementById('root')
         );
     }

@@ -16,30 +16,16 @@ class Messenger extends Component {
 
         this.handleNameChange = this.handleNameChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.loadAllData = this.loadAllData.bind(this);
+
+        this.socket = new WebSocket("ws://messenger.westeurope.cloudapp.azure.com/socket/messages?token=" + localStorage.getItem('token'));
+        this.socket.onmessage = (event) => {
+            this.loadAllData();
+        }
     }
 
     componentDidMount() {
-        getAllConversations()
-            .then( response =>
-                response.json().then(conversations => ({conversations, response}))
-            ).then(({conversations, response}) => {
-                if (response.ok) {
-                    this.setState({'conversations': conversations});
-                    conversations.map(conversation => {
-                        if (conversation.participant === null) return;
-                        getUser(conversation.participant)
-                            .then(response =>
-                                response.json().then(user => ({user, response}))
-                            ).then(({user, response}) => {
-                                this.setState({'users' : [...this.state.users, response.ok ? user.name : "Some user"]});
-                        })
-                    });
-                } else if (response.status === 401) {
-                    console.log("Need authentication");
-                } else {
-                    console.log(response.statusText);
-                }
-            }).catch(e => console.log("Error: ", e));
+        this.loadAllData();
     }
 
     handleNameChange(event) {
@@ -72,6 +58,30 @@ class Messenger extends Component {
         this.setState({'templateName' : ''});
     }
 
+    loadAllData() {
+        getAllConversations()
+            .then( response =>
+                response.json().then(conversations => ({conversations, response}))
+            ).then(({conversations, response}) => {
+            if (response.ok) {
+                this.setState({'conversations': conversations});
+                conversations.map(conversation => {
+                    if (conversation.participant === null) return;
+                    getUser(conversation.participant)
+                        .then(response =>
+                            response.json().then(user => ({user, response}))
+                        ).then(({user, response}) => {
+                        this.setState({'users' : [...this.state.users, response.ok ? user.name : "Some user"]});
+                    })
+                });
+            } else if (response.status === 401) {
+                console.log("Need authentication");
+            } else {
+                console.log(response.statusText);
+            }
+        }).catch(e => console.log("Error: ", e));
+    }
+
     render() {
         return (
             <section>
@@ -89,7 +99,7 @@ class Messenger extends Component {
                         <button type="submit">Find conversations</button>
                     </form>
 
-                    <ConversationsList conversations={this.state.conversations} users={this.state.users}/>
+                    <ConversationsList conversations={this.state.conversations} users={this.state.users} socket={this.socket}/>
                 </section>
             </section>
         );
