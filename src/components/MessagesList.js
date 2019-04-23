@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from "react-dom";
 import Conversation from "./Conversation";
-import {getPrivateConversation} from "../Api";
 
 
 class MessagesList extends Component {
@@ -26,9 +25,9 @@ class MessagesList extends Component {
                         return (
                             <li key={message.id !== undefined ? message.id : message.Id}>
                                 <section>
-                                    <a id={message.user !== undefined ? message.user : message.User} onClick={this.openConversation}>
+                                    <b id={message.user !== undefined ? message.user : message.User} onClick={this.openConversation}>
                                         { (this.props.users.length > i) ? this.props.users[i] : 'Some person'}
-                                    </a>
+                                    </b>
                                     <br/>
                                     <p className="info">{message.content !== undefined ? message.content : message.Content}</p>
                                 </section>

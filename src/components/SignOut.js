@@ -41,7 +41,7 @@ class SignOut extends Component {
     render() {
         return (
             <header>
-                <a onClick={this.signOut}>Sign Out</a>
+                <b onClick={this.signOut}>Sign Out</b>
                 <br/>
                 <article>{this.state.name}</article>
             </header>

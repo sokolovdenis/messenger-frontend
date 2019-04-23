@@ -64,15 +64,17 @@ class Messenger extends Component {
                 response.json().then(conversations => ({conversations, response}))
             ).then(({conversations, response}) => {
             if (response.ok) {
-                this.setState({'conversations': conversations});
-                conversations.map(conversation => {
+                this.setState({'conversations': conversations, 'users': Array(conversations.length)});
+                conversations.forEach((conversation, i) => {
                     if (conversation.participant === null) return;
                     getUser(conversation.participant)
                         .then(response =>
                             response.json().then(user => ({user, response}))
                         ).then(({user, response}) => {
-                        this.setState({'users' : [...this.state.users, response.ok ? user.name : "Some user"]});
-                    })
+                            let users = this.state.users;
+                            users[i] = response.ok ? user.name : "Some Person";
+                            this.setState({'users' : users});
+                    });
                 });
             } else if (response.status === 401) {
                 console.log("Need authentication");
@@ -80,6 +82,9 @@ class Messenger extends Component {
                 console.log(response.statusText);
             }
         }).catch(e => console.log("Error: ", e));
+    }
+
+    componentWillUnmount() {
     }
 
     render() {

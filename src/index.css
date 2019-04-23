@@ -47,16 +47,16 @@ div {
     text-align: center;
 }
 
-a {
+b {
     color: darkmagenta;
     float: left;
 }
 
-a:hover {
+b:hover {
     color: blueviolet;
 }
 
-header a {
+header b {
     float: right;
 }
 

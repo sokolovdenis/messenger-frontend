@@ -64,7 +64,7 @@ class SignIn extends Component {
         return (
             <section>
                 <header>
-                    <a onClick={this.signUp}>Sign Up</a>
+                    <b onClick={this.signUp}>Sign Up</b>
                     <br/>
                 </header>
                 <section>

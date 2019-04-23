@@ -76,24 +76,24 @@ class Conversation extends Component {
 
     addNewMessage(message) {
         let id = message.id;
+        let userId = message.user;
         if (id === undefined) {
             id = message.Id;
+            userId = message.User;
         }
+
         if (this.state.messages.find(function(mess) {return mess.id === id;}) === undefined) {
             this.setState({'messages': [message, ...this.state.messages]});
+            getUser(userId)
+                .then(response =>
+                    response.json().then(user => ({user, response}))
+                ).then(({user, response}) => {
+                    if (response.ok) {
+                        let name = response.ok ? user.name : "Some Person";
+                        this.setState({'users' : [name, ...this.state.users]});
+                    }
+                });
         }
-        /*getUser(message.user)
-            .then( res =>
-                res.json().then(user => ({user, res}))
-            ).then(({user, res}) => {
-            if (res.ok) {
-                this.setState({'users' : [user.name, ...this.state.users]});
-            } else if (res.status === 401) {
-                console.log("Need authentication");
-            } else {
-                console.log(res.statusText);
-            }
-        }).catch(e => console.log("Error ", e));*/
     }
 
     openMessenger() {
@@ -118,7 +118,17 @@ class Conversation extends Component {
                     response.json().then(messages => ({messages, response}))
                 ).then(({messages, response}) => {
                 if (response.ok) {
-                    this.setState({'messages': messages.reverse()});
+                    this.setState({'messages': messages.reverse(), 'users': Array(messages.length)});
+                    messages.forEach((message, i) => {
+                        getUser(message.user)
+                            .then(response =>
+                                response.json().then(user => ({user, response}))
+                            ).then(({user, response}) => {
+                                let users = this.state.users;
+                                users[i] = response.ok ? user.name : "Some Person";
+                                this.setState({'users' : users});
+                            });
+                        });
                 } else if (response.status === 401) {
                     console.log("Need authentication");
                 } else {
@@ -144,7 +154,17 @@ class Conversation extends Component {
                     response.json().then(messages => ({messages, response}))
                 ).then(({messages, response}) => {
                 if (response.ok) {
-                    this.setState({'messages': messages.reverse()});
+                    this.setState({'messages': messages.reverse(), 'users': Array(messages.length)});
+                    messages.forEach((message, i) => {
+                        getUser(message.user)
+                            .then(response =>
+                                response.json().then(user => ({user, response}))
+                            ).then(({user, response}) => {
+                                let users = this.state.users;
+                                users[i] = response.ok ? user.name : "Some Person";
+                                this.setState({'users' : users});
+                            });
+                        });
                 } else if (response.status === 401) {
                     console.log("Need authentication");
                 } else {
@@ -160,7 +180,7 @@ class Conversation extends Component {
             <section>
                 <SignOut />
                 <section>
-                    <a onClick={this.openMessenger}>All conversations</a>
+                    <b onClick={this.openMessenger}>All conversations</b>
                     <br/>
                     <article>{topic}</article>
 

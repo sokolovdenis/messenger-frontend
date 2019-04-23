@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Conversation from "./Conversation";
-import {getUser} from "../Api";
 
 
 class ConversationsList extends Component {
@@ -35,9 +34,9 @@ class ConversationsList extends Component {
                         return conversation.participant === null ? (
                                 <li key={conversation.id}>
                                     <section>
-                                        <a onClick={this.openPublicConversation}>
+                                        <b onClick={this.openPublicConversation}>
                                             Public conversation
-                                        </a>
+                                        </b>
                                         <br/>
                                         <p className="info">
                                             Last message:
@@ -48,9 +47,9 @@ class ConversationsList extends Component {
                             ) : (
                                 <li key={conversation.id}>
                                     <section>
-                                        <a id={conversation.participant} onClick={this.openConversation}>
+                                        <b id={conversation.participant} onClick={this.openConversation}>
                                             {this.props.users[i]}
-                                        </a>
+                                        </b>
                                         <br/>
                                         <p className="info">
                                             Last message:

@@ -77,7 +77,7 @@ class SignUp extends Component {
         return (
             <section>
                 <header>
-                    <a onClick={this.signIn}>Sign In</a>
+                    <b onClick={this.signIn}>Sign In</b>
                     <br/>
                 </header>
                 <section>
