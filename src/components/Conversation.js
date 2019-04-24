@@ -113,7 +113,7 @@ class Conversation extends Component {
         this.setState({'lastWasPublic' : this.props.isPublic});
 
         if (this.props.isPublic) {
-            getPublicConversation(0, 1000)
+            getPublicConversation(0, 200)
                 .then( response =>
                     response.json().then(messages => ({messages, response}))
                 ).then(({messages, response}) => {
@@ -149,7 +149,7 @@ class Conversation extends Component {
                 }
             }).catch(e => console.log("Error ", e));
 
-            getPrivateConversation(this.props.userId, 0, 1000)
+            getPrivateConversation(this.props.userId, 0, 200)
                 .then(response =>
                     response.json().then(messages => ({messages, response}))
                 ).then(({messages, response}) => {

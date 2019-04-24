@@ -23,6 +23,7 @@ class SignOut extends Component {
             .then(({user, response}) => {
                 if (response.ok) {
                     this.setState({'name' : user.name});
+                    localStorage.setItem('userId', user.id);
                 } else if (response.status === 401) {
                     console.log('Need authenticate');
                 }
@@ -32,6 +33,7 @@ class SignOut extends Component {
 
     signOut() {
         localStorage.setItem('token', '');
+        localStorage.setItem('userId', '');
         ReactDOM.render(
             <SignIn />,
             document.getElementById('root')

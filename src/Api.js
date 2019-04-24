@@ -52,14 +52,13 @@ function getSelfUser() {
 }
 
 function findUsersByName(query) {
-    let url = api + '/api/users';
+    let url = api + '/api/users?query=' + query;
 
     return fetch(url, {
         method : 'GET',
         headers : {
             'Accept': 'application/json, text/plain, */*',
             'Content-Type' : 'application/json',
-            'query' : query,
             'Authorization' : 'Bearer ' + localStorage.getItem('token')
         }
     });

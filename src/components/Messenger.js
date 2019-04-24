@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import SignOut from "./SignOut";
 import ConversationsList from "./ConversationsList";
 import {findUsersByName, getAllConversations, getUser} from "../Api";
+import UsersList from "./UsersList";
 
 
 class Messenger extends Component {
@@ -11,7 +12,8 @@ class Messenger extends Component {
         this.state = {
             conversations : [],
             users : [],
-            templateName : ''
+            templateName : '',
+            findedUsers : []
         };
 
         this.handleNameChange = this.handleNameChange.bind(this);
@@ -21,7 +23,7 @@ class Messenger extends Component {
         this.socket = new WebSocket("ws://messenger.westeurope.cloudapp.azure.com/socket/messages?token=" + localStorage.getItem('token'));
         this.socket.onmessage = (event) => {
             this.loadAllData();
-        }
+        };
     }
 
     componentDidMount() {
@@ -35,13 +37,15 @@ class Messenger extends Component {
     handleSubmit(event) {
         event.preventDefault();
 
-        findUsersByName(this.state.templateName)
-            .then( response =>
-                response.json().then(users => ({users, response}))
-            ).then(({users, response}) => {
+        if (this.state.templateName === '') {
+            this.setState({'findedUsers': []});
+        } else {
+            findUsersByName(this.state.templateName)
+                .then(response =>
+                    response.json().then(users => ({users, response}))
+                ).then(({users, response}) => {
                 if (response.ok) {
-                    this.setState({'findedUsers': users});
-                    console.log(this.state.findedUsers);
+                    this.setState({'findedUsers': users, 'templateName': ''});
                 } else if (response.status === 400) {
                     console.log("Some parameters are not valid");
                 } else if (response.status === 401) {
@@ -50,12 +54,10 @@ class Messenger extends Component {
                     console.log(response.statusText);
                 }
             }).catch(e => console.log("Error: ", e));
-
-        console.log("filter conversations, this method doesn't work now");
+        }
 
         document.getElementById('users').value = '';
         document.getElementById('users').focus();
-        this.setState({'templateName' : ''});
     }
 
     loadAllData() {
@@ -84,9 +86,6 @@ class Messenger extends Component {
         }).catch(e => console.log("Error: ", e));
     }
 
-    componentWillUnmount() {
-    }
-
     render() {
         return (
             <section>
@@ -96,13 +95,17 @@ class Messenger extends Component {
                         Your best Messenger
                     </article>
 
-                    <form onSubmit={this.handleSubmit}>
-                        <p>Find user by name: </p>
-                        <input id="users" onChange={this.handleNameChange} placeholder="" required autoFocus />
-                        <br/>
-                        <br/>
-                        <button type="submit">Find conversations</button>
-                    </form>
+                    <section>
+                        <form onSubmit={this.handleSubmit}>
+                            <p>Find user by name: </p>
+                            <input id="users" onChange={this.handleNameChange} placeholder="" required autoFocus />
+                            <br/>
+                            <br/>
+                            <button type="submit">Find conversations</button>
+                        </form>
+
+                        <UsersList users={this.state.findedUsers} socket={this.socket} />
+                    </section>
 
                     <ConversationsList conversations={this.state.conversations} users={this.state.users} socket={this.socket}/>
                 </section>
