@@ -33,7 +33,7 @@ class App extends Component {
             //this.setState({isSignedIn: true});
             this.state.isSignedIn = true;
         }
-        return ( this.state.isSignedIn? <Messenger app={this} token={this.state.token}/>:<SignIn onTokenReceive={this.tokenReceiveHandler}/> );
+        return ( this.state.isSignedIn? <Messenger app={this} token={token}/>:<SignIn onTokenReceive={this.tokenReceiveHandler}/> );
     }
 }
 

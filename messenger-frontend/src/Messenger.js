@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import ReactDOM from 'react-dom';
 import './App.css';
 import * as axios from "axios";
 
@@ -27,31 +28,16 @@ class MessagesList extends React.Component {
         this.state = {};
     }
 
-    componentDidMount() {
-        this.scrollToBottom();
-        // const node = ReactDOM.findDOMNode(this);
-        // node.scrollTop = node.scrollHeight;
+    componentWillUpdate() {
+        const node = this.el;
+        this.shouldScrollBottom = node.scrollTop + node.offsetHeight === node.scrollHeight;
     }
-
-    // componentWillUpdate: function() {
-    //     const node = this.getDOMNode();
-    //     this.shouldScrollBottom = node.scrollTop + node.offsetHeight === node.scrollHeight;
-    // },
-    //
-    // componentDidUpdate(prevProps) {
-    //     if (this.shouldScrollBottom) {
-    //         const node = ReactDOM.findDOMNode(this);
-    //         node.scrollTop = node.scrollHeight;
-    //     }
-    // }
 
     componentDidUpdate() {
         this.props.messenger.loadMessages();
-        this.scrollToBottom();
-    }
-
-    scrollToBottom() {
-        this.el.scrollIntoView({behavior: 'smooth'});
+        if (this.shouldScrollBottom) {
+            this.el.scrollTop = this.el.scrollHeight;
+        }
     }
 
     setCurrentUser(userId) {
@@ -95,14 +81,14 @@ class MessagesList extends React.Component {
     render() {
         return (
             <>
-                <div className="messages" id="messages">
+                <div className="messages" id="messages" ref={el => {this.el = el;}}>
                     {this.props.messagesList ? (
                         <>
                             {this.props.messagesList.map((message, i) => (
                                 <div className="message" key={"message__" + i}>
                                     <div className="message-username" key={"message-username__" + message.uniqueId}
                                          onClick={this.setCurrentUser.bind(this, message.user)}>
-                                        <a href="#">{this.props.messenger.state.users == null ? message.id : this.props.messenger.state.users[message.user]} </a>
+                                        <button className="link-button">{this.props.messenger.state.users == null ? message.id : this.props.messenger.state.users[message.user]} </button>
                                     </div>
                                     <div className="message-text" key={"message-text__" + message.uniqueId}>
                                         {message.content}
@@ -111,10 +97,6 @@ class MessagesList extends React.Component {
                             ))}
                         </>
                     ) : (<p>No messages.</p>)}
-                </div>
-                <div ref={el => {
-                    this.el = el;
-                }}>
                 </div>
             </>
         );
@@ -268,12 +250,15 @@ class Conversation extends React.Component {
 
     render() {
         var className = this.props.active ? "active side-menu-elem" : "side-menu-elem";
+        console.log(this.props.conversation.participant);
+        console.log(this.props.users);
+
         return (
-            <a className={className} href="#"
+            <button className={className}
                onClick={this.onClickHandler}>
                 {this.props.conversation.participant == null ? "Public" :
                     this.props.messenger.state.users === null? this.props.conversation.participant:this.props.messenger.state.users[this.props.conversation.participant]}
-            </a>
+            </button>
         );
     }
 }
@@ -324,7 +309,8 @@ class ConversationList extends React.Component {
                                           setCurrentConversation={this.setCurrentConversation.bind(this, conversation)}
                                           active={conversation.id === this.props.messenger.state.currentConversation}
                                           key={"conversation__" + conversation.id}
-                                          messenger={this.props.messenger}/>
+                                          messenger={this.props.messenger}
+                                          users={this.props.messenger.state.users}/>
                         ))}
                     </>
                 ) : (<p>No conversations.</p>)}
@@ -338,6 +324,14 @@ class Messenger extends Component {
         super(props);
         this.state = {currentConversation: "public", currentUser: null, users:{}, me:undefined};
         this.loadMessages = null;
+
+        this.socket = new WebSocket(`ws://messenger.westeurope.cloudapp.azure.com/socket/messages?token=${this.props.token}`);
+
+        this.socket.onmessage = function(event) {
+            var incomingMessage = event.data;
+            //showMessage(incomingMessage);
+            console.log(incomingMessage);
+        };
     }
 
     componentDidMount() {
