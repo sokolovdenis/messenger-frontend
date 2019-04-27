@@ -3,9 +3,10 @@ import ConversationList from './ConversationList/ConversationList'
 import MessageList from './MessageList/MessageList';
 import SendMessageForm from './SendMessageForm/SendMessageForm';
 import SearchPanel from './SearchPanel/SearchPanel';
+import SearchResultList from './SearchResultList/SearchResultList';
 import { authenticationService } from '../../services/Api/Api';
-import './Chat.css';
 import Header from './Header/Header';
+import './Chat.css';
 
 
 class Chat extends Component {
@@ -13,22 +14,28 @@ class Chat extends Component {
         super(props);
         // console.log(authenticationService.getCurrentUser());
         this.state = {
-            activeChatId: 'public',  // активная чат комната
+            activeChatName: null,  // userId активной чат комнаты (public==null)
             messages: [],  // сообщения в активной чат комнате
             chats: [],  // список чат комнат
             myId: null, // Id залогиненного пользователя
-            myName: "",  // Имя залогиненного пользователя
+            myName: '',  // Имя залогиненного пользователя
             names: {}, // словарь id:имя
+            query: '', // запрос поиска,
+            searchResults: [], // результаты поиска
         };
+
+        this.showed_names = {} // имена для которых уже создали запрос
 
         this.showConversations  = this.showConversations.bind(this);
         this.showMessages = this.showMessages.bind(this);
         this.showPostedMessage = this.showPostedMessage.bind(this);
         this.showMyUserName = this.showMyUserName.bind(this);
         this.showName = this.showName.bind(this);
+        this.showSearchResults = this.showSearchResults.bind(this);
         this.selectConversation  = this.selectConversation.bind(this);
         this.showErrorMessage = this.showErrorMessage.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
+        this.sendQuery = this.sendQuery.bind(this);
     }
     
     componentDidMount() {    
@@ -37,7 +44,7 @@ class Chat extends Component {
             .then(this.showConversations)
             .catch(this.showErrorMessage);
         // выбираем и загружаем диалог по умолчанию
-        this.selectConversation(this.state.activeChatId);
+        this.selectConversation(null);
         // загружаем данные о себе
         authenticationService.getMe()
             .then(this.showMyUserName)
@@ -49,9 +56,21 @@ class Chat extends Component {
     }
 
     selectConversation(id) {
-        authenticationService.getPublicMessages()
-            .then(this.showMessages)
-            .catch(this.showErrorMessage);
+        //отвечает не только за выбор обсуждения из списка,
+        //но и создание нового если тыкнуть на имя в сообщении
+        // если при поиске нажать на найденное пустое обсуждение,
+        // то нужно при отправке сообщения добавить новую запись в chats
+        this.setState({ activeChatName: id });
+        if (id == null) {
+            authenticationService.getPublicMessages()
+                .then(this.showMessages)
+                .catch(this.showErrorMessage);
+        }
+        else {
+            authenticationService.getPrivateMessages(id)
+                .then(this.showMessages)
+                .catch(this.showErrorMessage);
+        }
     }
 
     showConversations(data) {
@@ -67,11 +86,11 @@ class Chat extends Component {
             }
             return 0;
         });
-        // console.log(data);
         this.setState({ chats: data });
     }
 
     showMessages(data) {
+        // надо проверить если сообщений нет
         // console.log(data);
         this.setState({ messages: data });
     }
@@ -81,9 +100,24 @@ class Chat extends Component {
     }
 
     sendMessage(message) {
-        // отправляем сообщение на сервер .
-        authenticationService.postPublicMessages(message)
-            .then(this.showPostedMessage)
+        // отправляем сообщение на сервер 
+        if (this.state.activeChatName == null) {
+            authenticationService.postPublicMessages(message)
+                .then(this.showPostedMessage)
+                .catch(this.showErrorMessage);
+        }
+        else {
+            authenticationService.postPrivateMessages(this.state.activeChatName, message)
+                .then(this.showPostedMessage)
+                .catch(this.showErrorMessage);
+        }
+    }
+
+    sendQuery(query) {
+        // отправляем сообщение на сервер 
+        this.setState({ query: query });
+        authenticationService.findUsers(query)
+            .then(this.showSearchResults)
             .catch(this.showErrorMessage);
     }
 
@@ -98,28 +132,44 @@ class Chat extends Component {
     }
 
     // показываем имя по id
-    showName(id) {
+    showName(id, name=null) {
+        if (id === null) {
+            return 'public';
+        }
         if (id in this.state.names) {
             return this.state.names[id];
         }
         else {
-            var newNames = this.state.names;
-            // отправляем запрос на сервер
-            if (!(id in newNames)) {
+            if (name != null) {
+                // при поиске я уже знаю имя, но его надо запомнить
+                this.setState(function(prevState, props){
+                    prevState.names[id] = name;
+                    return {names: prevState.names}
+                });
+                return name;
+            }
+            // иначе отправляем запрос на сервер
+            if (!(id in this.showed_names)) {
                 // запоминаем этот ID и больше не спрашиваем сервер про него
-                newNames[id] = '###';
-                this.setState({names: newNames});
+                // конечно спасает не на 100% ну и ладно
+                this.showed_names[id] = '###'; // можно засунуть что угодно
                 // отправляем запрос, при его выполнении состояние изменится и все перерисуется
                 authenticationService.getUserInfo(id)
                     .then(data => {
-                        var newNames = this.state.names;
-                        newNames[data.id] = data.name;
-                        this.setState({names: newNames});
+                        this.setState(function(prevState, props){
+                            prevState.names[data.id] = data.name;
+                            return {names: prevState.names}
+                        });
                     })
                     .catch(this.showErrorMessage)
             }
-            return '###';
+            return this.state.names[id] || this.showed_names[id];
         }
+    }
+
+    showSearchResults(data) {
+        // надо проверить если сообщений нет
+        this.setState({ searchResults: data});
     }
 
 
@@ -129,14 +179,31 @@ class Chat extends Component {
                 <Header name={this.state.myName} logout={this.props.logout} />
                 <div className="messenger">
                     <div className="inbox-people">
-                        <SearchPanel/>
-                        <ConversationList
-                            chats={this.state.chats} />
+                        <SearchPanel 
+                            sendQuery={this.sendQuery} />
+                        { this.state.query === '' ?
+                            (
+                            <ConversationList
+                                selectConversation={this.selectConversation}
+                                activeChatName={this.state.activeChatName}
+                                chats={this.state.chats}
+                                showName={this.showName} />
+                            ):
+                            (
+                            <SearchResultList
+                                selectConversation={this.selectConversation}
+                                activeChatName={this.state.activeChatName}
+                                chats={this.state.chats}
+                                showName={this.showName}
+                                results={this.state.searchResults} />
+                            )
+                        }    
                     </div>
                     <div className="mesgs">
                         <MessageList 
+                            selectConversation={this.selectConversation}
+                            activeChatName={this.state.activeChatName}
                             userId={this.state.myId}
-                            activeChatId={this.state.chatId}
                             messages={this.state.messages}
                             showName={this.showName} />
                         <SendMessageForm

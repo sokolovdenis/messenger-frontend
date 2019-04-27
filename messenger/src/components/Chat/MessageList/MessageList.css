@@ -1,4 +1,9 @@
 .msg-history {
-    height: 516px;
+    height: 500px;
     overflow-y: auto;
+}
+.msg-header { 
+    padding: 0px 0px 5px 5px; 
+    overflow:hidden; 
+    border-bottom:1px solid #c4c4c4;
 }

@@ -29,7 +29,6 @@ class Auth extends Component {
       }
     
       handleError(message) {
-        console.log(message);
         this.setState({ requestingServer: false, warning: 'warning' });
       }
     
@@ -50,7 +49,8 @@ class Auth extends Component {
         if (this.state.mode === 'signin') {
           authenticationService.signIn(
             this.state.login, 
-            this.state.password
+            this.state.password,
+            this.state.remember
             ).then(user => {
               const { from } = this.props.location.state || { from: { pathname: "/" } };
               this.props.history.push(from);
@@ -60,11 +60,11 @@ class Auth extends Component {
           });
         } 
         else {
-            console.log(this.state);
             authenticationService.signUp(
               this.state.login, 
               this.state.password,
-              this.state.user
+              this.state.user,
+              this.state.remember
               ).then(user => {
                 const { from } = this.props.location.state || { from: { pathname: "/" } };
                 this.props.history.push(from);
@@ -155,7 +155,7 @@ class Auth extends Component {
                 )
               }
               {/* разобраться как выровнять по высоте*/}
-              <h1 class="h3 mb-3 font-weight-normal"> Or </h1>
+              <h1 className="h3 mb-3 font-weight-normal"> Or </h1>
               { this.state.mode === 'signin' ?
                 (
                     this.state.requestingServer === true ?

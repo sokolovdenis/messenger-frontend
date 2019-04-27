@@ -15,13 +15,9 @@ class App extends Component {
         super(props);
 
         this.state = {
-            currentUser: null
+            currentUser: authenticationService.getCurrentUser(),
         };
         this.logout = this.logout.bind(this);
-    }
-
-    componentWillMount() {
-		this.setState({ currentUser: authenticationService.getCurrentUser()});
     }
 
     logout(event) {
@@ -31,6 +27,8 @@ class App extends Component {
     }
 
     render() {
+        // надо разобраться с шириной и высотой
+        // ширина зависит от контента, поэтому прыгает при смене чат комнат
         return (
             <Router history={history}>
                 <div className='container'>

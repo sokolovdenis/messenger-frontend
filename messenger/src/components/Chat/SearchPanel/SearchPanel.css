@@ -18,13 +18,3 @@
     padding:2px 0 4px 6px; 
     background:none;
 }
-.srch-bar .input-group-addon button {
-    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
-    border: medium none;
-    padding: 0;
-    color: #707070;
-    font-size: 18px;
-}
-.srch-bar .input-group-addon { 
-    margin: 0 0 0 -27px;
-}

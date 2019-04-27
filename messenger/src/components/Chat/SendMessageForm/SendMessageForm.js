@@ -13,14 +13,12 @@ class SendMessageForm extends Component {
     }
     
     handleChange(event) {
-        console.log("handleChange");
         this.setState({
             message: event.target.value
         })
     }
     
     handleSubmit(e) {
-        console.log("handleSubmit");
         e.preventDefault();
         this.props.sendMessage(this.state.message);
         this.setState({

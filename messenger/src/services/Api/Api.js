@@ -38,11 +38,14 @@ export const authenticationService = {
     getConversations,
     getPublicMessages,
     postPublicMessages,
+    getPrivateMessages,
+    postPrivateMessages,
     getMe,
     getUserInfo,
+    findUsers,
 };
 
-function signIn(login, password) {
+function signIn(login, password, remember) {
     return fetch(SERVER + API_SIGNIN, {
             method: 'post',
             body: JSON.stringify({login: login, password: password}),
@@ -51,15 +54,19 @@ function signIn(login, password) {
         .then(fetchStatusCheck)
         .then(user => {
             // запоминаем пользователя
-            localStorage.setItem('token', user.token);
-            localStorage.setItem('expires', user.expires);
+            sessionStorage.setItem('token', user.token);
+            sessionStorage.setItem('expires', user.expires);
+            if (remember) {
+                localStorage.setItem('token', user.token);
+                localStorage.setItem('expires', user.expires);
+            }
             return user;
             })
         ;
     // не забыть поймать искючения в месте где вызываю метод
 }
 
-function signUp(login, password, name) {
+function signUp(login, password, name, remember) {
     return fetch(SERVER + API_SIGNUP, {
         method: 'post',
         body: JSON.stringify({login: login, password: password, name: name}),
@@ -68,8 +75,12 @@ function signUp(login, password, name) {
     .then(fetchStatusCheck)
     .then(user => {
         // запоминаем пользователя
-        localStorage.setItem('token', user.token);
-        localStorage.setItem('expires', user.expires);
+        sessionStorage.setItem('token', user.token);
+        sessionStorage.setItem('expires', user.expires);
+        if (remember) {
+            localStorage.setItem('token', user.token);
+            localStorage.setItem('expires', user.expires);
+        }
         return user;
         })
     ;
@@ -78,17 +89,28 @@ function signUp(login, password, name) {
 
 function logout() {
     // удаляем данные о пользователе из хранилища
-    localStorage.removeItem('token');
-    localStorage.removeItem('expires');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('expires');
+    if (localStorage.getItem('token') && localStorage.getItem('expires')) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('expires');
+    }
 }
 
 function getCurrentUser() { 
     // если в хранилище нет currentUser возвращается null
-    if (localStorage.getItem('token') && localStorage.getItem('expires'))
-        return {"token": localStorage.getItem('token'), 
-                "expires": localStorage.getItem('expires')};
-    else
+    if (sessionStorage.getItem('token') && sessionStorage.getItem('expires'))
+        return {"token": sessionStorage.getItem('token'), 
+                "expires": sessionStorage.getItem('expires')};
+    else {
+        if (localStorage.getItem('token') && localStorage.getItem('expires')) {
+            sessionStorage.setItem('token', localStorage.getItem('token'));
+            sessionStorage.setItem('expires', localStorage.getItem('expires'));
+            return {"token": sessionStorage.getItem('token'), 
+                    "expires": sessionStorage.getItem('expires')};
+        }
         return null;
+    }
 }
 
 function getConversations() {
@@ -119,6 +141,25 @@ function postPublicMessages(message) {
     // не забыть поймать искючения в месте где вызываю метод
 }
 
+function getPrivateMessages(id) {
+    return fetch(SERVER + get_user_conservartions(id), {
+            method: 'get',
+            headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + getCurrentUser().token }
+        })
+        .then(fetchStatusCheck);
+    // не забыть поймать искючения в месте где вызываю метод
+}
+
+function postPrivateMessages(id, message) {
+    return fetch(SERVER + get_user_conservartions(id), {
+            method: 'post',
+            body: JSON.stringify({content: message}),
+            headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + getCurrentUser().token }
+        })
+        .then(fetchStatusCheck);
+    // не забыть поймать искючения в месте где вызываю метод
+}
+
 function getMe() {
     return fetch(SERVER + API_ME, {
             method: 'get',
@@ -130,6 +171,15 @@ function getMe() {
 
 function getUserInfo(id) {
     return fetch(SERVER + get_user_info(id), {
+            method: 'get',
+            headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + getCurrentUser().token }
+        })
+        .then(fetchStatusCheck);
+    // не забыть поймать искючения в месте где вызываю метод
+}
+
+function findUsers(query) {
+    return fetch(SERVER + API_FIND_USER + '?query=' + query, {
             method: 'get',
             headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + getCurrentUser().token }
         })
