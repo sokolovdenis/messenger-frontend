@@ -137,7 +137,10 @@ function postPublicMessages(message) {
             body: JSON.stringify({content: message}),
             headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + getCurrentUser().token }
         })
-        .then(fetchStatusCheck);
+        .then(fetchStatusCheck)
+        .then(function(json) {
+            return [json, null]
+        });
     // не забыть поймать искючения в месте где вызываю метод
 }
 
@@ -156,7 +159,10 @@ function postPrivateMessages(id, message) {
             body: JSON.stringify({content: message}),
             headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + getCurrentUser().token }
         })
-        .then(fetchStatusCheck);
+        .then(fetchStatusCheck)
+        .then(function(json) {
+            return [json, id]
+        });
     // не забыть поймать искючения в месте где вызываю метод
 }
 

@@ -100,7 +100,8 @@ class Chat extends Component {
     }
 
     sendMessage(message) {
-        // отправляем сообщение на сервер 
+        // отправляем сообщение на сервер,
+        // в ответ получаем ответ сервера + chat.participant
         if (this.state.activeChatName == null) {
             authenticationService.postPublicMessages(message)
                 .then(this.showPostedMessage)
@@ -122,13 +123,39 @@ class Chat extends Component {
     }
 
     showPostedMessage(data) {
-        var messages = this.state.messages;
-
-        // обновляем обсуждения
-        
-        messages.push(data);
-
-        this.setState({ messages: messages});
+        var response = data[0];
+        var participant = data[1];
+        this.setState(
+            function(prevState, props) {
+                // если мы пишем кому-то с кем до этого не общались, 
+                // то нужно добавить новый элемент в массив chats
+                var findResult = prevState.chats.find(
+                    function(element, index, array) {
+                        if (element.id == response.conversationId) {
+                            return true;
+                        }
+                        return false;
+                    }
+                );
+                if (typeof findResult == "undefined") {
+                    var chatElement = {
+                        lastMessage: {
+                            conversationId: response.conversationId,
+                            timestamp: response.timestamp,
+                            user: response.user,
+                            content: response.content,
+                            id: response.id
+                        },
+                        participant: participant,
+                        id: response.conversationId
+                    };
+                    // обновляем список обсуждений
+                    prevState.chats = [chatElement].concat(prevState.chats)
+                }
+                prevState.messages.push(response);
+                return {messages: prevState.messages, chats: prevState.chats}
+            }
+        );
     }
 
     // показываем имя по id
