@@ -5,7 +5,13 @@ import './Message.css'
 
 class Message extends Component {
     constructor(props) {
-        super(props)
+        super(props);
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick(event) {
+        event.preventDefault();
+        this.props.selectConversation(this.props.senderId);
     }
 
     render() {
@@ -28,7 +34,9 @@ class Message extends Component {
                     </div>
                     <div className="received-msg">
                         <div className="received-withd-msg">
-                            {this.props.showName(this.props.senderId)}
+                            <div onClick={this.handleClick}>
+                                {this.props.showName(this.props.senderId)}
+                            </div>
                             <p>{this.props.text}</p>
                             <span className="time-date">
                                 <TimeAgo date={this.props.time}/>

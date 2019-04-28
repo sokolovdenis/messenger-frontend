@@ -42,6 +42,7 @@ class MessageList extends Component {
                                 showName={this.props.showName}
                                 text={message.content}
                                 time={message.timestamp}
+                                selectConversation={this.props.selectConversation}
                                 />
                     ))}
                 </div>
