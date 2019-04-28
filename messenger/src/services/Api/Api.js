@@ -15,6 +15,9 @@ function get_user_info(userId) {
 const API_ME = '/api/users/me';
 const API_FIND_USER = '/api/users';
 
+const API_WEBSOCKET = 'ws://messenger.westeurope.cloudapp.azure.com/socket/messages?token='+ getCurrentUser().token 
+
+
 function fetchStatusCheck(response) {
     // console.log(response)
     if (!response.ok) {
@@ -43,6 +46,7 @@ export const authenticationService = {
     getMe,
     getUserInfo,
     findUsers,
+    API_WEBSOCKET,
 };
 
 function signIn(login, password, remember) {

@@ -6,6 +6,7 @@ import SearchPanel from './SearchPanel/SearchPanel';
 import SearchResultList from './SearchResultList/SearchResultList';
 import { authenticationService } from '../../services/Api/Api';
 import Header from './Header/Header';
+import Websocket from 'react-websocket';
 import './Chat.css';
 
 
@@ -36,6 +37,7 @@ class Chat extends Component {
         this.showErrorMessage = this.showErrorMessage.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
         this.sendQuery = this.sendQuery.bind(this);
+        this.handleIncomingMessage = this.handleIncomingMessage.bind(this);
     }
     
     componentDidMount() {    
@@ -199,6 +201,65 @@ class Chat extends Component {
         this.setState({ searchResults: data});
     }
 
+    handleIncomingMessage(data) {
+        // почему то не меняется надпись с последним сообщением?
+        // нам нужно из строки получить json
+        data = JSON.parse(data)
+        // Примечание: имена полей начинаются с большой буквы
+        // если на webSocket получаем сообщение от нас же, то игнорируем его
+        if (data.User !== this.state.myId) {
+            this.setState(
+                function(prevState, props) {
+                    // обновляем список обсуждений
+                    var findCondition = function(element, index, array) {
+                        if (element.id == data.ConversationId) {
+                            return true;
+                        }
+                        return false;
+                    };
+                    var findResult = prevState.chats.find(findCondition);
+                    // надо узнать это личное сообщение или из общего чата
+                    var chatName = data.ConversationId === 'public' ? null : data.User;
+                    var chatElement = {
+                        lastMessage: {
+                            conversationId: data.ConversationId,
+                            timestamp: data.Timestamp,
+                            user: data.User,
+                            content: data.Content,
+                            id: data.Id
+                        },
+                        participant: chatName,
+                        id: data.ConversationId
+                    };
+                    if (typeof findResult == "undefined") {
+                        // если это новое обсуждение, то добавляем его в список chats
+                        prevState.chats = [chatElement].concat(prevState.chats)
+                    }
+                    else {
+                        // на первое место ставим обсуждение куда пришло сообщение
+                        var findResultIndex = prevState.chats.findIndex(findCondition);
+                        prevState.chats.splice(findResultIndex, 1);
+                        prevState.chats = [chatElement].concat(prevState.chats);
+                    }
+                    // если сообщение пришло на активное обсуждение
+                    // то надо изменить и список сообщений
+                    // надо чтобы null==null выполнялось
+                    if (chatName == prevState.activeChatName) {
+                        var message = {
+                            conversationId: data.ConversationId,
+                            timestamp: data.Timestamp,
+                            user: data.User,
+                            content: data.Content,
+                            id: data.Id
+                        };
+                        prevState.messages.push(message);
+                    }
+                    return {messages: prevState.messages, chats: prevState.chats}
+                }
+            );
+        }
+    }
+
 
     render() {
         return (
@@ -237,6 +298,8 @@ class Chat extends Component {
                             sendMessage={this.sendMessage} />
                     </div>
                 </div>
+                <Websocket url={authenticationService.API_WEBSOCKET}
+                    onMessage={this.handleIncomingMessage}/>
             </div>
         );
     }
