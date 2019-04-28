@@ -1,5 +1,6 @@
 .incoming-msg { 
     overflow:hidden;
+    word-wrap: break-word;
     margin:26px 0 26px;
 }
 .incoming-msg-img {
@@ -41,6 +42,7 @@
 }
 .outgoing-msg { 
     overflow:hidden;
+    word-wrap: break-word;
     margin:26px 0 26px;
 }
 .sent-msg {

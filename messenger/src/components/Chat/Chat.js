@@ -298,7 +298,7 @@ class Chat extends Component {
                             sendMessage={this.sendMessage} />
                     </div>
                 </div>
-                <Websocket url={authenticationService.API_WEBSOCKET}
+                <Websocket url={authenticationService.API_WEBSOCKET()}
                     onMessage={this.handleIncomingMessage}/>
             </div>
         );
