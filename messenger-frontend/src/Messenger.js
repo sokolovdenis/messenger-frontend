@@ -34,7 +34,9 @@ class MessagesList extends React.Component {
         const node = this.el;
         if (node.scrollTop === 0) {
             var height = this.el.scrollHeight;
-            this.props.messenger.loadMessages(true, () => {this.el.scrollTop = this.el.scrollHeight - height;});
+            this.props.messenger.loadMessages(true, () => {
+                this.el.scrollTop = this.el.scrollHeight - height;
+            });
         }
     }
 
@@ -42,6 +44,7 @@ class MessagesList extends React.Component {
         const node = this.el;
         node.addEventListener('scroll', this.listenScrollEvent);
     }
+
     componentWillUnmount() {
         const node = this.el;
         node.removeEventListener('scroll', this.listenScrollEvent);
@@ -77,8 +80,9 @@ class MessagesList extends React.Component {
                                 <div className="message" key={"message__" + i}>
                                     <div className="message-username" key={"message-username__" + message.uniqueId}
                                          onClick={this.setCurrentUser.bind(this, message.user)}>
-                                        <button
-                                            className="link-button">{this.props.messenger.state.users == null ? message.id : this.props.messenger.state.users[message.user]} </button>
+                                        <button className="link-button">
+                                            {this.props.messenger.state.users == null ? message.id : this.props.messenger.state.users[message.user]}
+                                        </button>
                                     </div>
                                     <div className="message-text" key={"message-text__" + message.uniqueId}>
                                         {message.content}
@@ -140,8 +144,11 @@ class MessageSubmit extends React.Component {
     render() {
         return (
             <form id="inputMessage" onSubmit={this.handleSignUp}>
-                <input type="text" id="content" value={this.state.content} onChange={this.handleChange}/>
-                <button onClick={this.handlePost} value="post">Send</button>
+                <span className="form_span">
+                    <input className="form_input" type="text" id="content" value={this.state.content}
+                           onChange={this.handleChange}/>
+                    <button className="form_button" onClick={this.handlePost} value="post">Send</button>
+                </span>
             </form>
         );
     }
@@ -168,19 +175,23 @@ class Messages extends React.Component {
     }
 
     componentDidMount() {
-        this.props.messenger.loadMessages(true);
+        this.props.messenger.loadMessages(false);
     }
 
-    loadMessagesData(loadNewMessages, callback=null) {
+    loadMessagesData(loadNewMessages, callback = null) {
+        var count = 10;
+        var from = undefined;
         if (this.state.currentUser !== this.props.currentUser) {
-            this.setState({currentUser: this.props.currentUser, top: 0});
-        } else if (!loadNewMessages) {
-            return;
+            this.setState({currentUser: this.props.currentUser, messagesList:[]});
+            from = -count;
+        } else {
+            if (!loadNewMessages) {
+                return;
+            }
+            from = this.state.top - count;
         }
 
-        var count = 10;
-        var from = this.state.top-count;
-        this.setState({top:from});
+        this.setState({top: from});
 
         if (this.props.currentUser === null) {
             var url = 'http://messenger.westeurope.cloudapp.azure.com/api/conversations/public/messages';
@@ -293,7 +304,7 @@ class ConversationList extends React.Component {
 
     handleCancel(event) {
         event.preventDefault();
-        this.setState({foundUsers: null, displayConversations: true, query:""});
+        this.setState({foundUsers: null, displayConversations: true, query: ""});
     }
 
     setCurrentConversation(conversation) {
@@ -309,9 +320,12 @@ class ConversationList extends React.Component {
     }
 
     setCurrentUser(userId) {
+        var oldConversations = this.state.conversations;
+        oldConversations.push({participant: userId});
         this.props.messenger.setState({
-            currentUser: userId
+            currentUser: userId, conversations: oldConversations
         });
+        this.setState({foundUsers: null, displayConversations: true, query: ""});
     }
 
     async loadConversationsData() {
@@ -337,9 +351,14 @@ class ConversationList extends React.Component {
         return (
             <nav className="side-menu">
                 <form id="inputUserQuery">
-                    <input type="text" id="query" value={this.state.query} onChange={this.handleChange}/>
-                    <button onClick={this.handleFind}>Find</button>
-                    <button onClick={this.handleCancel}>Cancel</button>
+                    <span className="form_span">
+                        <input className="form_input" type="text" id="query" value={this.state.query}
+                               onChange={this.handleChange}/>
+                        <span className="form_span_nowrap">
+                            <button onClick={this.handleFind}>Find</button>
+                            <button onClick={this.handleCancel}>Cancel</button>
+                        </span>
+                    </span>
                 </form>
                 {
                     this.state.displayConversations ? (
@@ -349,7 +368,7 @@ class ConversationList extends React.Component {
                                     <Conversation participant={conversation.participant}
                                                   setCurrentConversation={this.setCurrentConversation.bind(this, conversation)}
                                                   active={conversation.participant === this.props.messenger.state.currentUser}
-                                                  key={"conversation__" + conversation.id}
+                                                  key={"conversation__" + conversation.participant}
                                                   messenger={this.props.messenger}
                                                   users={this.props.messenger.state.users}/>
                                 ))}
@@ -359,12 +378,13 @@ class ConversationList extends React.Component {
                         this.state.foundUsers ? (
                             <>
                                 {this.state.foundUsers.map((user, i) => (
-                                    <div className="message-username" key={"found-username__" + user.uniqueId}
-                                         onClick={this.setCurrentUser.bind(this, user.id)}>
-                                        <button className="link-button">
-                                            {this.props.messenger.state.users == null ? user.id : this.props.messenger.state.users[user.id]}
-                                        </button>
-                                    </div>
+                                    <Conversation participant={user.id}
+                                                  setCurrentConversation={this.setCurrentUser.bind(this, user.id)}
+                                                  active={user.id === this.props.messenger.state.currentUser}
+                                                  key={"found_user__" + user.id}
+                                                  messenger={this.props.messenger}
+                                                  users={this.props.messenger.state.users}/>
+
                                 ))}
                             </>
                         ) : (<p>No users found</p>)
@@ -436,9 +456,12 @@ class Messenger extends Component {
                 <div className="container">
                     <ConversationList app={this.props.app} messenger={this} users={this.users}/>
                     <Messages app={this.props.app} messenger={this} currentUser={this.state.currentUser}/>
-                    <aside>aside</aside>
+                    <aside>
+                        <p>Место для Вашей рекламы</p>
+                        <p>Place for your ads</p>
+                    </aside>
                 </div>
-                <footer> footer</footer>
+                <footer>Messenger, 2019</footer>
             </div>
         );
     }

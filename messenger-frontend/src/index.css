@@ -29,6 +29,9 @@ footer {
     padding: 5px;
     background: lightseagreen;
     width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 main {
@@ -47,6 +50,10 @@ main {
 aside {
     width: 20vw;
     background: lemonchiffon;
+    display:flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
 }
 
 .logo {
@@ -90,14 +97,18 @@ aside {
 
 .message {
     display: flex;
-    margin: 2em;
+    margin: 1em;
     background: aquamarine;
 }
 
 .message-username {
     width: 10vw;
+    min-width: 10vw;
     align-self: center;
-    /*padding-right: 2rem;*/
+    display: inline-block;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    line-break: strict;
 }
 
 .message-text {
@@ -130,14 +141,26 @@ aside {
 
 .row {
     display: flex;
-    /*flex-wrap:wrap;*/
     justify-content: center;
     align-items: center;
 }
-
 .column {
     flex: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.form_input {
+    flex-grow: 1;
+}
+.form_span {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.form_span_nowrap {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
 }
