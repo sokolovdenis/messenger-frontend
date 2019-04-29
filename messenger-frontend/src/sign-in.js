@@ -24,7 +24,6 @@ class SignIn extends Component {
     }
 
     async handleSignUp(event) {
-        // console.log(this.state);
         event.preventDefault();
         await axios({
             method: 'post',
@@ -38,7 +37,6 @@ class SignIn extends Component {
                 responseType: 'json'
             }
         }).then((response) => {
-            //console.log(response);
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('expires', response.data.expires);
             this.onTokenReceive(response.data.token);
@@ -48,7 +46,6 @@ class SignIn extends Component {
     }
 
     async handleLogIn(event) {
-        console.log(this.state);
         event.preventDefault();
         await axios({
             method: 'post',

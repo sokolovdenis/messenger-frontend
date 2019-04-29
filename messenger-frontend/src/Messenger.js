@@ -33,7 +33,7 @@ class MessagesList extends React.Component {
     listenScrollEvent() {
         const node = this.el;
         if (node.scrollTop === 0) {
-            var height = this.el.scrollHeight;
+            let height = this.el.scrollHeight;
             this.props.messenger.loadMessages(true, () => {
                 this.el.scrollTop = this.el.scrollHeight - height;
             });
@@ -114,10 +114,11 @@ class MessageSubmit extends React.Component {
     }
 
     async handlePost(event) {
+        let url;
         if (this.props.currentUser === null) {
-            var url = 'http://messenger.westeurope.cloudapp.azure.com/api/conversations/public/messages';
+            url = 'http://messenger.westeurope.cloudapp.azure.com/api/conversations/public/messages';
         } else {
-            var url = `http://messenger.westeurope.cloudapp.azure.com/api/conversations/${this.props.currentUser}/messages`;
+            url = `http://messenger.westeurope.cloudapp.azure.com/api/conversations/${this.props.currentUser}/messages`;
         }
         event.preventDefault();
         await axios({
@@ -163,11 +164,11 @@ class Messages extends React.Component {
         this.socket = new WebSocket(`ws://messenger.westeurope.cloudapp.azure.com/socket/messages?token=${localStorage.getItem('token')}`);
 
         this.socket.onmessage = (event) => {
-            var incomingMessage = JSON.parse(event.data);
+            let incomingMessage = JSON.parse(event.data);
             incomingMessage = {user: incomingMessage.User, content: incomingMessage.Content};
             this.props.messenger.loadUserData([incomingMessage.user]);
             if (this.props.currentUser === incomingMessage.user || this.props.messenger.state.me.id === incomingMessage.user) {
-                var oldMessages = this.state.messagesList;
+                let oldMessages = this.state.messagesList;
                 oldMessages.push(incomingMessage);
                 this.setState({messagesList: oldMessages});
             }
@@ -179,8 +180,8 @@ class Messages extends React.Component {
     }
 
     loadMessagesData(loadNewMessages, callback = null) {
-        var count = 10;
-        var from = undefined;
+        let count = 10;
+        let from = undefined;
         if (this.state.currentUser !== this.props.currentUser) {
             this.setState({currentUser: this.props.currentUser, messagesList:[]});
             from = -count;
@@ -193,10 +194,11 @@ class Messages extends React.Component {
 
         this.setState({top: from});
 
+        let url;
         if (this.props.currentUser === null) {
-            var url = 'http://messenger.westeurope.cloudapp.azure.com/api/conversations/public/messages';
+            url = 'http://messenger.westeurope.cloudapp.azure.com/api/conversations/public/messages';
         } else {
-            var url = `http://messenger.westeurope.cloudapp.azure.com/api/conversations/${this.props.currentUser}/messages`;
+            url = `http://messenger.westeurope.cloudapp.azure.com/api/conversations/${this.props.currentUser}/messages`;
         }
         axios({
             method: 'get',
@@ -215,7 +217,7 @@ class Messages extends React.Component {
                 callback();
             }
             // userId всех юзеров из текущей беседы (без повторений)
-            var userIds = Array.from(new Set(response.data.map(message => message.user)));
+            let userIds = Array.from(new Set(response.data.map(message => message.user)));
             this.props.messenger.loadUserData(userIds);
         }).catch(function (error) {
             console.log(error);
@@ -241,7 +243,7 @@ class Conversation extends React.Component {
     }
 
     render() {
-        var className = this.props.active ? "active side-menu-elem" : "side-menu-elem";
+        let className = this.props.active ? "active side-menu-elem" : "side-menu-elem";
         return (
             <button className={className}
                     onClick={this.onClickHandler}>
@@ -272,7 +274,7 @@ class ConversationList extends React.Component {
     }
 
     async handleFind(event) {
-        var url = `http://messenger.westeurope.cloudapp.azure.com/api/users`;
+        let url = `http://messenger.westeurope.cloudapp.azure.com/api/users`;
         event.preventDefault();
         axios({
             method: 'get',
@@ -287,9 +289,9 @@ class ConversationList extends React.Component {
         }).then((response) => {
             if (response.status === 200) {
                 this.setState({foundUsers: response.data});
-                var newUsers = this.props.messenger.state.users;
-                for (var i in response.data) {
-                    var user = response.data[i];
+                let newUsers = this.props.messenger.state.users;
+                for (let i in response.data) {
+                    let user = response.data[i];
                     newUsers[user.id] = user.name;
                 }
                 this.props.messenger.setState({users: newUsers});
@@ -320,7 +322,7 @@ class ConversationList extends React.Component {
     }
 
     setCurrentUser(userId) {
-        var oldConversations = this.state.conversations;
+        let oldConversations = this.state.conversations;
         oldConversations.push({participant: userId});
         this.props.messenger.setState({
             currentUser: userId, conversations: oldConversations
@@ -403,14 +405,13 @@ class Messenger extends Component {
     }
 
     loadUserData(userIds) {
-        var users = this.state.users;
-        for (var i in userIds) {
+        let users = this.state.users;
+        for (let i in userIds) {
             const user = userIds[i];
             if (!(user in users) && (user !== null)) {
                 axios({
                     method: 'get',
                     url: 'http://messenger.westeurope.cloudapp.azure.com/api/users/' + user,
-                    data: {},
                     headers: {
                         responseType: 'json',
                         'Authorization': 'Bearer ' + localStorage.getItem('token')
@@ -433,7 +434,6 @@ class Messenger extends Component {
         axios({
             method: 'get',
             url: 'http://messenger.westeurope.cloudapp.azure.com/api/users/me',
-            data: {},
             headers: {
                 responseType: 'json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
@@ -451,7 +451,7 @@ class Messenger extends Component {
 
     render() {
         return (
-            <div>
+            <>
                 <Header app={this.props.app} me={this.state.me}/>
                 <div className="container">
                     <ConversationList app={this.props.app} messenger={this} users={this.users}/>
@@ -462,7 +462,7 @@ class Messenger extends Component {
                     </aside>
                 </div>
                 <footer>Messenger, 2019</footer>
-            </div>
+            </>
         );
     }
 }
