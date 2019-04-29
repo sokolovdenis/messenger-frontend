@@ -8,7 +8,7 @@ class Header extends React.Component {
     }
 
     render() {
-        let greetings = this.props.messenger.state.me !== undefined ? `Hello, ${this.props.messenger.state.me.name}` : '';
+        let greetings = this.props.me !== undefined ? `Hello, ${this.props.me.name}` : '';
         return (
             <header>
                 <div className="logo">Messenger</div>
@@ -24,7 +24,27 @@ class Header extends React.Component {
 class MessagesList extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = {};
+        this.listenScrollEvent = this.listenScrollEvent.bind(this);
+
+    }
+
+    listenScrollEvent() {
+        const node = this.el;
+        if (node.scrollTop === 0) {
+            var height = this.el.scrollHeight;
+            this.props.messenger.loadMessages(true, () => {this.el.scrollTop = this.el.scrollHeight - height;});
+        }
+    }
+
+    componentDidMount() {
+        const node = this.el;
+        node.addEventListener('scroll', this.listenScrollEvent);
+    }
+    componentWillUnmount() {
+        const node = this.el;
+        node.removeEventListener('scroll', this.listenScrollEvent);
     }
 
     componentWillUpdate() {
@@ -32,11 +52,11 @@ class MessagesList extends React.Component {
         this.shouldScrollBottom = node.scrollTop + node.offsetHeight === node.scrollHeight;
     }
 
-    componentDidUpdate() {
-        this.props.messenger.loadMessages();
+    componentDidUpdate(prevProps, prevState) {
         if (this.shouldScrollBottom) {
             this.el.scrollTop = this.el.scrollHeight;
         }
+
     }
 
     setCurrentUser(userId) {
@@ -51,7 +71,7 @@ class MessagesList extends React.Component {
                 <div className="messages" id="messages" ref={el => {
                     this.el = el;
                 }}>
-                    {this.props.messagesList ? (
+                    {this.props.messagesList !== null ? (
                         <>
                             {this.props.messagesList.map((message, i) => (
                                 <div className="message" key={"message__" + i}>
@@ -90,14 +110,12 @@ class MessageSubmit extends React.Component {
     }
 
     async handlePost(event) {
-        //console.log(this.state);
         if (this.props.currentUser === null) {
             var url = 'http://messenger.westeurope.cloudapp.azure.com/api/conversations/public/messages';
         } else {
             var url = `http://messenger.westeurope.cloudapp.azure.com/api/conversations/${this.props.currentUser}/messages`;
         }
         event.preventDefault();
-        console.log("post to " + url);
         await axios({
             method: 'post',
             url: url,
@@ -110,7 +128,6 @@ class MessageSubmit extends React.Component {
             }
         }).then((response) => {
             if (response.status === 200) {
-                //this.props.messagesList.push({content: this.state.content, user: this.props.messenger.me});
                 this.setState({content: ''});
             } else {
                 console.log(response);
@@ -133,7 +150,7 @@ class MessageSubmit extends React.Component {
 class Messages extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {currentUser: undefined, messagesList: null};
+        this.state = {currentUser: undefined, messagesList: [], top: 0};
         this.props.messenger.loadMessages = this.loadMessagesData.bind(this);
 
         this.socket = new WebSocket(`ws://messenger.westeurope.cloudapp.azure.com/socket/messages?token=${localStorage.getItem('token')}`);
@@ -141,7 +158,6 @@ class Messages extends React.Component {
         this.socket.onmessage = (event) => {
             var incomingMessage = JSON.parse(event.data);
             incomingMessage = {user: incomingMessage.User, content: incomingMessage.Content};
-            console.log(incomingMessage);
             this.props.messenger.loadUserData([incomingMessage.user]);
             if (this.props.currentUser === incomingMessage.user || this.props.messenger.state.me.id === incomingMessage.user) {
                 var oldMessages = this.state.messagesList;
@@ -152,15 +168,20 @@ class Messages extends React.Component {
     }
 
     componentDidMount() {
-        this.props.messenger.loadMessages();
+        this.props.messenger.loadMessages(true);
     }
 
-    loadMessagesData() {
-        if (this.state.currentUser === this.props.currentUser) {
+    loadMessagesData(loadNewMessages, callback=null) {
+        if (this.state.currentUser !== this.props.currentUser) {
+            this.setState({currentUser: this.props.currentUser, top: 0});
+        } else if (!loadNewMessages) {
             return;
-        } else {
-            this.setState({currentUser: this.props.currentUser});
         }
+
+        var count = 10;
+        var from = this.state.top-count;
+        this.setState({top:from});
+
         if (this.props.currentUser === null) {
             var url = 'http://messenger.westeurope.cloudapp.azure.com/api/conversations/public/messages';
         } else {
@@ -169,26 +190,26 @@ class Messages extends React.Component {
         axios({
             method: 'get',
             url: url,
-            data: {
-                from: 0,
-                count: 1000
+            params: {
+                From: from,
+                Count: count
             },
             headers: {
                 responseType: 'json',
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             }
         }).then((response) => {
-            this.setState({messagesList: response.data});
-
+            this.setState({messagesList: response.data.concat(this.state.messagesList)});
+            if (callback !== null) {
+                callback();
+            }
             // userId всех юзеров из текущей беседы (без повторений)
-            var userIds = Array.from(new Set(this.state.messagesList.map(message => message.user)));
+            var userIds = Array.from(new Set(response.data.map(message => message.user)));
             this.props.messenger.loadUserData(userIds);
         }).catch(function (error) {
             console.log(error);
         });
     }
-
-
 
     render() {
         return (
@@ -210,16 +231,13 @@ class Conversation extends React.Component {
 
     render() {
         var className = this.props.active ? "active side-menu-elem" : "side-menu-elem";
-        // console.log(this.props.conversation.participant);
-        // console.log(this.props.users[this.props.conversation.participant]);
-
         return (
             <button className={className}
                     onClick={this.onClickHandler}>
-                {this.props.conversation.participant == null ? "Public" :
+                {this.props.participant == null ? "Public" :
                     this.props.users === null ?
-                        this.props.conversation.participant
-                        : this.props.users[this.props.conversation.participant]}
+                        this.props.participant
+                        : this.props.users[this.props.participant]}
             </button>
         );
     }
@@ -243,8 +261,6 @@ class ConversationList extends React.Component {
     }
 
     async handleFind(event) {
-        console.log('query ' + this.state.query);
-        console.log(localStorage.getItem('token'));
         var url = `http://messenger.westeurope.cloudapp.azure.com/api/users`;
         event.preventDefault();
         axios({
@@ -259,7 +275,6 @@ class ConversationList extends React.Component {
             }
         }).then((response) => {
             if (response.status === 200) {
-                // console.log(response);
                 this.setState({foundUsers: response.data});
                 var newUsers = this.props.messenger.state.users;
                 for (var i in response.data) {
@@ -276,9 +291,9 @@ class ConversationList extends React.Component {
         this.setState({displayConversations: false});
     }
 
-    handleCancel() {
-        this.setState({foundUsers: null});
-        this.setState({displayConversations: true});
+    handleCancel(event) {
+        event.preventDefault();
+        this.setState({foundUsers: null, displayConversations: true, query:""});
     }
 
     setCurrentConversation(conversation) {
@@ -290,7 +305,7 @@ class ConversationList extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        this.props.messenger.loadMessages();
+        this.props.messenger.loadMessages(false);
     }
 
     setCurrentUser(userId) {
@@ -331,7 +346,7 @@ class ConversationList extends React.Component {
                         this.state.conversations ? (
                             <>
                                 {this.state.conversations.map((conversation, i) => (
-                                    <Conversation conversation={conversation}
+                                    <Conversation participant={conversation.participant}
                                                   setCurrentConversation={this.setCurrentConversation.bind(this, conversation)}
                                                   active={conversation.participant === this.props.messenger.state.currentUser}
                                                   key={"conversation__" + conversation.id}
@@ -382,7 +397,6 @@ class Messenger extends Component {
                     }
                 }).then((response) => {
                     if (response.status === 200) {
-                        // console.log(response);
                         users[user] = response.data.name;
                         this.setState({users: users});
                     } else {
@@ -418,7 +432,7 @@ class Messenger extends Component {
     render() {
         return (
             <div>
-                <Header app={this.props.app} messenger={this}/>
+                <Header app={this.props.app} me={this.state.me}/>
                 <div className="container">
                     <ConversationList app={this.props.app} messenger={this} users={this.users}/>
                     <Messages app={this.props.app} messenger={this} currentUser={this.state.currentUser}/>
