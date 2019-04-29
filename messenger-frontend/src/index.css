@@ -101,9 +101,16 @@ aside {
 }
 
 .message-text {
+    /*width: 20vw;*/
+    display: inline-block;
     align-self: center;
     padding-right: 2rem;
     padding-left: 2rem;
+    overflow-wrap: break-word;
+    word-break: break-all;
+    word-wrap: break-word;
+    line-break: strict;
+    hyphens: auto;
 }
 
 .link-button {
@@ -119,4 +126,18 @@ aside {
 .link-button:hover,
 .link-button:focus {
     text-decoration: none;
+}
+
+.row {
+    display: flex;
+    /*flex-wrap:wrap;*/
+    justify-content: center;
+    align-items: center;
+}
+
+.column {
+    flex: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

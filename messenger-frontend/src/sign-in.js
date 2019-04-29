@@ -75,22 +75,36 @@ class SignIn extends Component {
 
     render() {
         return (
-            <div>
-                <form id="register_form" onSubmit={this.handleSignUp}>
-                    <input type="text" id="signup_login" value={this.state.signup_login} onChange={this.handleChange}/>
-                    <input type="text" id="signup_name" value={this.state.signup_name} onChange={this.handleChange}/>
-                    <input type="password" id="signup_password" value={this.state.signup_password}
-                           onChange={this.handleChange}/>
-                    <button onClick={this.handleSignUp} className="side-menu-elem" value="Sign Up">Sign Up</button>
-                </form>
-
-                <form id="register_form" onSubmit={this.handleLogIn}>
-                    <input type="text" id="login_login" value={this.state.login_login} onChange={this.handleChange}/>
-                    <input type="password" id="login_password" value={this.state.login_password}
-                           onChange={this.handleChange}/>
-                    <button onClick={this.handleLogIn} className="side-menu-elem" value="Log In">Log In</button>
-                </form>
-            </div>
+            <>
+                <div className="row">
+                    <div className="column">
+                        <form id="register_form" onSubmit={this.handleSignUp}>
+                            <label> Login </label><br/>
+                            <input type="text" id="signup_login" value={this.state.signup_login}
+                                   onChange={this.handleChange}/><br/>
+                            <label> Name </label><br/>
+                            <input type="text" id="signup_name" value={this.state.signup_name}
+                                   onChange={this.handleChange}/><br/>
+                            <label> Password </label><br/>
+                            <input type="password" id="signup_password" value={this.state.signup_password}
+                                   onChange={this.handleChange}/><br/>
+                            <button onClick={this.handleSignUp} className="side-menu-elem" value="Sign Up">Sign Up
+                            </button>
+                        </form>
+                    </div>
+                    <div className="column">
+                        <form id="register_form" onSubmit={this.handleLogIn}>
+                            <label> Login </label><br/>
+                            <input type="text" id="login_login" value={this.state.login_login}
+                                   onChange={this.handleChange}/><br/>
+                            <label> Password </label><br/>
+                            <input type="password" id="login_password" value={this.state.login_password}
+                                   onChange={this.handleChange}/><br/>
+                            <button onClick={this.handleLogIn} className="side-menu-elem" value="Log In">Log In</button>
+                        </form>
+                    </div>
+                </div>
+            </>
         );
     }
 }
