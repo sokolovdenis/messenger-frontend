@@ -149,8 +149,11 @@ function postPublicMessages(message) {
     // не забыть поймать искючения в месте где вызываю метод
 }
 
-function getPrivateMessages(id) {
-    return fetch(SERVER + get_user_conservartions(id), {
+function getPrivateMessages(id, from=0, count=9999) {
+    var url = new URL(SERVER + get_user_conservartions(id)),
+        params = { From: from, Count: count}
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+    return fetch(url, {
             method: 'get',
             headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + getCurrentUser().token }
         })

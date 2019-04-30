@@ -22,7 +22,10 @@ class Chat extends Component {
             myName: '',  // Имя залогиненного пользователя
             names: {}, // словарь id:имя
             query: '', // запрос поиска,
-            searchResults: [], // результаты поиска
+            searchResults: [], // результаты поиска,
+            from: 0, // с какого сообщения загружать
+            count: 10,  // сколько загружать
+            isLoadingMessages: false,
         };
 
         this.showed_names = {} // имена для которых уже создали запрос
@@ -38,6 +41,7 @@ class Chat extends Component {
         this.sendMessage = this.sendMessage.bind(this);
         this.sendQuery = this.sendQuery.bind(this);
         this.handleIncomingMessage = this.handleIncomingMessage.bind(this);
+        this.handleScroll = this.handleScroll.bind(this);
     }
     
     componentDidMount() {    
@@ -54,25 +58,73 @@ class Chat extends Component {
     }
 
     showErrorMessage(msg) {
-        console.log(msg);
+        console.log("error ", msg);
     }
 
-    selectConversation(id) {
+    selectConversation(userId) {
         //отвечает не только за выбор обсуждения из списка,
         //но и создание нового если тыкнуть на имя в сообщении
         // если при поиске нажать на найденное пустое обсуждение,
         // то нужно при отправке сообщения добавить новую запись в chats
-        this.setState({ activeChatName: id });
-        if (id == null) {
+        if (userId == null) {
+            this.setState({ activeChatName: userId });
             authenticationService.getPublicMessages()
                 .then(this.showMessages)
                 .catch(this.showErrorMessage);
+            this.setState({from: 0});
         }
         else {
-            authenticationService.getPrivateMessages(id)
-                .then(this.showMessages)
-                .catch(this.showErrorMessage);
+            this.setState(function(prevState, props) {
+                var findConveration = this.state.chats.find(
+                    function(element, index, array) {
+                        if (element.participant == userId) {
+                            return true;
+                        }
+                        return false;
+                    }
+                );
+                if (typeof findConveration != "undefined") {
+                    var lastMessageId = findConveration.lastMessage.id;
+                    var count = prevState.count;
+                    prevState.from = (lastMessageId - count > 0) ? lastMessageId - count : 0;
+                }
+                return {from: prevState.from, count: 10, messages: [], activeChatName: userId};
+            });
         }
+    }
+
+    handleScroll(page) {
+        if (this.state.activeChatName != null) {
+            var userId = this.state.activeChatName;
+            var isLoading = this.state.isLoadingMessages;
+            if (!isLoading) {
+                this.setState({isLoadingMessages: true});
+                authenticationService.getPrivateMessages(userId, this.state.from, this.state.count)
+                    .then((data) =>
+                        this.setState(function(prevState, props) {
+                            return {messages: data.concat(prevState.messages)};
+                        })
+                    )
+                    .then(() =>
+                        this.setState(function(prevState, props) {
+                            var count = prevState.count;
+                            var from = prevState.from;
+                            var isLoadingMessages = (from > 0) ? false : true; // чтобы бесконечно не загружать начальные сообщения
+                            from = (from - count > 0) ? from - count : 0;
+                            count = (from == 0) ? prevState.from : count;
+                            return {from: from, count: count, isLoadingMessages: isLoadingMessages}
+                        })
+                    )
+                    .catch(this.showErrorMessage);
+            }
+        }
+        else {
+            // console.log('handleScroll', page);
+        }
+        // по activeChatName получаем userId
+        // по первому сообщению узнаем его id
+        // потом загружаем 10 предыдущих
+        // делаем конкатенацию
     }
 
     showConversations(data) {
@@ -293,7 +345,8 @@ class Chat extends Component {
                             activeChatName={this.state.activeChatName}
                             userId={this.state.myId}
                             messages={this.state.messages}
-                            showName={this.showName} />
+                            showName={this.showName} 
+                            handleScroll={this.handleScroll} />
                         <SendMessageForm
                             sendMessage={this.sendMessage} />
                     </div>
