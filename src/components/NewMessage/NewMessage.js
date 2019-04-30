@@ -21,8 +21,6 @@ class NewMessage extends Component {
     handleSubmit(event) {
         event.preventDefault();
 
-        console.log("!!!!");
-
         this.props.sendMessage({
             request: api.sendMessagesToPublic,
             path: null,

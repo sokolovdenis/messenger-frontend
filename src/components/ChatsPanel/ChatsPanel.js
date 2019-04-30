@@ -9,7 +9,7 @@ import PropTypes from "prop-types";
 
 class ChatsPanel extends Component {
     componentDidMount() {
-        this.props.recvChatList({ request: api.getConversations, token: this.props.token });
+        // this.props.recvChatList({ request: api.getConversations, token: this.props.token });
     }
 
     render() {

@@ -1,4 +1,5 @@
-import {RECV_NEW_MESSAGE_SUCCESS, RECV_NEW_MESSAGE_FAILURE} from "../reducers/recvNewMessage";
+import {UPDATE_CHAT_LIST} from "../reducers/recvChatList";
+import {TRY_UPDATE_MESSAGE_LIST} from "../reducers/recvMessageList";
 
 const RECV_NEW_MESSAGE = 'RECV_NEW_MESSAGE';
 
@@ -7,7 +8,31 @@ const onRecvNewMessage = store => next => action => {
         return next(action);
     }
 
-    console.log(action);
+    const { ConversationId, Timestamp, User, Content, Id } = JSON.parse(action.payload);
+
+    const message = {
+        conversationId: ConversationId,
+        timestamp: Timestamp,
+        user: User,
+        content: Content,
+        id: Id,
+    };
+
+    store.dispatch({
+        type: UPDATE_CHAT_LIST,
+        payload: {
+            newChat: { lastMessage: message,  id: ConversationId, },
+            error: null,
+        },
+    });
+
+    store.dispatch({
+        type: TRY_UPDATE_MESSAGE_LIST,
+        payload: {
+            newMessage: message,
+            error: null,
+        },
+    });
 };
 
 export const onRecvNewMessageAction = (payload) => ({
