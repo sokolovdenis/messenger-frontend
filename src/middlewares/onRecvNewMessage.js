@@ -22,7 +22,6 @@ const onRecvNewMessage = store => next => action => {
         type: UPDATE_CHAT_LIST,
         payload: {
             newChat: { lastMessage: message,  id: ConversationId, },
-            error: null,
         },
     });
 
@@ -30,7 +29,6 @@ const onRecvNewMessage = store => next => action => {
         type: TRY_UPDATE_MESSAGE_LIST,
         payload: {
             newMessage: message,
-            error: null,
         },
     });
 };

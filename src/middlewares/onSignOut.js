@@ -12,7 +12,6 @@ const onSignOut = store => next => action => {
         payload: {
             token: null,
             expires: null,
-            error: null,
         },
     });
 };

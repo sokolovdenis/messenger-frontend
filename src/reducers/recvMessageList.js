@@ -17,6 +17,6 @@ const recvMessageList = createReducer({
         ...payload,
         messageList: [...state.messageList, payload.newMessage],
     }),
-}, { messageList: []});
+}, { messageList: [] });
 
 export default recvMessageList;
