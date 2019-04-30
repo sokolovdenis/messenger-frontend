@@ -6,6 +6,7 @@ import './MessagesPanel.css';
 import NewMessage from '../NewMessage/NewMessage';
 import Message from "../Message/Message";
 import {onRecvMessageListAction} from "../../middlewares/onRecvMessageList";
+import {onRecvNewMessageAction} from "../../middlewares/onRecvNewMessage";
 import api from "../../constants/api";
 import WEBSOCKET from '../../constants/websocket';
 import Websocket from "react-websocket";
@@ -19,8 +20,8 @@ class MessagesPanel extends Component {
         });
     }
 
-    onMessage(data) {
-        console.log(data);
+    onMessage(message) {
+        this.props.recvNewMessage(message)
     }
 
     render() {
@@ -58,6 +59,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     recvMessageList: payload => dispatch(onRecvMessageListAction(payload)),
+    recvNewMessage: payload => dispatch(onRecvNewMessageAction(payload))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MessagesPanel);
