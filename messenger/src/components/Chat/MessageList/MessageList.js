@@ -16,7 +16,7 @@ class MessageList extends Component {
                 <div className="msg-header">
                     {this.props.showName(this.props.activeChatName)}
                 </div>
-                <div style={{height:500 + 'px', overflow:'auto'}} >
+                <div className="msg-history" >
                     <InfiniteScroll
                         pageStart={0}
                         loadMore={this.props.handleScroll}
