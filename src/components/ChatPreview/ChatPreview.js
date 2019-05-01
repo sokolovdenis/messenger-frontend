@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import './ChatPreview.css';
 import {formatTimestamp} from "../../utils/formatTimestamp";
 import {cutString} from "../../utils/cutString";
+import User from "../User/User";
 
 class ChatPreview extends Component {
     render() {
@@ -11,12 +12,12 @@ class ChatPreview extends Component {
         return (
             <div className="ChatPreview">
                 <div className="ChatPreview__title">
-                    <div className="ChatPreview__chatName">{id === "public" ? "Общая беседа" : cutString(user)}</div>
+                    <User className="ChatPreview__chatName" id={id} />
                     <div className="ChatPreview__timestamp">{formatTimestamp(timestamp)}</div>
                 </div>
                 <div className="ChatPreview__lastMessage">
                     {id === "public"
-                        ? <div className="ChatPreview__author">{cutString(user)}</div>
+                        ? <User className="ChatPreview__author" id={user} />
                         : null}
                     <div className="ChatPreview__message">{cutString(content)}</div>
                 </div>

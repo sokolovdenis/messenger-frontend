@@ -15,7 +15,8 @@ import {addPathAndQueries} from "../../utils/addPathAndQueries";
 class MessagesPanel extends Component {
     componentDidMount() {
         this.props.recvMessageList({
-            request: api.recvMessagesFromPublic,
+            request: api.recvMessagesFrom,
+            conversationId: this.props.conversationId,
             token: this.props.token
         });
     }
@@ -49,12 +50,14 @@ MessagesPanel.propTypes = {
 };
 
 MessagesPanel.defaultProps = {
-    messageList: []
+    messageList: [],
+    conversationId: "public",
 };
 
 const mapStateToProps = state => ({
     token: state.auth.token,
     messageList: state.recvMessageList.messageList,
+    conversationId: state.recvMessageList.conversationId,
 });
 
 const mapDispatchToProps = dispatch => ({

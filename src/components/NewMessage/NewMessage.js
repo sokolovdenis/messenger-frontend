@@ -22,7 +22,8 @@ class NewMessage extends Component {
         event.preventDefault();
 
         this.props.sendMessage({
-            request: api.sendMessagesToPublic,
+            request: api.sendMessagesTo,
+            conversationId: this.props.conversationId,
             path: null,
             token: this.props.token,
             content: this.state.message,
@@ -64,12 +65,15 @@ NewMessage.propTypes = {
     error: PropTypes.string,
 };
 
-const mapStateToProps = state => {
-    return ({
-        token: state.auth.token,
-        error: state.sendMessage.error,
-    });
+NewMessage.defaultProps = {
+    conversationId: "public",
 };
+
+const mapStateToProps = state => ({
+    token: state.auth.token,
+    conversationId: state.recvMessageList.conversationId,
+    error: state.sendMessage.error,
+});
 
 const mapDispatchToProps = dispatch => ({
     sendMessage: payload => dispatch(onSendMessageAction(payload)),

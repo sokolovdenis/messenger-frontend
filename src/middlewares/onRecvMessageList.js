@@ -9,13 +9,14 @@ const onRecvMessageList = store => next => action => {
         return next(action);
     }
 
-    const {request, token} = action.payload;
+    const {request, conversationId, token} = action.payload;
 
-    apiRequest(request, 'GET', token, null, messageList => {
+    apiRequest(request(conversationId), 'GET', token, null, messageList => {
         store.dispatch({
             type: RECV_MESSAGE_LIST_SUCCESS,
             payload: {
                 messageList,
+                conversationId,
                 error: null,
             },
         });
@@ -24,6 +25,7 @@ const onRecvMessageList = store => next => action => {
             type: RECV_MESSAGE_LIST_FAILURE,
             payload: {
                 messageList: [],
+                conversationId,
                 error: getErrorMessage(response),
             }
         })

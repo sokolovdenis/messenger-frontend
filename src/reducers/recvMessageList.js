@@ -9,14 +9,22 @@ const recvMessageListFailureAction = createAction(RECV_MESSAGE_LIST_FAILURE);
 export const TRY_UPDATE_MESSAGE_LIST = 'TRY_UPDATE_MESSAGE_LIST';
 const tryUpdateMessageListAction = createAction(TRY_UPDATE_MESSAGE_LIST);
 
+const updateMessageList = (state, newMessage) => {
+    if (state.conversationId !== newMessage.conversationId) {
+        return state.messageList;
+    }
+
+    return [...state.messageList, newMessage];
+};
+
 const recvMessageList = createReducer({
     [recvMessageListSuccessAction]: (state, payload) => ({ ...state, ...payload}),
     [recvMessageListFailureAction]: (state, payload) => ({ ...state, ...payload}),
     [tryUpdateMessageListAction]: (state, payload) => ({
         ...state,
         ...payload,
-        messageList: [...state.messageList, payload.newMessage],
+        messageList: updateMessageList(state, payload.newMessage),
     }),
-}, { messageList: [] });
+}, { messageList: [], conversationId: "public" });
 
 export default recvMessageList;

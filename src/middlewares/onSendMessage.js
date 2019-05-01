@@ -10,7 +10,7 @@ const onSendMessage = store => next => action => {
         return next(action);
     }
 
-    const {request, path, token, content} = action.payload;
+    const {request, conversationId, path, token, content} = action.payload;
 
     if (content === '') {
         store.dispatch({
@@ -23,7 +23,7 @@ const onSendMessage = store => next => action => {
         return;
     }
 
-    apiRequest(addPathAndQueries(request, path, []),
+    apiRequest(addPathAndQueries(request(conversationId), path, []),
         'POST', token, { content }, userList => {
             store.dispatch({
                 type: SEND_MESSAGE_SUCCESS,
