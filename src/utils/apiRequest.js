@@ -13,4 +13,4 @@ export const apiRequest = (request, method, token, body, onFulfilled, onRejected
     ).then(onFulfilled
     ).catch(promise => {
         promise.then(onRejected);
-    });
+    }).catch(() => {});

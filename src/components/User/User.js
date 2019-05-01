@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 import './User.css';
 import api from "../../constants/api";
 import {onGetUserByIdAction} from "../../middlewares/onGetUserById";
+import {onChangeConversationIdAction} from "../../middlewares/onChangeConversationId";
 
 class User extends Component {
     componentDidMount() {
@@ -18,6 +19,14 @@ class User extends Component {
         }
     }
 
+    handleClick(event) {
+        event.preventDefault();
+
+        if (this.props.conversationId !== this.props.id) {
+            this.props.changeConversationId(this.props.id);
+        }
+    }
+
     render() {
         const name = this.props.name
             ? this.props.name
@@ -26,7 +35,7 @@ class User extends Component {
                 : this.props.id;
 
         return (
-            <div className="User">
+            <div className="User" onClick={this.handleClick.bind(this)}>
                 {name}
             </div>
         )
@@ -42,10 +51,12 @@ const mapStateToProps = state => ({
     token: state.auth.token,
     idToName: state.getUserById.idToName,
     idToNameStarted: state.getUserById.idToNameStarted,
+    conversationId: state.recvMessageList.conversationId,
 });
 
 const mapDispatchToProps = dispatch => ({
     getUserById: payload => dispatch(onGetUserByIdAction(payload)),
+    changeConversationId: payload => dispatch(onChangeConversationIdAction(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(User);

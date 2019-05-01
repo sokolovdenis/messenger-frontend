@@ -10,6 +10,7 @@ import onRecvUserList from "../middlewares/onRecvUserList";
 import onSendMessage from "../middlewares/onSendMessage";
 import onRecvNewMessage from "../middlewares/onRecvNewMessage";
 import onGetUserById from "../middlewares/onGetUserById";
+import onChangeConversationId from "../middlewares/onChangeConversationId";
 
 const store = createStore(
     reducer,
@@ -22,6 +23,7 @@ const store = createStore(
         onSendMessage,
         onRecvNewMessage,
         onGetUserById,
+        onChangeConversationId,
         thunk
     )
 );

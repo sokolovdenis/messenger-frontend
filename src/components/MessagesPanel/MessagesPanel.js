@@ -14,15 +14,25 @@ import {addPathAndQueries} from "../../utils/addPathAndQueries";
 
 class MessagesPanel extends Component {
     componentDidMount() {
+        this.recvMessageList();
+    }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.conversationId !== this.props.conversationId) {
+            this.recvMessageList();
+        }
+    }
+
+    onMessage(message) {
+        this.props.recvNewMessage(message)
+    }
+
+    recvMessageList() {
         this.props.recvMessageList({
             request: api.recvMessagesFrom,
             conversationId: this.props.conversationId,
             token: this.props.token
         });
-    }
-
-    onMessage(message) {
-        this.props.recvNewMessage(message)
     }
 
     render() {

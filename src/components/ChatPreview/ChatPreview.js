@@ -3,6 +3,7 @@ import './ChatPreview.css';
 import {formatTimestamp} from "../../utils/formatTimestamp";
 import {cutString} from "../../utils/cutString";
 import User from "../User/User";
+import {parseConversationId} from "../../utils/parseConversationId";
 
 class ChatPreview extends Component {
     render() {
@@ -12,7 +13,7 @@ class ChatPreview extends Component {
         return (
             <div className="ChatPreview">
                 <div className="ChatPreview__title">
-                    <User className="ChatPreview__chatName" id={id} />
+                    <User className="ChatPreview__chatName" id={parseConversationId(id)} />
                     <div className="ChatPreview__timestamp">{formatTimestamp(timestamp)}</div>
                 </div>
                 <div className="ChatPreview__lastMessage">
