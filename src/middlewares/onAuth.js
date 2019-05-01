@@ -12,6 +12,8 @@ const onAuth = store => next => action => {
     const {request, parameters} = action.payload;
 
     apiRequest(request, 'POST', null, parameters, ({token, expires}) => {
+        localStorage.setItem("token", token);
+        localStorage.setItem("expires", expires);
         store.dispatch({
             type: AUTH_SUCCESS,
             payload: {

@@ -22,6 +22,6 @@ class Conversations extends Component {
     };
 }
 
-const mapStateToProps = state => ({ token : state.auth.token, });
+const mapStateToProps = state => ({token: state.auth.token,});
 
 export default connect(mapStateToProps)(Conversations);

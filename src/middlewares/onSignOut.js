@@ -7,6 +7,8 @@ const onSignOut = store => next => action => {
         return next(action);
     }
 
+    localStorage.clear();
+
     store.dispatch({
         type: DO_SIGN_OUT,
         payload: {
