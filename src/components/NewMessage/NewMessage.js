@@ -2,12 +2,11 @@ import React, {Component} from 'react';
 import './NewMessage.css';
 import FormField from "../FormField/FormField";
 import FormInput from "../FormInput/FormInput";
-import Form from "../Form/Form";
-import Button from "../Button/Button";
 import {connect} from "react-redux";
 import {onSendMessageAction} from "../../middlewares/onSendMessage";
 import api from '../../constants/api';
 import PropTypes from 'prop-types';
+import SignOut from "../SignOut/SignOut";
 
 class NewMessage extends Component {
     constructor(props) {
@@ -40,23 +39,39 @@ class NewMessage extends Component {
         });
     }
 
-    render () {
+    render() {
+
         const errorMessage = this.props.error
-            ? <div className="errorMessage">{this.props.error}</div>
+            ? (<div className="row">
+                <div className="col">
+                    <div className="alert alert-danger" role="alert">{this.props.error}</div>
+                </div>
+            </div>)
             : null;
 
         return (
-          <div className="NewMessage">
-              {errorMessage}
-              <Form onSubmit={this.handleSubmit.bind(this)}>
-                  <FormField label="Сообщение" name="message">
-                      <FormInput value={this.state.message} name="message" onChange={this.handleInputChange.bind(this)} />
-                  </FormField>
-                  <Button type="submit">
-                      Отправить
-                  </Button>
-              </Form>
-          </div>
+            <form className="container px-5 pt-3" onSubmit={this.handleSubmit.bind(this)}>
+                {errorMessage}
+                <div className="row">
+                    <div className="col-auto">
+                        <button className="btn btn-primary" type="submit">
+                            Send
+                        </button>
+                    </div>
+                    <div className="col">
+                        <FormField name="message">
+                            <FormInput
+                                name="message"
+                                value={this.state.message}
+                                onChange={this.handleInputChange.bind(this)}
+                            />
+                        </FormField>
+                    </div>
+                    <div className="col-auto">
+                        <SignOut/>
+                    </div>
+                </div>
+            </form>
         );
     }
 }

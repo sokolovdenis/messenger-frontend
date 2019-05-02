@@ -1,3 +1,10 @@
 export const parseConversationId = conversationId => {
-    return conversationId.split('_')[0];
+    const participants = conversationId.split('_');
+
+    if (participants.length === 1) {
+        return participants[0];
+    }
+
+    const me = localStorage.getItem("me");
+    return participants[0] === me ? participants[1] : participants[0];
 };

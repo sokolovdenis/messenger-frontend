@@ -8,12 +8,16 @@ class Message extends Component {
         const {timestamp, user, content} = this.props;
 
         return (
-            <div className="Message">
-                <div className="Message__info">
-                    <User className="Message__author" id={user} />
-                    <div className="Message__timestamp">{formatTimestamp(timestamp)}</div>
+            <div className="container">
+                <div className="row">
+                    <div className="col">
+                        <User id={user}/>
+                    </div>
+                    <div className="col-auto font-weight-light">{formatTimestamp(timestamp)}</div>
                 </div>
-                <div className="Message__content">{content}</div>
+                <div className="row">
+                    <div className="col text-break">{content}</div>
+                </div>
             </div>
         );
     }

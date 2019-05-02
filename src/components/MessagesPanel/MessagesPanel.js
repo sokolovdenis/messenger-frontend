@@ -37,15 +37,15 @@ class MessagesPanel extends Component {
 
     render() {
         return (
-            <div className="MessagesPanel">
-                <ul>
-                    {this.props.messageList.map((message, index) => (
-                        <li key={index}>
-                            <Message {...message}/>
-                        </li>)
-                    )}
-                </ul>
-                <NewMessage/>
+            <div className="col-7 pt-5 overflow-auto border" style={{'height':'93vh'}}>
+                {this.props.messageList.length === 0
+                    ? null
+                    : (<ul className="list-group">{
+                            this.props.messageList.map((message, index) => (
+                                <li className="list-group-item" key={index}>
+                                    <Message {...message}/>
+                                </li>))}
+                        </ul>)}
                 <Websocket
                     url={addPathAndQueries(WEBSOCKET, null, [{param: "token", query: this.props.token}])}
                     onMessage={this.onMessage.bind(this)}

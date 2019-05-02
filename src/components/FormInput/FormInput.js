@@ -3,12 +3,12 @@ import './FormInput.css'
 
 class FormInput extends Component {
     render() {
-        const {value, onChange, placeholder, name} = this.props;
+        const {value, onChange, placeholder, name, type} = this.props;
 
         return (
             <input
-                type='text'
-                className='FormText'
+                type={type ? type : 'text'}
+                className='form-control'
                 name={name}
                 value={value}
                 placeholder={placeholder}

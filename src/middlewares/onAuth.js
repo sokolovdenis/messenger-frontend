@@ -1,6 +1,7 @@
 import {AUTH_FAILURE, AUTH_SUCCESS} from "../reducers/auth";
 import {getErrorMessage} from '../utils/getErrorMessage'
 import {apiRequest} from "../utils/apiRequest";
+import api from '../constants/api';
 
 const AUTH = 'AUTH';
 
@@ -12,15 +13,18 @@ const onAuth = store => next => action => {
     const {request, parameters} = action.payload;
 
     apiRequest(request, 'POST', null, parameters, ({token, expires}) => {
-        localStorage.setItem("token", token);
-        localStorage.setItem("expires", expires);
-        store.dispatch({
-            type: AUTH_SUCCESS,
-            payload: {
-                token,
-                expires,
-                error: null,
-            },
+        apiRequest(api.getSelf, 'GET', token, null, ({id}) => {
+            localStorage.setItem("token", token);
+            localStorage.setItem("expires", expires);
+            localStorage.setItem("me", id);
+            store.dispatch({
+                type: AUTH_SUCCESS,
+                payload: {
+                    token,
+                    expires,
+                    error: null,
+                },
+            });
         });
     }, response => {
         store.dispatch({

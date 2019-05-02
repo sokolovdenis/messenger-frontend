@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
 import './Authorization.css';
-import Button from '../../components/Button/Button';
-import Form from '../../components/Form/Form';
 import FormInput from '../../components/FormInput/FormInput';
 import FormField from '../../components/FormField/FormField';
 import pages from '../../constants/pages';
@@ -10,6 +8,7 @@ import {onAuthAction} from "../../middlewares/onAuth";
 
 import {connect} from 'react-redux';
 import {Redirect} from "react-router";
+import Header from "../../components/Header/Header";
 
 class Authorization extends Component {
     constructor(props) {
@@ -33,8 +32,8 @@ class Authorization extends Component {
         const {login, password, name} = this.state;
 
         this.state.isSignUp
-            ? this.props.auth({ request: api.signUp, parameters: { login, password, name}})
-            : this.props.auth({ request: api.signIn, parameters: { login, password }});
+            ? this.props.auth({request: api.signUp, parameters: {login, password, name}})
+            : this.props.auth({request: api.signIn, parameters: {login, password}});
     };
 
     changeAction = event => {
@@ -51,37 +50,44 @@ class Authorization extends Component {
         }
 
         const errorMessage = this.props.error
-            ? <div className="errorMessage">{this.props.error}</div>
+            ? (<div className="row">
+                <div className="col">
+                    <div className="alert alert-danger" role="alert">{this.props.error}</div>
+                </div>
+            </div>)
             : null;
 
         const nameField = this.state.isSignUp
-            ? (<FormField label='Имя пользователя' name='name'>
+            ? (<FormField label='Name' name='name'>
                 <FormInput name='name' onChange={this.handleInputChange}/>
             </FormField>)
             : null;
 
         return (
-            <div className="Authorization">
-                {errorMessage}
-                <Form onSubmit={this.handleSubmit}>
-                    <FormField label='Логин ' name='login'>
+            <div className="container border p-5 vh-100">
+                <Header/>
+                <form onSubmit={this.handleSubmit}>
+                    <FormField label='Login ' name='login'>
                         <FormInput name='login' onChange={this.handleInputChange}/>
                     </FormField>
-                    <FormField label='Пароль' name='password'>
-                        <FormInput name='password' onChange={this.handleInputChange}/>
+                    <FormField label='Password' name='password'>
+                        <FormInput name='password' type="password" onChange={this.handleInputChange}/>
                     </FormField>
-                    <span className="haveAccount" onClick={this.changeAction}>
-                        {this.state.isSignUp
-                            ? "У меня уже есть аккаунт"
-                            : "Создать новый аккаунт"}
-                    </span>
                     {nameField}
-                    <Button type='submit'>
-                        {this.state.isSignUp
-                            ? "Зарегистрироваться"
-                            : "Войти"}
-                    </Button>
-                </Form>
+                    {errorMessage}
+                    <div class="btn-group">
+                        <button className="btn btn-outline-primary" type='submit'>
+                            {this.state.isSignUp
+                                ? "Sign Up"
+                                : "Sign In"}
+                        </button>
+                        <button className="btn btn-outline-info" onClick={this.changeAction}>
+                            {this.state.isSignUp
+                                ? "I have already had account"
+                                : "Create new account"}
+                        </button>
+                    </div>
+                </form>
             </div>
         );
     };

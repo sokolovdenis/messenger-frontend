@@ -6,6 +6,7 @@ import pages from "../../constants/pages"
 
 import {connect} from "react-redux";
 import {Redirect} from "react-router";
+import NewMessage from "../../components/NewMessage/NewMessage";
 
 class Conversations extends Component {
     render = () => {
@@ -14,9 +15,16 @@ class Conversations extends Component {
         }
 
         return (
-            <div className="Conversations">
-                <ChatsPanel/>
-                <MessagesPanel/>
+            <div className="container">
+                <div className="row overflow-hidden px" style={{'height': '93vh'}}>
+                    <ChatsPanel/>
+                    <MessagesPanel/>
+                </div>
+                <div className="row border" style={{'height': '7vh'}}>
+                    <div className="col fixed-bottom">
+                        <NewMessage/>
+                    </div>
+                </div>
             </div>
         );
     };

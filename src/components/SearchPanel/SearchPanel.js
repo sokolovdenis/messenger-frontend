@@ -19,24 +19,37 @@ class SearchPanel extends Component {
         });
     }
 
-    render () {
+    render() {
         const emptyResult = this.props.message
-            ? <li key="-1" className="SearchPanel__empty">{this.props.message}</li>
+            ? (<div className="row">
+                <div className="col">
+                    <div className="alert alert-danger" role="alert">{this.props.message}</div>
+                </div>
+            </div>)
             : null;
 
         return (
-            <div className="SearchPanel">
-                <FormField class="SearchPanel__query" label="Поиск" name="search">
-                    <FormInput name="search" onChange={this.handleInputChange.bind(this)}/>
-                </FormField>
-                <ul className="SearchPanel__results">
-                    {emptyResult}
-                    {this.props.userList.map((user, index) => (
-                        <li key={index}>
-                            <User {...user}/>
-                        </li>
-                    ))}
-                </ul>
+            <div className="container">
+                <div className="row">
+                    <div className="col">
+                        <FormField label="Search participants" name="search">
+                            <FormInput name="search" onChange={this.handleInputChange.bind(this)}/>
+                        </FormField>
+                    </div>
+                </div>
+                {emptyResult}
+                {this.props.userList.length === 0
+                    ? null
+                    : (<div className="row">
+                        <div className="col">
+                            <ul className="list-group">{
+                                this.props.userList.map((user, index) => (
+                                    <li key={index} className="list-group-item">
+                                        <User {...user}/>
+                                    </li>))}
+                            </ul>
+                        </div>
+                    </div>)}
             </div>
         );
     }

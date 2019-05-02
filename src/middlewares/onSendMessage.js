@@ -16,7 +16,7 @@ const onSendMessage = store => next => action => {
         store.dispatch({
             type: SEND_MESSAGE_FAILURE,
             payload: {
-                error: "Введите текст сообщения",
+                error: "The Message field is required.",
             }
         });
 

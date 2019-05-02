@@ -31,7 +31,7 @@ const onRecvUserList = store => next => action => {
                 type: RECV_USER_LIST_SUCCESS,
                 payload: {
                     userList,
-                    message: userList.length > 0 ? null : 'По вашему запросу ничего не нашлось',
+                    message: userList.length > 0 ? null : 'Your search did not match any users.',
                     error: null,
                 },
             });

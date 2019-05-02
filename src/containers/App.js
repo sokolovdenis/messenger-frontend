@@ -33,18 +33,14 @@ class App extends Component {
 
     render() {
         return (
-            <div className="App">
-                <Header/>
+            <div className="container">
                 <HashRouter>
-                    <div className="App__layout">
-                        <Switch>
-                            <Route path={pages.authentication} component={Authorization}/>
-                            <Route path={pages.conversations} component={Conversations}/>
-                            <Redirect from="/" to={pages.conversations}/>
-                        </Switch>
-                    </div>
+                    <Switch>
+                        <Route path={pages.authentication} component={Authorization}/>
+                        <Route path={pages.conversations} component={Conversations}/>
+                        <Redirect from="/" to={pages.conversations}/>
+                    </Switch>
                 </HashRouter>
-                <Footer/>
             </div>
         );
     }

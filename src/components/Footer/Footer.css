@@ -1,7 +1,0 @@
-.Footer {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    min-height: 60px;
-    padding: 0 30px 0 0;
-}

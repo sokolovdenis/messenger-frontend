@@ -35,7 +35,7 @@ class User extends Component {
                 : this.props.id;
 
         return (
-            <div className="User" onClick={this.handleClick.bind(this)}>
+            <div className="font-weight-bolder" onClick={this.handleClick.bind(this)}>
                 {name}
             </div>
         )

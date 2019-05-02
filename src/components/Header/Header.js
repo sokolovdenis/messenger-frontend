@@ -6,11 +6,10 @@ import {connect} from "react-redux";
 class Header extends Component {
     render() {
         return (
-            <header className="Header">
-                <h1 className="Header__title">Messenger</h1>
-                {this.props.token
-                    ? <SignOut/>
-                    : null}
+            <header className="row">
+                <div className="col">
+                    <h1 className="Header__title">Messenger</h1>
+                </div>
             </header>
         );
     }

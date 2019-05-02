@@ -6,10 +6,7 @@ class Form extends Component {
         const {children, onSubmit} = this.props;
 
         return (
-            <form
-                className='Form'
-                onSubmit={onSubmit}
-            >
+            <form className="container" onSubmit={onSubmit}>
                 {children}
             </form>
         )

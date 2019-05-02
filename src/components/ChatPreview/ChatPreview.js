@@ -11,16 +11,20 @@ class ChatPreview extends Component {
         const {timestamp, user, content} = lastMessage;
 
         return (
-            <div className="ChatPreview">
-                <div className="ChatPreview__title">
-                    <User className="ChatPreview__chatName" id={parseConversationId(id)} />
-                    <div className="ChatPreview__timestamp">{formatTimestamp(timestamp)}</div>
+            <div className="container">
+                <div className="row">
+                    <div className="col">
+                        <User id={parseConversationId(id)} />
+                    </div>
+                    <div className="col-auto">{formatTimestamp(timestamp)}</div>
                 </div>
-                <div className="ChatPreview__lastMessage">
+                <div className="row">
                     {id === "public"
-                        ? <User className="ChatPreview__author" id={user} />
+                        ? (<div className="col-auto">
+                            <User id={user} />
+                        </div>)
                         : null}
-                    <div className="ChatPreview__message">{cutString(content)}</div>
+                    <div className="col font-italic">{cutString(content)}</div>
                 </div>
             </div>
         );
