@@ -15,6 +15,9 @@ class MessagesPanel extends Component {
     }
 
     componentDidUpdate(prevProps) {
+        const scroller = document.getElementById("scroller");
+        scroller.scrollTop = scroller.scrollHeight;
+
         if (prevProps.conversationId !== this.props.conversationId) {
             this.recvMessageList();
         }
@@ -34,7 +37,7 @@ class MessagesPanel extends Component {
 
     render() {
         return (
-            <div className="col-7 pt-5 overflow-auto border" style={{'height':'93vh'}}>
+            <div id="scroller" className="col-7 pt-5 overflow-auto border" style={{'height':'93vh'}}>
                 {this.props.messageList.length === 0
                     ? null
                     : (<ul className="list-group">{
