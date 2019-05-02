@@ -29,10 +29,15 @@ class MessageList extends Component {
     componentDidUpdate(prevProps, prevState, prevContext) {
         // хотел реализовать штуку, которая при появлении нового сообщения показывала бы стрелку вниз
         // а при написании собственного сообщения просто прокручивать вниз, но как разделять эти два события не понятно
-        // поэтому при появлении нового сообщения не важно от кого прокручиваю вниз
+        // поэтому при появлении нового сообщения не важно от кого прокручиваю вниз (но все равно не работает)
         // а стрелка появляется при прокручивании наверх
-        if(prevProps.myProps !== this.props.myProp) {
+        if (prevProps.messages[prevProps.messages.length - 1] !== this.props.messages[this.props.messages.length - 1]) {
+            // если я сам пишу сообщение, то это здесь не видно
             this.scrollToBottom();
+        }
+        if (prevProps.activeChatName !== this.props.activeChatName) {
+            this.scrollToBottom();
+            // забыть текущее положение прокрутки в InfiniteScroll
         }
     }
 
@@ -45,8 +50,8 @@ class MessageList extends Component {
         const scrollHeight = this.messageList.scrollHeight;
         const height = this.messageList.clientHeight;
         const maxScrollTop = scrollHeight - height;
-        var readyToScroll = this.messageList.scrollTop !== maxScrollTop && 
-                            this.messageList.scrollTop !== 0;
+        var readyToScroll = this.messageList.scrollTop !== maxScrollTop || 
+                            (this.messageList.scrollTop !== 0 && maxScrollTop <= 0);
         if (readyToScroll !== this.state.readyToScroll) {
             this.setState({ readyToScroll: readyToScroll});
         }
@@ -60,27 +65,29 @@ class MessageList extends Component {
                     {this.props.showName(this.props.activeChatName)}
                 </div>
                 <div className="msg-history" ref={(ref) => this.messageList = ref}>
-                    <InfiniteScroll
-                        pageStart={0}
-                        loadMore={this.props.handleScroll}
-                        hasMore={true || false}
-                        isReverse={true}
-                        useWindow={false}
-                        loader={this.props.messages[0] && 
-                                this.props.messages[0].id !== 0 && 
-                                <div className="loader" key={0}>Loading ...</div>}
-                        >
-                        {this.props.messages.map((message, index) => (
-                            <Message key={message.id + " " + index}
-                                    ownerId={this.props.userId} 
-                                    senderId={message.user}
-                                    showName={this.props.showName}
-                                    text={message.content}
-                                    time={message.timestamp}
-                                    selectConversation={this.props.selectConversation}
-                                    />
-                        ))}
-                    </InfiniteScroll>
+                    <div>
+                        <InfiniteScroll
+                            pageStart={0}
+                            loadMore={this.props.handleScroll}
+                            hasMore={true || false}
+                            isReverse={true}
+                            useWindow={false}
+                            loader={this.props.messages[0] && 
+                                    this.props.messages[0].id !== 0 && 
+                                    <div className="loader" key={0}>Loading ...</div>}
+                            >
+                            {this.props.messages.map((message, index) => (
+                                <Message key={message.id + " " + index}
+                                        ownerId={this.props.userId} 
+                                        senderId={message.user}
+                                        showName={this.props.showName}
+                                        text={message.content}
+                                        time={message.timestamp}
+                                        selectConversation={this.props.selectConversation}
+                                        />
+                            ))}
+                        </InfiniteScroll>
+                    </div>
                 </div>
                 {this.state.readyToScroll &&
                 <button className="msg-bottom-btn" type="button" onClick={this.scrollToBottom}>
