@@ -1,16 +1,13 @@
 import React, {Component} from 'react';
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
-
-import './MessagesPanel.css';
-import NewMessage from '../NewMessage/NewMessage';
-import Message from "../Message/Message";
-import {onRecvMessageListAction} from "../../middlewares/onRecvMessageList";
-import {onRecvNewMessageAction} from "../../middlewares/onRecvNewMessage";
-import api from "../../constants/api";
-import WEBSOCKET from '../../constants/websocket';
 import Websocket from "react-websocket";
-import {addPathAndQueries} from "../../utils/addPathAndQueries";
+import Message from "./Message";
+import api from "../constants/api";
+import WEBSOCKET from '../constants/websocket';
+import {onRecvMessageListAction} from "../middlewares/onRecvMessageList";
+import {onRecvNewMessageAction} from "../middlewares/onRecvNewMessage";
+import {addPathAndQueries} from "../utils/addPathAndQueries";
 
 class MessagesPanel extends Component {
     componentDidMount() {

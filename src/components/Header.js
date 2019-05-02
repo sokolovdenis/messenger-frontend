@@ -1,6 +1,4 @@
 import React, {Component} from 'react';
-import './Header.css';
-import SignOut from "../SignOut/SignOut";
 import {connect} from "react-redux";
 
 class Header extends Component {

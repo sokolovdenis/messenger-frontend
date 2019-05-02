@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
-import './NewMessage.css';
-import FormField from "../FormField/FormField";
-import FormInput from "../FormInput/FormInput";
-import {connect} from "react-redux";
-import {onSendMessageAction} from "../../middlewares/onSendMessage";
-import api from '../../constants/api';
 import PropTypes from 'prop-types';
-import SignOut from "../SignOut/SignOut";
+import {connect} from "react-redux";
+import FormInput from "./FormInput";
+import FormField from "./FormField";
+import SignOut from "./SignOut";
+import api from '../constants/api';
+import {onSendMessageAction} from "../middlewares/onSendMessage";
 
 class NewMessage extends Component {
     constructor(props) {

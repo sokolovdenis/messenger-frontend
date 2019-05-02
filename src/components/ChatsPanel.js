@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
-import './ChatsPanel.css';
-import SearchPanel from '../SearchPanel/SearchPanel';
-import ChatPreview from '../ChatPreview/ChatPreview';
-import {onRecvChatListAction} from "../../middlewares/onRecvChatList";
-import api from '../../constants/api';
-import {connect} from "react-redux";
 import PropTypes from "prop-types";
+import {connect} from "react-redux";
+import ChatPreview from './ChatPreview';
+import SearchPanel from './SearchPanel';
+import api from '../constants/api';
+import {onRecvChatListAction} from "../middlewares/onRecvChatList";
 
 class ChatsPanel extends Component {
     componentDidMount() {

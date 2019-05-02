@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
-import './SignOut.css';
-
 import {connect} from "react-redux";
-import {onSignOutAction} from "../../middlewares/onSignOut";
+import {onSignOutAction} from "../middlewares/onSignOut";
 
 class SignOut extends Component {
     handleClick = event => {

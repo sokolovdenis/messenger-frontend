@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
-import './ChatPreview.css';
-import {formatTimestamp} from "../../utils/formatTimestamp";
-import {cutString} from "../../utils/cutString";
-import User from "../User/User";
-import {parseConversationId} from "../../utils/parseConversationId";
+import User from "./User";
+import {cutString} from "../utils/cutString";
+import {formatTimestamp} from "../utils/formatTimestamp";
+import {parseConversationId} from "../utils/parseConversationId";
 
 class ChatPreview extends Component {
     render() {

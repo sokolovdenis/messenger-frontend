@@ -1,14 +1,12 @@
 import React, {Component} from 'react';
-import './Authorization.css';
-import FormInput from '../../components/FormInput/FormInput';
-import FormField from '../../components/FormField/FormField';
-import pages from '../../constants/pages';
-import api from '../../constants/api';
-import {onAuthAction} from "../../middlewares/onAuth";
-
 import {connect} from 'react-redux';
 import {Redirect} from "react-router";
-import Header from "../../components/Header/Header";
+import FormInput from '../components/FormInput';
+import FormField from '../components/FormField';
+import Header from "../components/Header";
+import api from '../constants/api';
+import pages from '../constants/pages';
+import {onAuthAction} from "../middlewares/onAuth";
 
 class Authorization extends Component {
     constructor(props) {

@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
-import './Message.css';
-import {formatTimestamp} from "../../utils/formatTimestamp";
-import User from "../../components/User/User";
+import User from "./User";
+import {formatTimestamp} from "../utils/formatTimestamp";
 
 class Message extends Component {
     render() {

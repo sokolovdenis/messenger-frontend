@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import './FormField.css';
 
 class FormField extends Component {
     render() {

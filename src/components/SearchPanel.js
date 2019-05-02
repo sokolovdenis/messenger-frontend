@@ -1,14 +1,13 @@
 import React, {Component} from 'react';
-import './SearchPanel.css';
-import FormInput from "../FormInput/FormInput";
-import FormField from "../FormField/FormField";
-import {onRecvUserListAction} from "../../middlewares/onRecvUserList";
-import {connect} from "react-redux";
-import {debounce} from "../../utils/debounce";
-import {DEBOUNCE_TIMEOUT} from "../../constants/debounceTimeout";
-import api from "../../constants/api";
-import User from "../User/User";
 import PropTypes from "prop-types";
+import {connect} from "react-redux";
+import FormInput from "./FormInput";
+import FormField from "./FormField";
+import User from "./User";
+import api from "../constants/api";
+import {DEBOUNCE_TIMEOUT} from "../constants/debounceTimeout";
+import {onRecvUserListAction} from "../middlewares/onRecvUserList";
+import {debounce} from "../utils/debounce";
 
 class SearchPanel extends Component {
     handleInputChange(event) {

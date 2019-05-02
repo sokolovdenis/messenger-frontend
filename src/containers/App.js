@@ -1,16 +1,11 @@
 import React, {Component} from 'react';
 import {Redirect, Route, Switch} from 'react-router';
 import {HashRouter} from 'react-router-dom';
-
-import './App.css';
-import Header from "../components/Header/Header";
-import Footer from "../components/Footer/Footer";
-import Authorization from "../pages/Authorization/Authorization";
-import Conversations from '../pages/Conversations/Conversations';
+import Authorization from "../pages/Authorization";
+import Conversations from '../pages/Conversations';
 import pages from '../constants/pages';
-
-import store from "../store/store";
 import {AUTH_SUCCESS} from "../reducers/auth";
+import store from "../store/store";
 
 class App extends Component {
     constructor(props) {

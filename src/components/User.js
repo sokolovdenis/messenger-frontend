@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-
-import './User.css';
-import api from "../../constants/api";
-import {onGetUserByIdAction} from "../../middlewares/onGetUserById";
-import {onChangeConversationIdAction} from "../../middlewares/onChangeConversationId";
+import api from "../constants/api";
+import {onGetUserByIdAction} from "../middlewares/onGetUserById";
+import {onChangeConversationIdAction} from "../middlewares/onChangeConversationId";
 
 class User extends Component {
     componentDidMount() {

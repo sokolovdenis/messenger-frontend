@@ -1,12 +1,10 @@
 import React, {Component} from 'react';
-import './Conversations.css';
-import ChatsPanel from "../../components/ChatsPanel/ChatsPanel";
-import MessagesPanel from "../../components/MessagesPanel/MessagesPanel";
-import pages from "../../constants/pages"
-
 import {connect} from "react-redux";
 import {Redirect} from "react-router";
-import NewMessage from "../../components/NewMessage/NewMessage";
+import ChatsPanel from "../components/ChatsPanel";
+import MessagesPanel from "../components/MessagesPanel";
+import NewMessage from "../components/NewMessage";
+import pages from "../constants/pages"
 
 class Conversations extends Component {
     render = () => {
