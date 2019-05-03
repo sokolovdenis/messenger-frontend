@@ -8,12 +8,25 @@ class EnteringChatRoom extends react.Component {
     constructor(props) {
         super(props);
         this.token = null;
-        this.tokenExpire = null;
+        this.tokenExpired = null;
     }
+
 
     // TODO: повесить callback на кнопку
     // Возвращает: token, время истечения token
     signUp(login, password, name) {
+        var token;
+        var tokenExpired;
+        function onFulfied(response) {
+            console.log(`SignIn!`);
+            token = response.data.token;
+            tokenExpired = response.data.expires;
+        }
+
+        function onReject(error) {
+            console.log(`Error: ${error.response.status} : ${error.response.data}`)
+        }
+
         axios({
             method: 'post',
             url: api + 'signup',
@@ -25,18 +38,24 @@ class EnteringChatRoom extends react.Component {
                 password: password,
                 name: name
             }
-        }).then(function (response) {
-            response = JSON.parse(response)
-            console.log(`SignUp!`);
-            this.token = response.data.token;
-            this.tokenExpire = response.data.expires;
-        }).catch(function (error) {
-            console.log(`Error: ${error.response.status} : ${error.response.data}`)
-        });
+        }).then(token, tokenExpired);
     }
 
-    signIn(login, password) {
-        return axios({
+    async signIn(login, password) {
+
+        var token;
+        var tokenExpired;
+        function onFulfied(response) {
+            console.log(`SignIn!`);
+            token = response.data.token;
+            tokenExpired = response.data.expires;
+        }
+
+        function onReject(error) {
+            console.log(`Error: ${error.response.status} : ${error.response.data}`)
+        }
+
+        await axios({
             method: 'post',
             url: api + 'signin',
             headers: {
@@ -46,27 +65,15 @@ class EnteringChatRoom extends react.Component {
                 login: login,
                 password: password
             }
-        }).then(function (response) {
-            console.log(`SignIn!`);
-            // TODO: исправить падение
-            this.token = 1;
-            let x = response.data.token;
-            this.token = x;
-            this.tokenExpire = response.data.expires;
-        }).catch(function (error) {
-            console.log(`Error: ${error.response.status} : ${error.response.data}`)
-        });
-    }
+        }).then(onFulfied, onReject);
 
-    getToken() {
-        return this.token;
+        this.token = token;
+        this.tokenExpire = tokenExpired;
     }
 }
-
 
 let entering = new EnteringChatRoom()
 let login = 'ggggg'
 
 //entering.signUp(login, login, login)
 entering.signIn(login, login)
-console.log(entering.getToken())
