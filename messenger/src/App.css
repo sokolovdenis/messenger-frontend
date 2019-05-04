@@ -1,35 +1,58 @@
-.App {
-  text-align: center;
+#root {
+  width: 600px;
+  height: 100%;
+  margin: 0 auto;
+  padding: 60px;
+  color: black;
+  margin-top: 7%;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+.waves-effect {
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  overflow: hidden;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  vertical-align: middle;
+  z-index: 1;
+  -webkit-transition: .3s ease-out;
+  transition: .3s ease-out;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
+.waves-light {
+  background-color: rgba(255, 255, 255, 0.45);
+}
+
+.Main {
+background-color: black;
+  height: 400px;
+  width: 400px;
+}
+
+h1 {
+  font-family: bold;
   color: white;
 }
 
-.App-intro {
-  font-size: large;
+.Login {
+  height: 30px;
+  width: 500px;
+  color: aliceblue;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.SignIn {
+  width: 50%;
+  margin: 0 auto;
+
 }
 
-@media all and (min-width: 480px) {
-  .Login {
-    padding: 60px 0;
-  }
+body {
+  background:url("https://images.pexels.com/photos/976994/pexels-photo-976994.jpeg?cs=srgb&dl=lake-lakeside-landscape-976994.jpg&fm=jpg")no-repeat;
+  background-size:cover;
 
-  .Login form {
-    margin: 0 auto;
-    max-width: 320px;
-  }
+
 }

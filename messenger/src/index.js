@@ -3,7 +3,6 @@ import ReactDom from 'react-dom'
 import {EnteringChatRoom} from './EnteringChatRoom';
 import './index.css';
 
-let entering = new EnteringChatRoom()
-
+//<EnteringChatRoom/>
 ReactDom.render(<EnteringChatRoom/>, document.getElementById('root'));
 

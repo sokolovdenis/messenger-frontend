@@ -19,3 +19,4 @@ yarn-error.log*
 # rubbish
 src/sigup.jpeg
 .idea
+src/Chat.js
