@@ -1,9 +1,9 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './EnteringChatRoom';
+import React from 'react';;
+import ReactDom from 'react-dom'
+import {EnteringChatRoom} from './EnteringChatRoom';
 import './index.css';
 
-ReactDOM.render(
-  <App />,
-  document.getElementById('root')
-);
+let entering = new EnteringChatRoom()
+
+ReactDom.render(<EnteringChatRoom/>, document.getElementById('root'));
+

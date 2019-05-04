@@ -1,22 +1,38 @@
 const axios = require('axios')
 const react = require('react')
 
+import React from 'react'
+import ReactDom from 'react-dom'
+import "./App.css"
+
+import {Button, FormGroup, FormControl, ControlLabel} from "react-bootstrap";
+
 const api = 'http://messenger.westeurope.cloudapp.azure.com/api/authentication/'
 
 // Класс процедуры регистрации
 class EnteringChatRoom extends react.Component {
     constructor(props) {
         super(props);
-        this.token = null;
-        this.tokenExpired = null;
+        this.state = {
+            login: "",
+            password: "",
+            token : null,
+            tokenExpired : null
+        }
     }
 
+    render() {
+        return(
+            <div className="Login"></div>
+        );
+    }
 
     // TODO: повесить callback на кнопку
     // Возвращает: token, время истечения token
     signUp(login, password, name) {
         var token;
         var tokenExpired;
+
         function onFulfied(response) {
             console.log(`SignIn!`);
             token = response.data.token;
@@ -45,6 +61,7 @@ class EnteringChatRoom extends react.Component {
 
         var token;
         var tokenExpired;
+
         function onFulfied(response) {
             console.log(`SignIn!`);
             token = response.data.token;
@@ -67,13 +84,9 @@ class EnteringChatRoom extends react.Component {
             }
         }).then(onFulfied, onReject);
 
-        this.token = token;
-        this.tokenExpire = tokenExpired;
+        this.state.token = token;
+        this.state.tokenExpire = tokenExpired;
     }
 }
 
-let entering = new EnteringChatRoom()
-let login = 'ggggg'
-
-//entering.signUp(login, login, login)
-entering.signIn(login, login)
+export {EnteringChatRoom}
