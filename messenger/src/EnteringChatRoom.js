@@ -35,7 +35,7 @@ class LoginForm extends React.Component {
                 <input type="text" ref="Login" placeholder="Login" className="FiledToFill" required/>
                 <input type="password" ref="password" placeholder="Password" className="FiledToFill" required/>
                 <input type="submit" value="Go!" className="Go"/>
-                <input type="submit" value="Go!" className="Go"/>
+                <input type="submit" value="SignIn" className="Go"/>
             </form>
         )
     }
