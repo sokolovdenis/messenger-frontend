@@ -31,10 +31,11 @@ class LoginForm extends React.Component {
     render() {
 
         return (
-            <form onSubmit={this.handleSignIn.bind(this)}>
-                <input type="text" ref="Login" placeholder="Login" className="waves-effect waves-light Login" required/>
-                <input type="password" ref="password" placeholder="Password" className="waves-effect waves-light Login" required/>
-                <input type="submit" value="SignIn" className="SignIn"/>
+            <form className="Form" onSubmit={this.handleSignIn.bind(this)}>
+                <input type="text" ref="Login" placeholder="Login" className="FiledToFill" required/>
+                <input type="password" ref="password" placeholder="Password" className="FiledToFill" required/>
+                <input type="submit" value="Go!" className="Go"/>
+                <input type="submit" value="Go!" className="Go"/>
             </form>
         )
     }

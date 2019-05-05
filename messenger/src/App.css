@@ -6,40 +6,37 @@
   color: black;
   margin-top: 7%;
 }
-
-.waves-effect {
-  position: relative;
-  cursor: pointer;
-  display: inline-block;
-  overflow: hidden;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-  vertical-align: middle;
-  z-index: 1;
-  -webkit-transition: .3s ease-out;
-  transition: .3s ease-out;
-}
-
-.waves-light {
-  background-color: rgba(255, 255, 255, 0.45);
-}
-
 .Main {
     background-color: #212121 !important;
-  display: block;
    /*От всего экрана*/
   height: 35%;
   width: 35%;
   margin: auto;
-
   position: absolute;
-  left:0;
-  right: 0;
-  top: 0;
-  bottom: 0;
+}
+
+.Form {
+    margin: auto;
+    position:relative;
+    width: 100%;
+    height: 50%;
+    background-color:blue;
+}
+
+.FiledToFill {
+    margin-left: 13%;
+    position:relative;
+    width: 70%;
+    height: 30%;
+    background-color:yellow;
+}
+
+.Go {
+    margin-left: 30%;
+    position:relative;
+    width: 40%;
+    height: 30%;
+    background-color:green;
 }
 
 h1 {
@@ -51,12 +48,6 @@ h1 {
   height: 30px;
   width: 500px;
   color: aliceblue;
-}
-
-.SignIn {
-  width: 50%;
-  margin: 0 auto;
-
 }
 
 body {
