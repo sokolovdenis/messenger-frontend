@@ -28,9 +28,18 @@
 }
 
 .Main {
-background-color: black;
-  height: 400px;
-  width: 400px;
+    background-color: #212121 !important;
+  display: block;
+   /*От всего экрана*/
+  height: 35%;
+  width: 35%;
+  margin: auto;
+
+  position: absolute;
+  left:0;
+  right: 0;
+  top: 0;
+  bottom: 0;
 }
 
 h1 {
