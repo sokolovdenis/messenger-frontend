@@ -36,12 +36,15 @@
 }
 
 .Go {
-    outline: none;
     margin-left: 30%;
     position:relative;
     width: 40%;
+    font-size: medium;
+    font-weight: bold;
     height: 30%;
-    background-color:green;
+    color: #651fff;
+    border-color: #b2ebf2;
+    background-color: #b2dfdb;
 }
 
 h1 {
