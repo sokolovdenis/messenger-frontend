@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8f22f49f-42df-4715-a3f3-19b723f9c233" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.test.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.test.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/EnteringChatRoom.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/SigInForm.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -14,104 +18,73 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.37785715">
-      <split-first>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/src/EnteringChatRoom.js">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="585">
-                  <caret line="39" column="9" lean-forward="true" selection-start-line="39" selection-start-column="9" selection-end-line="39" selection-end-column="9" />
-                  <folding>
-                    <element signature="e#63#88#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="jar://$APPLICATION_HOME_DIR$/lib/platform-impl.jar!/resources/html5-schema/html5/sectional.rnc">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="150">
-                  <caret line="10" column="16" selection-start-line="10" selection-start-column="16" selection-end-line="10" selection-end-column="16" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/package.json">
-              <provider selected="true" editor-type-id="text-editor" />
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/.gitignore">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="345">
-                  <caret line="23" column="22" selection-start-line="23" selection-start-column="22" selection-end-line="23" selection-end-column="22" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-first>
-      <split-second>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/Chat.js">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="450">
-                  <caret line="30" column="14" selection-start-line="30" selection-start-column="14" selection-end-line="30" selection-end-column="14" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/index.js">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="60">
-                  <caret line="6" column="31" selection-start-line="6" selection-start-column="31" selection-end-line="6" selection-end-column="31" />
-                  <folding>
-                    <element signature="e#28#60#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/src/App.css">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="262">
-                  <caret line="61" column="142" selection-start-line="61" selection-start-column="142" selection-end-line="61" selection-end-column="142" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-second>
-    </splitter>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Router_Example.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="417">
+              <caret line="259" column="70" lean-forward="true" selection-start-line="258" selection-start-column="27" selection-end-line="259" selection-end-column="70" />
+              <folding>
+                <element signature="e#3968#4005#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/SigInForm.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="195">
+              <caret line="37" column="88" selection-start-line="37" selection-start-column="88" selection-end-line="37" selection-end-column="88" />
+              <folding>
+                <element signature="e#63#88#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="CSS File" />
         <option value="JavaScript File" />
+        <option value="CSS File" />
       </list>
     </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Promise</find>
-      <find>token</find>
-      <find>validateForm</find>
-      <find>rend</find>
-      <find>bsiz</find>
-      <find>render</find>
       <find>onSignOut</find>
-      <find>onSignIn</find>
-      <find>Welcome</find>
       <find>Main</find>
-      <find>SignIn</find>
       <find>Chat</find>
+      <find>fon</find>
+      <find>Roster</find>
+      <find>FullRoster</find>
+      <find>Player</find>
+      <find>HashRouter</find>
+      <find>render</find>
+      <find>SignI</find>
+      <find>SignUp</find>
+      <find>FormTitle__Link</find>
+      <find>type=&quot;password&quot;</find>
+      <find>$</find>
+      <find>element</find>
+      <find>children</find>
+      <find>FormT</find>
+      <find>LoginForm</find>
+      <find>Welcome</find>
+      <find>handleSignIn</find>
+      <find>onSignIn</find>
+      <find>signin</find>
+      <find>signi</find>
+      <find>sign</find>
+      <find>SignInForm</find>
+      <find>ф</find>
+      <find>SignIn</find>
+      <find>Sign Up</find>
+      <find>SignIn&quot;</find>
+      <find>Router</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -122,13 +95,16 @@
       <list>
         <option value="$PROJECT_DIR$/src/App.js" />
         <option value="$PROJECT_DIR$/src/Request.js" />
-        <option value="$PROJECT_DIR$/src/index.js" />
         <option value="$PROJECT_DIR$/src/EnteringChatRoom2.js" />
         <option value="$PROJECT_DIR$/src/EnteringChat.js" />
         <option value="$PROJECT_DIR$/src/EnteringChatRoom.css" />
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/src/EnteringChatRoom.js" />
         <option value="$PROJECT_DIR$/src/App.css" />
+        <option value="$PROJECT_DIR$/src/EnteringChatRoom.js" />
+        <option value="$PROJECT_DIR$/src/example.css" />
+        <option value="$PROJECT_DIR$/src/index.js" />
+        <option value="$PROJECT_DIR$/src/Router_Example.js" />
+        <option value="$PROJECT_DIR$/src/SigInForm.js" />
       </list>
     </option>
   </component>
@@ -144,6 +120,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -160,7 +137,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -186,7 +162,7 @@
     </option>
   </component>
   <component name="RunManager" selected="npm.start">
-    <configuration name="App" type="NodeJSConfigurationType" path-to-js-file="$PROJECT_DIR$/src/EnteringChatRoom.js" working-dir="$PROJECT_DIR$">
+    <configuration name="App" type="NodeJSConfigurationType" path-to-js-file="$PROJECT_DIR$/src/SigInForm.js" working-dir="$PROJECT_DIR$">
       <method v="2" />
     </configuration>
     <configuration default="true" type="NodeJSConfigurationType" working-dir="$PROJECT_DIR$">
@@ -225,12 +201,14 @@
       <workItem from="1556950388377" duration="424000" />
       <workItem from="1556950832458" duration="6774000" />
       <workItem from="1556993638394" duration="7809000" />
-      <workItem from="1557046106188" duration="6226000" />
+      <workItem from="1557046106188" duration="13617000" />
+      <workItem from="1557079520985" duration="2565000" />
+      <workItem from="1557085637177" duration="16662000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="45285000" />
+    <option name="totallyTimeSpent" value="71903000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -245,7 +223,7 @@
     <frame x="0" y="-1" width="1600" height="873" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.11223843" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.11223843" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -258,37 +236,39 @@
       <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49968293" weight="0.32977304" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.49968293" weight="0.32977304" />
-      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5028535" side_tool="true" visible="true" weight="0.3471295" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="10" sideWeight="0.4971465" visible="true" weight="0.3471295" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5028535" side_tool="true" weight="0.3471295" />
+      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.4971465" weight="0.21361816" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" x="0" y="0" width="350" height="673" id="Documentation" order="3" side_tool="true" weight="0.32947233" />
     </layout>
+    <layout-to-restore>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.11223843" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="npm" order="2" side_tool="true" />
+      <window_info id="Favorites" order="3" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49968293" weight="0.32977304" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.48865154" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.48998666" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49968293" weight="0.32977304" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.49968293" weight="0.32977304" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5028535" side_tool="true" weight="0.3471295" />
+      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.4971465" visible="true" weight="0.21361816" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" x="0" y="0" width="350" height="673" id="Documentation" order="3" side_tool="true" weight="0.32947233" />
+    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/EnteringChatRoom.js</url>
-          <line>132</line>
-          <option name="timeStamp" value="65" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/EnteringChatRoom.js</url>
-          <line>94</line>
-          <option name="timeStamp" value="67" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/EnteringChatRoom.js</url>
-          <line>95</line>
-          <option name="timeStamp" value="69" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
     <watches-manager>
       <configuration name="NodeJSConfigurationType">
         <watch expression="promise[&quot;[[PromiseStatus]]&quot;]" />
@@ -359,23 +339,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/EnteringChatRoom2.js" />
     <entry file="file://$PROJECT_DIR$/src/EnteringChatRoom.css" />
-    <entry file="file://$PROJECT_DIR$/src/Chat.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="30" column="14" selection-start-line="30" selection-start-column="14" selection-end-line="30" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="6" column="31" selection-start-line="6" selection-start-column="31" selection-end-line="6" selection-end-column="31" />
-          <folding>
-            <element signature="e#28#60#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -393,20 +356,68 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/EnteringChatRoom.js">
+    <entry file="file://$PROJECT_DIR$/src/App.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="585">
-          <caret line="39" column="9" lean-forward="true" selection-start-line="39" selection-start-column="9" selection-end-line="39" selection-end-column="9" />
+        <state relative-caret-position="915">
+          <caret line="61" column="142" selection-start-line="61" selection-start-column="142" selection-end-line="61" selection-end-column="142" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/example.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="65">
+          <caret line="87" column="29" selection-start-line="87" selection-start-column="29" selection-end-line="87" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Chat.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="30" column="14" selection-start-line="30" selection-start-column="14" selection-end-line="30" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/react-dom/cjs/react-dom.development.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="224">
+          <caret line="21149" column="2" selection-start-line="21149" selection-start-column="2" selection-end-line="21149" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external/lib.dom.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="233">
+          <caret line="4490" column="4" selection-start-line="4490" selection-start-column="4" selection-end-line="4490" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="57" lean-forward="true" selection-start-line="5" selection-start-column="57" selection-end-line="5" selection-end-column="57" />
           <folding>
-            <element signature="e#63#88#0" expanded="true" />
+            <element signature="e#28#60#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/App.css">
+    <entry file="file://$PROJECT_DIR$/src/Router_Example.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="262">
-          <caret line="61" column="142" selection-start-line="61" selection-start-column="142" selection-end-line="61" selection-end-column="142" />
+        <state relative-caret-position="417">
+          <caret line="259" column="70" lean-forward="true" selection-start-line="258" selection-start-column="27" selection-end-line="259" selection-end-column="70" />
+          <folding>
+            <element signature="e#3968#4005#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/SigInForm.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="37" column="88" selection-start-line="37" selection-start-column="88" selection-end-line="37" selection-end-column="88" />
+          <folding>
+            <element signature="e#63#88#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

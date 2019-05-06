@@ -1,8 +1,6 @@
 import React from 'react';;
 import ReactDom from 'react-dom'
-import {EnteringChatRoom} from './EnteringChatRoom';
+import {App} from './SigInForm';
 import './index.css';
 
-//<EnteringChatRoom/>
-ReactDom.render(<EnteringChatRoom/>, document.getElementById('root'));
-
+ReactDom.render(<App/>, document.getElementById('root'));
