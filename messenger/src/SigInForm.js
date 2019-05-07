@@ -31,8 +31,7 @@ class SignIn extends React.Component {
     async signIn(event) {
         event.preventDefault();
         var badLoginPath = "/bad-login";
-        var token;
-        var tokenExpired;
+
         var login = this.refs.login.value;
         var password = this.refs.password.value;
 
@@ -42,8 +41,8 @@ class SignIn extends React.Component {
         }
 
         function onFulfied(response) {
-            token = response.data.token;
-            tokenExpired = response.data.expires;
+            this.token = response.data.token;
+            this.tokenExpired = response.data.expires;
         }
 
         function onReject(error) {
@@ -60,7 +59,7 @@ class SignIn extends React.Component {
                 login: login,
                 password: password
             }
-        }).then(onFulfied, onReject);
+        }).then(onFulfied.bind(this), onReject);
     }
 
 
@@ -87,11 +86,12 @@ class SignUp extends React.Component {
 
     constructor(props) {
         super(props);
-        this.errorStatus = null;
+        this.errorStatus = 432;
+        this.errorStatus32 = 567;
+        this.errorStatus44 = 900;
     }
 
     errorMsg() {
-        let x = this.errorStatus;
         switch (this.errorStatus) {
             case 400: {
                 return (<div>Login name or password has the wrong length!</div>);
@@ -106,12 +106,9 @@ class SignUp extends React.Component {
     async signUp(event) {
         event.preventDefault();
         var badLoginPath = "/bad-login";
-        var token;
-        var tokenExpired;
         var login = this.refs.login.value;
         var password = this.refs.password.value;
         var name = this.refs.name.value;
-        var errorStatus;
         // Путь / => переход в sign-up
         if (location.hash === "#/") {
             location.href += "sign-up";
@@ -123,12 +120,12 @@ class SignUp extends React.Component {
         }
 
         function onFulfied(response) {
-            token = response.data.token;
-            tokenExpired = response.data.expires;
+            this.token = response.data.token;
+            this.tokenExpired = response.data.expires;
         }
 
         function onReject(error) {
-            errorStatus = error.response.status;
+            this.errorStatus = error.response.status;
             location.href += badLoginPath;
         }
 
@@ -143,16 +140,17 @@ class SignUp extends React.Component {
                 password: password,
                 name: name
             }
-        }).then(onFulfied, onReject);
-        this.errorStatus = errorStatus;
+        }).then(onFulfied.bind(this), onReject.bind(this));
     }
 
     render() {
-
+        let x = this.errorStatus32;
+        let x1 = this.errorStatus;
+        let x2 = this.errorStatus44;
         return (
             <Router>
                 <form className="Form" onSubmit={this.signUp.bind(this)}>
-                    <Route exact path="/sign-up/bad-login" render={this.errorMsg}/>
+                    <Route exact path="/sign-up/bad-login" render={this.errorMsg.bind(this)}/>
                     <input type="text" ref="login" placeholder="Login" className="FiledToFill" required/>
                     <input type="password" ref="password" placeholder="Password" className="FiledToFill" required/>
                     <input type="name" ref="name" placeholder="Name" className="FiledToFill" required/>
