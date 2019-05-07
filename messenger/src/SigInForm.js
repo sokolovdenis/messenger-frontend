@@ -23,20 +23,27 @@ class SignIn extends React.Component {
         super(props);
     }
 
-    errorMsg() {
+    static errorMsg() {
         return (
             <div>
                 <h1>Error MSG!</h1>
             </div>);
     }
 
+
     // Возвращает: token, время истечения token
     async signIn(event) {
         event.preventDefault();
+        var badLoginPath = "/bad-login";
         var token;
         var tokenExpired;
         var login = this.refs.login.value;
         var password = this.refs.password.value;
+
+        // Путь /sign-in/bad-login => возвращаемся к /sign-in
+        if (location.href.endsWith(badLoginPath)) {
+            location.href = location.href.replace(badLoginPath, '');
+        }
 
         function onFulfied(response) {
             token = response.data.token;
@@ -45,7 +52,7 @@ class SignIn extends React.Component {
 
         function onReject(error) {
             console.log(`Error: ${error.response.status} : ${error.response.data}`);
-            location.href += "/bad-login";
+            location.href += badLoginPath;
         }
 
         await axios({
@@ -67,7 +74,7 @@ class SignIn extends React.Component {
         return (
             <Router>
                 <form className="Form" onSubmit={this.signIn.bind(this)}>
-                    <Route exact path="/sign-in/bad-login" render={this.errorMsg}/>
+                    <Route exact path="/sign-in/bad-login" render={SignIn.errorMsg}/>
                     <input type="text" ref="login" placeholder="Login" className="FiledToFill" required/>
                     <input type="password" ref="password" placeholder="Password" className="FiledToFill" required/>
                     <input type="submit" value="Go!" className="Go"/>

@@ -1,6 +1,7 @@
-import React from 'react';;
+import React from 'react';
 import ReactDom from 'react-dom'
-import {App} from './SigInForm';
-import './index.css';
+import {App} from './SigInForm'
+import './index.css'
+
 
 ReactDom.render(<App/>, document.getElementById('root'));
