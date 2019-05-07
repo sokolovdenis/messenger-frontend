@@ -15,31 +15,51 @@ class SignIn extends React.Component {
 
     constructor(props) {
         super(props);
-        this.tmp = 'SignUp';
     }
 
-    handleSignUp(e) {
-        e.preventDefault()
-        console.log("handleSignUp");
-        let username = this.refs.username.value;
-        let password = this.refs.password.value;
-        this.props.onSignIn(username, password)
+    // Возвращает: token, время истечения token
+    async signIn(event) {
+        event.preventDefault();
+        var token;
+        var tokenExpired;
+        var login = this.refs.login.value;
+        var password = this.refs.password.value;
+
+        function onFulfied(response) {
+            token = response.data.token;
+            tokenExpired = response.data.expires;
+        }
+
+        function onReject(error) {
+            console.log(`Error: ${error.response.status} : ${error.response.data}`)
+        }
+
+        await axios({
+            method: 'post',
+            url: api + 'signin',
+            headers: {
+                'content-type': 'application/json',
+            },
+            data: {
+                login: login,
+                password: password
+            }
+        }).then(onFulfied, onReject);
     }
 
     render() {
 
-        this.tmp = 'SignIn';
-        console.log('SignUp2');
         return (
-            <form className="Form" onSubmit={this.handleSignUp.bind(this)}>
-                <input type="text" ref="Login" placeholder="Login" className="FiledToFill" required/>
+            <form className="Form" onSubmit={this.signIn.bind(this)}>
+                <input type="text" ref="login" placeholder="Login" className="FiledToFill" required/>
                 <input type="password" ref="password" placeholder="Password" className="FiledToFill" required/>
                 <input type="submit" value="Go!" className="Go"/>
-                <Link to="/"><input type="submit" value="SignUp" className="Go"/></Link>
+                <Link to="/">
+                    <button className="Go">SignUp</button>
+                </Link>
             </form>
         );
     }
-
 
 }
 
@@ -49,26 +69,50 @@ class SignUp extends React.Component {
         super(props);
     }
 
-    handleSignUp(e) {
-        e.preventDefault()
-        console.log("handleSignUp");
-        let username = this.refs.username.value;
-        let password = this.refs.password.value;
-        this.props.onSignIn(username, password)
+    // Возвращает: token, время истечения token
+    async signUp(event) {
+        event.preventDefault();
+        var token;
+        var tokenExpired;
+        var login = this.refs.login.value;
+        var password = this.refs.password.value;
+        var name = this.refs.name.value;
+
+        function onFulfied(response) {
+            token = response.data.token;
+            tokenExpired = response.data.expires;
+        }
+
+        function onReject(error) {
+            console.log(`Error: ${error.response.status} : ${error.response.data}`)
+        }
+
+        await axios({
+            method: 'post',
+            url: api + 'signup',
+            headers: {
+                'content-type': 'application/json',
+            },
+            data: {
+                login: login,
+                password: password,
+                name: name
+            }
+        }).then(onFulfied, onReject);
     }
 
     render() {
 
-        this.tmp = 'SignIn';
-        console.log('SignUp2');
         return (
             <Router>
-                <form className="Form" onSubmit={this.handleSignUp.bind(this)}>
-                    <input type="text" ref="Login" placeholder="Login" className="FiledToFill" required/>
+                <form className="Form" onSubmit={this.signUp.bind(this)}>
+                    <input type="text" ref="login" placeholder="Login" className="FiledToFill" required/>
                     <input type="password" ref="password" placeholder="Password" className="FiledToFill" required/>
                     <input type="name" ref="name" placeholder="Name" className="FiledToFill" required/>
                     <input type="submit" value="Go!" className="Go"/>
-                    <Link to="/sign-in"><input type="submit" value="SignIn" className="Go"/></Link>
+                    <Link to="/sign-in">
+                        <button className="Go">SignIn</button>
+                    </Link>
                 </form>
             </Router>
 
