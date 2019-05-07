@@ -11,10 +11,23 @@ let Router = HashRouter;
 
 const api = 'http://messenger.westeurope.cloudapp.azure.com/api/authentication/'
 
+const Home = () => (
+    <div>
+        <h1>Welcome to the Tornadoes Website!</h1>
+    </div>
+)
+
 class SignIn extends React.Component {
 
     constructor(props) {
         super(props);
+    }
+
+    errorMsg() {
+        return (
+            <div>
+                <h1>Error MSG!</h1>
+            </div>);
     }
 
     // Возвращает: token, время истечения token
@@ -31,7 +44,8 @@ class SignIn extends React.Component {
         }
 
         function onReject(error) {
-            console.log(`Error: ${error.response.status} : ${error.response.data}`)
+            console.log(`Error: ${error.response.status} : ${error.response.data}`);
+            location.href += "/bad-login";
         }
 
         await axios({
@@ -47,17 +61,21 @@ class SignIn extends React.Component {
         }).then(onFulfied, onReject);
     }
 
+
     render() {
 
         return (
-            <form className="Form" onSubmit={this.signIn.bind(this)}>
-                <input type="text" ref="login" placeholder="Login" className="FiledToFill" required/>
-                <input type="password" ref="password" placeholder="Password" className="FiledToFill" required/>
-                <input type="submit" value="Go!" className="Go"/>
-                <Link to="/">
-                    <button className="Go">SignUp</button>
-                </Link>
-            </form>
+            <Router>
+                <form className="Form" onSubmit={this.signIn.bind(this)}>
+                    <Route exact path="/sign-in/bad-login" render={this.errorMsg}/>
+                    <input type="text" ref="login" placeholder="Login" className="FiledToFill" required/>
+                    <input type="password" ref="password" placeholder="Password" className="FiledToFill" required/>
+                    <input type="submit" value="Go!" className="Go"/>
+                    <Link to="/">
+                        <button className="Go">SignUp</button>
+                    </Link>
+                </form>
+            </Router>
         );
     }
 
