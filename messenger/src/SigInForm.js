@@ -23,13 +23,12 @@ class SignIn extends React.Component {
         super(props);
     }
 
-    static errorMsg() {
+    errorMsg() {
         return (
             <div>
                 <h1>Error MSG!</h1>
             </div>);
     }
-
 
     // Возвращает: token, время истечения token
     async signIn(event) {
@@ -74,7 +73,7 @@ class SignIn extends React.Component {
         return (
             <Router>
                 <form className="Form" onSubmit={this.signIn.bind(this)}>
-                    <Route exact path="/sign-in/bad-login" render={SignIn.errorMsg}/>
+                    <Route exact path="/sign-in/bad-login" render={this.errorMsg}/>
                     <input type="text" ref="login" placeholder="Login" className="FiledToFill" required/>
                     <input type="password" ref="password" placeholder="Password" className="FiledToFill" required/>
                     <input type="submit" value="Go!" className="Go"/>
@@ -94,14 +93,27 @@ class SignUp extends React.Component {
         super(props);
     }
 
+    errorMsg() {
+        return (
+            <div>
+                <h1>Error MSG!</h1>
+            </div>);
+    }
+
     // Возвращает: token, время истечения token
     async signUp(event) {
         event.preventDefault();
+        var badLoginPath = "bad-login";
         var token;
         var tokenExpired;
         var login = this.refs.login.value;
         var password = this.refs.password.value;
         var name = this.refs.name.value;
+
+        // Путь /sign-in/bad-login => возвращаемся к /sign-in
+        if (location.href.endsWith(badLoginPath)) {
+            location.href = location.href.replace(badLoginPath, '');
+        }
 
         function onFulfied(response) {
             token = response.data.token;
@@ -110,6 +122,7 @@ class SignUp extends React.Component {
 
         function onReject(error) {
             console.log(`Error: ${error.response.status} : ${error.response.data}`)
+            location.href += badLoginPath;
         }
 
         await axios({
@@ -131,6 +144,7 @@ class SignUp extends React.Component {
         return (
             <Router>
                 <form className="Form" onSubmit={this.signUp.bind(this)}>
+                    <Route exact path="/bad-login" render={this.errorMsg}/>
                     <input type="text" ref="login" placeholder="Login" className="FiledToFill" required/>
                     <input type="password" ref="password" placeholder="Password" className="FiledToFill" required/>
                     <input type="name" ref="name" placeholder="Name" className="FiledToFill" required/>
