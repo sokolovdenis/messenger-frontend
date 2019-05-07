@@ -18,8 +18,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/SigInForm.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="388">
-              <caret line="146" column="40" selection-start-line="146" selection-start-column="40" selection-end-line="146" selection-end-column="40" />
+            <state relative-caret-position="344">
+              <caret line="105" column="25" lean-forward="true" selection-start-line="105" selection-start-column="25" selection-end-line="105" selection-end-column="25" />
               <folding>
                 <element signature="e#63#88#0" expanded="true" />
               </folding>
@@ -208,12 +208,12 @@
       <workItem from="1556993638394" duration="7809000" />
       <workItem from="1557046106188" duration="13617000" />
       <workItem from="1557079520985" duration="2565000" />
-      <workItem from="1557085637177" duration="30237000" />
+      <workItem from="1557085637177" duration="36328000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="85478000" />
+    <option name="totallyTimeSpent" value="91569000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -226,6 +226,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="-1" width="1600" height="873" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.11223843" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -241,7 +242,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.49968293" weight="0.32977304" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5028535" side_tool="true" weight="0.3471295" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="10" sideWeight="0.4971465" visible="true" weight="0.26568758" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" sideWeight="0.4971465" visible="true" weight="0.19759679" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -414,8 +415,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/SigInForm.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="388">
-          <caret line="146" column="40" selection-start-line="146" selection-start-column="40" selection-end-line="146" selection-end-column="40" />
+        <state relative-caret-position="344">
+          <caret line="105" column="25" lean-forward="true" selection-start-line="105" selection-start-column="25" selection-end-line="105" selection-end-column="25" />
           <folding>
             <element signature="e#63#88#0" expanded="true" />
           </folding>

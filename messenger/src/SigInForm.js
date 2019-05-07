@@ -24,10 +24,7 @@ class SignIn extends React.Component {
     }
 
     errorMsg() {
-        return (
-            <div>
-                <h1>Error MSG!</h1>
-            </div>);
+        return (<div>Incorrect login or password!</div>);
     }
 
     // Возвращает: token, время истечения token
@@ -50,7 +47,6 @@ class SignIn extends React.Component {
         }
 
         function onReject(error) {
-            console.log(`Error: ${error.response.status} : ${error.response.data}`);
             location.href += badLoginPath;
         }
 
@@ -91,26 +87,37 @@ class SignUp extends React.Component {
 
     constructor(props) {
         super(props);
+        this.errorStatus = null;
     }
 
     errorMsg() {
-        return (
-            <div>
-                <h1>Error MSG!</h1>
-            </div>);
+        let x = this.errorStatus;
+        switch (this.errorStatus) {
+            case 400: {
+                return (<div>Login name or password has the wrong length!</div>);
+            }
+            case 409: {
+                return (<div>Record already exists!</div>);
+            }
+        }
     }
 
     // Возвращает: token, время истечения token
     async signUp(event) {
         event.preventDefault();
-        var badLoginPath = "bad-login";
+        var badLoginPath = "/bad-login";
         var token;
         var tokenExpired;
         var login = this.refs.login.value;
         var password = this.refs.password.value;
         var name = this.refs.name.value;
+        var errorStatus;
+        // Путь / => переход в sign-up
+        if (location.hash === "#/") {
+            location.href += "sign-up";
+        }
 
-        // Путь /sign-in/bad-login => возвращаемся к /sign-in
+        // Путь /sign-up/bad-login => возвращаемся к /sign-up
         if (location.href.endsWith(badLoginPath)) {
             location.href = location.href.replace(badLoginPath, '');
         }
@@ -121,7 +128,7 @@ class SignUp extends React.Component {
         }
 
         function onReject(error) {
-            console.log(`Error: ${error.response.status} : ${error.response.data}`)
+            errorStatus = error.response.status;
             location.href += badLoginPath;
         }
 
@@ -137,6 +144,7 @@ class SignUp extends React.Component {
                 name: name
             }
         }).then(onFulfied, onReject);
+        this.errorStatus = errorStatus;
     }
 
     render() {
@@ -144,7 +152,7 @@ class SignUp extends React.Component {
         return (
             <Router>
                 <form className="Form" onSubmit={this.signUp.bind(this)}>
-                    <Route exact path="/bad-login" render={this.errorMsg}/>
+                    <Route exact path="/sign-up/bad-login" render={this.errorMsg}/>
                     <input type="text" ref="login" placeholder="Login" className="FiledToFill" required/>
                     <input type="password" ref="password" placeholder="Password" className="FiledToFill" required/>
                     <input type="name" ref="name" placeholder="Name" className="FiledToFill" required/>
@@ -181,72 +189,12 @@ class App extends react.Component {
                     <h1 style={{textAlign: "center"}}>Chat</h1>
                     <Route exact path="/" component={SignUp}/>
                     <Route path="/sign-in" component={SignIn}/>
+                    <Route path="/sign-up" component={SignUp}/>
                 </div>
             </Router>
         )
 
     }
-
-    // // TODO: повесить callback на кнопку
-    // // Возвращает: token, время истечения token
-    // signUp(login, password, name) {
-    //     var token;
-    //     var tokenExpired;
-    //
-    //     function onFulfied(response) {
-    //         console.log(`SignIn!`);
-    //         token = response.data.token;
-    //         tokenExpired = response.data.expires;
-    //     }
-    //
-    //     function onReject(error) {
-    //         console.log(`Error: ${error.response.status} : ${error.response.data}`)
-    //     }
-    //
-    //     axios({
-    //         method: 'post',
-    //         url: api + 'signup',
-    //         headers: {
-    //             'content-type': 'application/json',
-    //         },
-    //         data: {
-    //             login: login,
-    //             password: password,
-    //             name: name
-    //         }
-    //     }).then(token, tokenExpired);
-    // }
-    //
-    // async signIn(login, password) {
-    //
-    //     var token;
-    //     var tokenExpired;
-    //
-    //     function onFulfied(response) {
-    //         console.log(`SignIn!`);
-    //         token = response.data.token;
-    //         tokenExpired = response.data.expires;
-    //     }
-    //
-    //     function onReject(error) {
-    //         console.log(`Error: ${error.response.status} : ${error.response.data}`)
-    //     }
-    //
-    //     await axios({
-    //         method: 'post',
-    //         url: api + 'signin',
-    //         headers: {
-    //             'content-type': 'application/json',
-    //         },
-    //         data: {
-    //             login: login,
-    //             password: password
-    //         }
-    //     }).then(onFulfied, onReject);
-    //
-    //     this.state.token = token;
-    //     this.state.tokenExpire = tokenExpired;
-    // }
 }
 
 export {App}
