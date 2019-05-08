@@ -11,16 +11,15 @@ let Router = HashRouter;
 
 const api = 'http://messenger.westeurope.cloudapp.azure.com/api/authentication/'
 
-const Home = () => (
-    <div>
-        <h1>Welcome to the Tornadoes Website!</h1>
-    </div>
-)
 
 class SignIn extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            token: null,
+            tokenExpired: null
+        }
     }
 
     errorMsg() {
@@ -41,8 +40,12 @@ class SignIn extends React.Component {
         }
 
         function onFulfied(response) {
-            this.token = response.data.token;
-            this.tokenExpired = response.data.expires;
+            this.setState(
+                {
+                    token: response.data.token,
+                    tokenExpired: response.data.expires
+                }
+            );
         }
 
         function onReject(error) {
@@ -72,7 +75,7 @@ class SignIn extends React.Component {
                     <input type="text" ref="login" placeholder="Login" className="FiledToFill" required/>
                     <input type="password" ref="password" placeholder="Password" className="FiledToFill" required/>
                     <input type="submit" value="Go!" className="Go"/>
-                    <Link to="/">
+                    <Link to="/sign-up">
                         <button className="Go">SignUp</button>
                     </Link>
                 </form>
@@ -82,17 +85,44 @@ class SignIn extends React.Component {
 
 }
 
+class Entering extends React.Component {
+
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <Router>
+                <div>
+                    <Link to="/sign-up">
+                        <button className="Go">SignUp</button>
+                    </Link>
+                    <Link to="/sign-in">
+                        <button className="Go">SignIn</button>
+                    </Link>
+                </div>
+            </Router>
+
+        );
+    }
+
+}
+
 class SignUp extends React.Component {
 
     constructor(props) {
         super(props);
-        this.errorStatus = 432;
-        this.errorStatus32 = 567;
-        this.errorStatus44 = 900;
+        this.state = {
+            errorStatus: null,
+            login: null,
+            password: null,
+            name: null
+        }
     }
 
     errorMsg() {
-        switch (this.errorStatus) {
+        switch (this.state.errorStatus) {
             case 400: {
                 return (<div>Login name or password has the wrong length!</div>);
             }
@@ -109,10 +139,6 @@ class SignUp extends React.Component {
         var login = this.refs.login.value;
         var password = this.refs.password.value;
         var name = this.refs.name.value;
-        // Путь / => переход в sign-up
-        if (location.hash === "#/") {
-            location.href += "sign-up";
-        }
 
         // Путь /sign-up/bad-login => возвращаемся к /sign-up
         if (location.href.endsWith(badLoginPath)) {
@@ -120,12 +146,21 @@ class SignUp extends React.Component {
         }
 
         function onFulfied(response) {
-            this.token = response.data.token;
-            this.tokenExpired = response.data.expires;
+            this.setState(
+                {
+                    token: response.data.token,
+                    tokenExpired: response.data.expires
+                }
+            );
         }
 
         function onReject(error) {
-            this.errorStatus = error.response.status;
+            this.setState(
+                {
+                    errorStatus: error.response.status,
+                }
+            );
+
             location.href += badLoginPath;
         }
 
@@ -144,9 +179,6 @@ class SignUp extends React.Component {
     }
 
     render() {
-        let x = this.errorStatus32;
-        let x1 = this.errorStatus;
-        let x2 = this.errorStatus44;
         return (
             <Router>
                 <form className="Form" onSubmit={this.signUp.bind(this)}>
@@ -170,6 +202,7 @@ class SignUp extends React.Component {
 class App extends react.Component {
     constructor(props) {
         super(props);
+
         this.state = {
             user: null,
             login: "",
@@ -185,7 +218,7 @@ class App extends react.Component {
             <Router>
                 <div className="Main">
                     <h1 style={{textAlign: "center"}}>Chat</h1>
-                    <Route exact path="/" component={SignUp}/>
+                    <Route exact path="/" component={Entering}/>
                     <Route path="/sign-in" component={SignIn}/>
                     <Route path="/sign-up" component={SignUp}/>
                 </div>

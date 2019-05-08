@@ -19,8 +19,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/SigInForm.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="160" column="23" lean-forward="true" selection-start-line="160" selection-start-column="23" selection-end-line="160" selection-end-column="23" />
+            <state relative-caret-position="430">
+              <caret line="77" column="38" selection-start-line="77" selection-start-column="38" selection-end-line="77" selection-end-column="38" />
               <folding>
                 <element signature="e#63#88#0" expanded="true" />
               </folding>
@@ -61,7 +61,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Roster</find>
       <find>FullRoster</find>
       <find>Player</find>
       <find>HashRouter</find>
@@ -83,7 +82,6 @@
       <find>sign</find>
       <find>SignInForm</find>
       <find>ф</find>
-      <find>SignIn</find>
       <find>Sign Up</find>
       <find>SignIn&quot;</find>
       <find>Chat</find>
@@ -91,6 +89,8 @@
       <find>Rout</find>
       <find>replace</find>
       <find>signUp</find>
+      <find>/sign-up/bad</find>
+      <find>SignIn</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -114,7 +114,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="100" />
     <option name="y" value="20" />
     <option name="width" value="1400" />
@@ -209,12 +209,12 @@
       <workItem from="1556993638394" duration="7809000" />
       <workItem from="1557046106188" duration="13617000" />
       <workItem from="1557079520985" duration="2565000" />
-      <workItem from="1557085637177" duration="39195000" />
+      <workItem from="1557085637177" duration="47986000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="94436000" />
+    <option name="totallyTimeSpent" value="103227000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -226,7 +226,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="-1" width="1600" height="873" extended-state="7" />
+    <frame x="0" y="-1" width="1600" height="873" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.11223843" />
@@ -243,7 +243,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.49968293" weight="0.32977304" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5028535" side_tool="true" weight="0.3471295" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="10" sideWeight="0.4971465" visible="true" weight="0.24032043" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" sideWeight="0.4971465" visible="true" weight="0.26301736" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -416,8 +416,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/SigInForm.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="160" column="23" lean-forward="true" selection-start-line="160" selection-start-column="23" selection-end-line="160" selection-end-column="23" />
+        <state relative-caret-position="430">
+          <caret line="77" column="38" selection-start-line="77" selection-start-column="38" selection-end-line="77" selection-end-column="38" />
           <folding>
             <element signature="e#63#88#0" expanded="true" />
           </folding>
