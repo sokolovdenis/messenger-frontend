@@ -6,6 +6,16 @@
   color: black;
   margin-top: 7%;
 }
+
+.ChatRoom {
+    background-color: #212121 !important;
+    /*От всего экрана*/
+    height: 100%;
+    width: 100%;
+    margin: auto;
+    position: absolute;
+}
+
 .Main {
     background-color: #212121 !important;
    /*От всего экрана*/

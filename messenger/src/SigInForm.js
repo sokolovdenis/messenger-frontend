@@ -10,7 +10,9 @@ import {HashRouter, Link, Route, NavLink} from 'react-router-dom'
 let Router = HashRouter;
 
 const api = 'http://messenger.westeurope.cloudapp.azure.com/api/authentication/'
-
+const chat = "/chat";
+const sign_in = '/sign-in'
+const sign_up = '/sign-up'
 
 class SignIn extends React.Component {
 
@@ -30,7 +32,7 @@ class SignIn extends React.Component {
     async signIn(event) {
         event.preventDefault();
         var badLoginPath = "/bad-login";
-
+        var chat = "/chat";
         var login = this.refs.login.value;
         var password = this.refs.password.value;
 
@@ -40,12 +42,15 @@ class SignIn extends React.Component {
         }
 
         function onFulfied(response) {
+            console.log("Successful signin!");
             this.setState(
                 {
                     token: response.data.token,
                     tokenExpired: response.data.expires
                 }
             );
+            location.href = location.href.replace(sign_in, '');
+            location.href += chat;
         }
 
         function onReject(error) {
@@ -70,15 +75,18 @@ class SignIn extends React.Component {
 
         return (
             <Router>
-                <form className="Form" onSubmit={this.signIn.bind(this)}>
-                    <Route exact path="/sign-in/bad-login" render={this.errorMsg}/>
-                    <input type="text" ref="login" placeholder="Login" className="FiledToFill" required/>
-                    <input type="password" ref="password" placeholder="Password" className="FiledToFill" required/>
-                    <input type="submit" value="Go!" className="Go"/>
-                    <Link to="/sign-up">
-                        <button className="Go">SignUp</button>
-                    </Link>
-                </form>
+                <div className="Main">
+                    <h1 style={{textAlign: "center"}}>Chat</h1>
+                    <form className="Form" onSubmit={this.signIn.bind(this)}>
+                        <Route exact path="/sign-in/bad-login" render={this.errorMsg}/>
+                        <input type="text" ref="login" placeholder="Login" className="FiledToFill" required/>
+                        <input type="password" ref="password" placeholder="Password" className="FiledToFill" required/>
+                        <input type="submit" value="Go!" className="Go"/>
+                        <Link to="/sign-up">
+                            <button className="Go">SignUp</button>
+                        </Link>
+                    </form>
+                </div>
             </Router>
         );
     }
@@ -94,13 +102,16 @@ class Entering extends React.Component {
     render() {
         return (
             <Router>
-                <div>
-                    <Link to="/sign-up">
-                        <button className="Go">SignUp</button>
-                    </Link>
-                    <Link to="/sign-in">
-                        <button className="Go">SignIn</button>
-                    </Link>
+                <div className="Main">
+                    <h1 style={{textAlign: "center"}}>Chat</h1>
+                    <div>
+                        <Link to="/sign-up">
+                            <button className="Go">SignUp</button>
+                        </Link>
+                        <Link to="/sign-in">
+                            <button className="Go">SignIn</button>
+                        </Link>
+                    </div>
                 </div>
             </Router>
 
@@ -146,12 +157,16 @@ class SignUp extends React.Component {
         }
 
         function onFulfied(response) {
+            console.log("Successful signup!");
+
             this.setState(
                 {
                     token: response.data.token,
                     tokenExpired: response.data.expires
                 }
             );
+            location.href = location.href.replace(sign_up, '');
+            location.href += chat;
         }
 
         function onReject(error) {
@@ -181,16 +196,38 @@ class SignUp extends React.Component {
     render() {
         return (
             <Router>
-                <form className="Form" onSubmit={this.signUp.bind(this)}>
-                    <Route exact path="/sign-up/bad-login" render={this.errorMsg.bind(this)}/>
-                    <input type="text" ref="login" placeholder="Login" className="FiledToFill" required/>
-                    <input type="password" ref="password" placeholder="Password" className="FiledToFill" required/>
-                    <input type="name" ref="name" placeholder="Name" className="FiledToFill" required/>
-                    <input type="submit" value="Go!" className="Go"/>
-                    <Link to="/sign-in">
-                        <button className="Go">SignIn</button>
-                    </Link>
-                </form>
+                <div className="Main">
+                    <h1 style={{textAlign: "center"}}>Chat</h1>
+                    <form className="Form" onSubmit={this.signUp.bind(this)}>
+                        <Route exact path="/sign-up/bad-login" render={this.errorMsg.bind(this)}/>
+                        <input type="text" ref="login" placeholder="Login" className="FiledToFill" required/>
+                        <input type="password" ref="password" placeholder="Password" className="FiledToFill" required/>
+                        <input type="name" ref="name" placeholder="Name" className="FiledToFill" required/>
+                        <input type="submit" value="Go!" className="Go"/>
+                        <Link to="/sign-in">
+                            <button className="Go">SignIn</button>
+                        </Link>
+                    </form>
+                </div>
+            </Router>
+
+        );
+    }
+
+}
+
+class ChatRoom extends React.Component {
+
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <Router>
+                <div className="ChatRoom">
+
+                </div>
             </Router>
 
         );
@@ -216,12 +253,10 @@ class App extends react.Component {
 
         return (
             <Router>
-                <div className="Main">
-                    <h1 style={{textAlign: "center"}}>Chat</h1>
-                    <Route exact path="/" component={Entering}/>
-                    <Route path="/sign-in" component={SignIn}/>
-                    <Route path="/sign-up" component={SignUp}/>
-                </div>
+                <Route exact path="/" component={Entering}/>
+                <Route path="/chat" component={ChatRoom}/>
+                <Route path="/sign-in" component={SignIn}/>
+                <Route path="/sign-up" component={SignUp}/>
             </Router>
         )
 
