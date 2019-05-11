@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Chat from './Chat.js';
-import {LoadPublicMessages, LoadUserMessages, GetUserById, GetConversations, GetUserByName} from './common.js';
+import {LoadPublicMessages, LoadUserMessages, GetUserById, GetConversations, GetUserByName, GetMe} from './common.js';
 import './Messenger.css';
 
 
@@ -29,12 +29,24 @@ class Messenger extends Component {
     this.ws = new WebSocket("ws://messenger.westeurope.cloudapp.azure.com/socket/messages?token="+localStorage.getItem("token"));
 
     this.ws.onmessage = (e) => {
-      this.LoadMessages();
+      let messages = this.state.messages;
+      messages.push(JSON.parse(e.data));
+      this.setState({"messages": messages}, () => {
+        let objDiv = document.getElementById(this.state.messages[this.state.messages.length-1].hasOwnProperty('Id') ?
+                                              this.state.messages[this.state.messages.length-1].Id :
+                                              this.state.messages[this.state.messages.length-1].id);
+        objDiv.scrollIntoView({ behavior: "smooth" });
+      });
     }
 
   }
 
   componentDidMount() {
+    GetMe()
+    .then((resp) => {
+      let users = this.state.users;
+      users.set(resp.id, resp.name);
+    });
     this.LoadMessages();
     this.LoadConversations();
   }
@@ -55,7 +67,9 @@ class Messenger extends Component {
           }
         });
       }).then(() => {
-        let objDiv = document.getElementById(this.state.messages[this.state.messages.length-1].id);
+        let objDiv = document.getElementById(this.state.messages[this.state.messages.length-1].hasOwnProperty('Id') ?
+                                              this.state.messages[this.state.messages.length-1].Id :
+                                              this.state.messages[this.state.messages.length-1].id);
         objDiv.scrollIntoView({ behavior: "smooth" });
       })
     }
@@ -63,7 +77,9 @@ class Messenger extends Component {
       LoadUserMessages(this.state.ChatId).then(messages => this.setState({"messages": messages}))
       .then(() => {
         if (this.state.messages.length > 0) {
-          let objDiv = document.getElementById(this.state.messages[this.state.messages.length-1].id);
+          let objDiv = document.getElementById(this.state.messages[this.state.messages.length-1].hasOwnProperty('Id') ?
+                                              this.state.messages[this.state.messages.length-1].Id :
+                                              this.state.messages[this.state.messages.length-1].id);
           objDiv.scrollIntoView({ behavior: "smooth" });
         }
       });

@@ -59,9 +59,9 @@ class Chat extends Component {
         <div className="Chat">
         {
           this.props.messages.map((msg, i) =>
-            <div key={msg.id} id={msg.id}>
-              <div><b>{this.props.users.get(msg.user)}</b></div>
-              <div>{msg.content}</div>
+            <div key={msg.hasOwnProperty('Id') ? msg.Id : msg.id} id={msg.hasOwnProperty('Id') ? msg.Id : msg.id}>
+              <div><b>{this.props.users.get(msg.hasOwnProperty('User') ? msg.User : msg.user)}</b></div>
+              <div>{msg.hasOwnProperty('Content') ? msg.Content : msg.content}</div>
             </div>)
         }
         </div>

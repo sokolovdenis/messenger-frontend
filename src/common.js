@@ -94,6 +94,25 @@ function GetUserByName(name) {
   })
 }
 
+function GetMe() {
+  let url = "http://messenger.westeurope.cloudapp.azure.com/api/users/me";
+  let token = localStorage.getItem("token");
+  return fetch(url,
+    {
+      'headers': {
+        'Authorization': 'Bearer ' + token
+      }
+    }
+    ).then(function (response) {
+    if (response.ok) {
+      return response.json();
+    }
+    else {
+      console.log(response);
+    }
+  })
+}
+
 function SendPublicMessage(message) {
   let url = "http://messenger.westeurope.cloudapp.azure.com/api/conversations/public/messages";
     let token = localStorage.getItem("token");
@@ -130,4 +149,4 @@ function SendPrivateMessage(message, chatId) {
     });
 }
 
-export {LoadPublicMessages, LoadUserMessages, GetUserById, GetConversations, GetUserByName, SendPublicMessage, SendPrivateMessage};
+export {LoadPublicMessages, LoadUserMessages, GetUserById, GetConversations, GetUserByName, GetMe, SendPublicMessage, SendPrivateMessage};
