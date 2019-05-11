@@ -15,7 +15,9 @@ class Messenger extends Component {
       users: new Map(),
       isPublic: true,
       ChatId: "",
-      search: ""
+      search: "",
+      searchRes: "",
+      isSearch: false
     };
 
     this.LoadMessages = this.LoadMessages.bind(this);
@@ -91,7 +93,11 @@ class Messenger extends Component {
   }
 
   handleChange(e) {
-    this.setState({"search": e.target.value});
+    this.setState({"search": e.target.value}, () => {
+      if (this.state.search === "") {
+        this.setState({"isSearch": false}, () => {this.LoadConversations();})
+      }
+    });
   }
 
   handleSubmit(e) {
@@ -99,21 +105,16 @@ class Messenger extends Component {
 
     GetUserByName(this.state.search)
     .then(resp => {
-      this.setState({"ChatId": resp[0].id, "isPublic": false, "search":""});
-      return resp[0];
-    })
-    .then( (resp) => {
-      if (!this.state.users.has(resp.id))
-          {
-            let users = this.state.users;
-            users.set(resp.id, resp.name);
-            this.setState({"users": users});
-          }
+      this.setState({"conversations": resp, "isSearch": true, "searchRes": this.state.search});
+      resp.forEach((conv, i) => {
+        if (!this.state.users.has(conv.id))
+        {
+          let users = this.state.users;
+          users.set(conv.id, conv.name);
+          this.setState({"users": users})
+        }
       })
-    .then(() => {
-      this.LoadMessages();
-      this.LoadConversations();
-    });
+    })
   }
 
   render() {
@@ -121,9 +122,10 @@ class Messenger extends Component {
       <div className="Messenger-row">
         <div className="Messenger-left">
           <form onSubmit={this.handleSubmit}>
-            <input className="Text" type='text' value={this.state.search} onChange={this.handleChange}/>
+            <input className="Text" type='search' value={this.state.search} onChange={this.handleChange}/>
             <input className="Submit" type='submit' value='search'/>
           </form>
+          {this.state.isSearch ? <h3>Search result for: {this.state.searchRes} </h3> : <h3> Conversations </h3>}
           <ul>
             {
               this.state.conversations.map((conv) => {
@@ -133,8 +135,8 @@ class Messenger extends Component {
                  </li>)
                 :
                 (
-                  <li key={conv.id} onClick={() => this.handleChatClick(false, conv.participant)}>
-                    {this.state.users.get(conv.participant)}
+                  <li key={conv.id} onClick={() => this.handleChatClick(false, this.state.isSearch ? conv.id : conv.participant)}>
+                    {this.state.isSearch ? conv.name : this.state.users.get(conv.participant)}
                  </li>
                 )
               })
