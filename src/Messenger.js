@@ -60,8 +60,10 @@ class Messenger extends Component {
     else {
       LoadUserMessages(this.state.ChatId).then(messages => this.setState({"messages": messages}))
       .then(() => {
-        let objDiv = document.getElementById(this.state.messages[this.state.messages.length-1].id);
-        objDiv.scrollIntoView({ behavior: "smooth" });
+        if (this.state.messages.length > 0) {
+          let objDiv = document.getElementById(this.state.messages[this.state.messages.length-1].id);
+          objDiv.scrollIntoView({ behavior: "smooth" });
+        }
       });
     }
   }
