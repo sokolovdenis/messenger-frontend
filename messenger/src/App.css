@@ -20,6 +20,17 @@
     font-size: x-large;
 }
 
+.ErrorBox {
+    color: whitesmoke;
+    font-size: large;
+    background-color: #e51c23;
+    height: 12%;
+    width: 63%;
+    margin: auto;
+    text-align: center;
+    position: relative;
+}
+
 .ChatRoom {
     background-color: #212121 !important;
     height: 80%;
@@ -71,6 +82,7 @@
     color: #651fff;
     border-color: #b2ebf2;
     background-color: #b2dfdb;
+    display: inline-block;
 }
 
 h1 {

@@ -25,7 +25,10 @@ class SignIn extends React.Component {
     }
 
     errorMsg() {
-        return (<div>Incorrect login or password!</div>);
+        return (
+            <div className="ErrorBox" >
+                Incorrect login or password!
+            </div>);
     }
 
     // Возвращает: token, время истечения token
@@ -143,10 +146,16 @@ class SignUp extends React.Component {
     errorMsg() {
         switch (this.state.errorStatus) {
             case 400: {
-                return (<div>Login name or password has the wrong length!</div>);
+                return (
+                    <div className="ErrorBox">
+                        Login name or password has the wrong length!
+                    </div>);
             }
             case 409: {
-                return (<div>Record already exists!</div>);
+                return (
+                    <div className="ErrorBox">
+                        Record already exists!
+                    </div>);
             }
         }
     }
@@ -264,7 +273,7 @@ class ChatRoom extends React.Component {
         await axios({
             method: 'get',
             url: api + 'users/me',
-            headers: { Authorization: `Bearer ${this.props.tokenInfo.token}` }
+            headers: {Authorization: `Bearer ${this.props.tokenInfo.token}`}
         }).then(onFulfied.bind(this), onReject.bind(this));
     }
 
@@ -272,7 +281,7 @@ class ChatRoom extends React.Component {
 
         return (
             <Router>
-                <div className="ChatRoom" >
+                <div className="ChatRoom">
                     <div className="UserBox" align="center">
                         UserName: {this.state.name}
                     </div>
@@ -286,7 +295,6 @@ class ChatRoom extends React.Component {
 
 // Класс процедуры регистрации
 class App extends react.Component {
-
 
 
     constructor(props) {
@@ -307,7 +315,7 @@ class App extends react.Component {
         return (
             <Router>
                 <Route exact path="/" component={Entering}/>
-                <Route path="/chat" render={(props) => <ChatRoom tokenInfo={this.state} {...props}/>} />
+                <Route path="/chat" render={(props) => <ChatRoom tokenInfo={this.state} {...props}/>}/>
                 <Route path="/sign-in" render={(props) => <SignIn saveToken={this.saveToken} {...props}/>}/>
                 <Route path="/sign-up" render={(props) => <SignUp saveToken={this.saveToken} {...props}/>}/>
             </Router>
