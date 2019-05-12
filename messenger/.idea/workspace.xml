@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8f22f49f-42df-4715-a3f3-19b723f9c233" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SigInForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/SigInForm.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -16,20 +15,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/App.css">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="180">
-              <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
+              <caret line="12" selection-start-line="12" selection-end-line="13" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/SigInForm.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="290">
-              <caret line="227" column="35" selection-start-line="227" selection-start-column="35" selection-end-line="227" selection-end-column="35" />
+            <state relative-caret-position="233">
+              <caret line="245" column="21" selection-start-line="245" selection-start-column="21" selection-end-line="245" selection-end-column="21" />
               <folding>
                 <element signature="e#63#88#0" expanded="true" />
               </folding>
@@ -49,9 +48,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>SignUp</find>
-      <find>FormTitle__Link</find>
-      <find>type=&quot;password&quot;</find>
       <find>$</find>
       <find>element</find>
       <find>children</find>
@@ -73,12 +69,15 @@
       <find>replace</find>
       <find>signUp</find>
       <find>/sign-up/bad</find>
-      <find>SignIn</find>
       <find>Enterin</find>
       <find>Go</find>
       <find>Go!</find>
       <find>onFul</find>
       <find>head</find>
+      <find>SignIn</find>
+      <find>onS</find>
+      <find>onF</find>
+      <find>axios</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -97,8 +96,8 @@
         <option value="$PROJECT_DIR$/src/example.css" />
         <option value="$PROJECT_DIR$/src/Router_Example.js" />
         <option value="$PROJECT_DIR$/src/index.js" />
-        <option value="$PROJECT_DIR$/src/SigInForm.js" />
         <option value="$PROJECT_DIR$/src/App.css" />
+        <option value="$PROJECT_DIR$/src/SigInForm.js" />
       </list>
     </option>
   </component>
@@ -200,12 +199,12 @@
       <workItem from="1557085637177" duration="49125000" />
       <workItem from="1557380562651" duration="3229000" />
       <workItem from="1557598833512" duration="668000" />
-      <workItem from="1557602819205" duration="4067000" />
+      <workItem from="1557602819205" duration="10917000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="112330000" />
+    <option name="totallyTimeSpent" value="119180000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -220,7 +219,7 @@
     <frame x="0" y="-1" width="1600" height="873" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.11223843" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.11223843" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -234,7 +233,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.49968293" weight="0.32977304" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5028535" side_tool="true" weight="0.3471295" />
-      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.4971465" visible="true" weight="0.2763685" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" sideWeight="0.4971465" visible="true" weight="0.24566089" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -383,20 +382,20 @@
     <entry file="file://$PROJECT_DIR$/src/index.css">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/SigInForm.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="290">
-          <caret line="227" column="35" selection-start-line="227" selection-start-column="35" selection-end-line="227" selection-end-column="35" />
-          <folding>
-            <element signature="e#63#88#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/App.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
-          <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
+          <caret line="12" selection-start-line="12" selection-end-line="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/SigInForm.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="233">
+          <caret line="245" column="21" selection-start-line="245" selection-start-column="21" selection-end-line="245" selection-end-column="21" />
+          <folding>
+            <element signature="e#63#88#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -9,10 +9,10 @@ import {HashRouter, Link, Route, NavLink} from 'react-router-dom'
 
 let Router = HashRouter;
 
-const api = 'http://messenger.westeurope.cloudapp.azure.com/api/authentication/'
+const api = 'http://messenger.westeurope.cloudapp.azure.com/api/';
 const chat = "/chat";
-const sign_in = '/sign-in'
-const sign_up = '/sign-up'
+const sign_in = '/sign-in';
+const sign_up = '/sign-up';
 
 class SignIn extends React.Component {
 
@@ -49,6 +49,14 @@ class SignIn extends React.Component {
                     tokenExpired: response.data.expires
                 }
             );
+
+            this.props.saveToken(
+                {
+                    token: response.data.token,
+                    tokenExpired: response.data.expires
+                }
+            );
+
             location.href = location.href.replace(sign_in, '');
             location.href += chat;
         }
@@ -59,7 +67,7 @@ class SignIn extends React.Component {
 
         await axios({
             method: 'post',
-            url: api + 'signin',
+            url: api + 'authentication/signin',
             headers: {
                 'content-type': 'application/json',
             },
@@ -165,6 +173,14 @@ class SignUp extends React.Component {
                     tokenExpired: response.data.expires
                 }
             );
+
+            this.props.saveToken(
+                {
+                    token: response.data.token,
+                    tokenExpired: response.data.expires
+                }
+            );
+
             location.href = location.href.replace(sign_up, '');
             location.href += chat;
         }
@@ -181,7 +197,7 @@ class SignUp extends React.Component {
 
         await axios({
             method: 'post',
-            url: api + 'signup',
+            url: api + 'authentication/signup',
             headers: {
                 'content-type': 'application/json',
             },
@@ -220,13 +236,44 @@ class ChatRoom extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            name: null,
+            id: null
+        };
+        this.getName();
+    }
+
+    async getName() {
+
+        function onFulfied(response) {
+            console.log("Successful get!");
+
+            this.setState(
+                {
+                    token: response.data.name,
+                    tokenExpired: response.data.id
+                }
+            );
+
+        }
+
+        function onReject(error) {
+            console.log("Error!")
+        }
+
+        await axios({
+            method: 'post',
+            url: api + 'users/me',
+            headers: { Authorization: `Bearer ${this.props.tokenInfo.token}` }
+        }).then(onFulfied.bind(this), onReject.bind(this));
     }
 
     render() {
+
         return (
             <Router>
-                <div className="ChatRoom">
-
+                <div className="ChatRoom" align="center">
+                        this.state.name
                 </div>
             </Router>
 
@@ -237,26 +284,30 @@ class ChatRoom extends React.Component {
 
 // Класс процедуры регистрации
 class App extends react.Component {
+
+
+
     constructor(props) {
         super(props);
 
         this.state = {
-            user: null,
-            login: "",
-            password: "",
             token: null,
             tokenExpired: null
         }
     }
+
+    saveToken = (tokenInfo) => {
+        this.setState(tokenInfo);
+    };
 
     render() {
 
         return (
             <Router>
                 <Route exact path="/" component={Entering}/>
-                <Route path="/chat" component={ChatRoom}/>
-                <Route path="/sign-in" component={SignIn}/>
-                <Route path="/sign-up" component={SignUp}/>
+                <Route path="/chat" render={(props) => <ChatRoom tokenInfo={this.state} {...props}/>} />
+                <Route path="/sign-in" render={(props) => <SignIn saveToken={this.saveToken} {...props}/>}/>
+                <Route path="/sign-up" render={(props) => <SignUp saveToken={this.saveToken} {...props}/>}/>
             </Router>
         )
 
