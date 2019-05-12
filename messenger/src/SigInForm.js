@@ -86,7 +86,7 @@ class SignIn extends React.Component {
 
         return (
             <Router>
-                <div className="Main">
+                <div className="RegisterBox">
                     <h1 style={{textAlign: "center"}}>Chat</h1>
                     <form className="Form" onSubmit={this.signIn.bind(this)}>
                         <Route exact path="/sign-in/bad-login" render={this.errorMsg}/>
@@ -113,16 +113,14 @@ class Entering extends React.Component {
     render() {
         return (
             <Router>
-                <div className="Main">
+                <div className="EnteringBox">
                     <h1 style={{textAlign: "center"}}>Chat</h1>
-                    <div>
                         <Link to="/sign-up">
                             <button className="Go">SignUp</button>
                         </Link>
                         <Link to="/sign-in">
                             <button className="Go">SignIn</button>
                         </Link>
-                    </div>
                 </div>
             </Router>
 
@@ -221,7 +219,7 @@ class SignUp extends React.Component {
     render() {
         return (
             <Router>
-                <div className="Main">
+                <div className="RegisterBox">
                     <h1 style={{textAlign: "center"}}>Chat</h1>
                     <form className="Form" onSubmit={this.signUp.bind(this)}>
                         <Route exact path="/sign-up/bad-login" render={this.errorMsg.bind(this)}/>

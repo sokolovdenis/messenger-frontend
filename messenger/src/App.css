@@ -33,23 +33,37 @@
 
 .ChatRoom {
     background-color: #212121 !important;
-    height: 80%;
-    width: 70%;
-    margin: auto;
+    height: 60%;
+    width: 60%;
     position: absolute;
+    top: 20%;
+    bottom: 0;
+    left: 20%;
+    right: 0;
+}
+
+.EnteringBox {
+    background-color: #212121 !important;
+  height: 30%;
+  width: 35%;
+  margin: auto;
+  position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
 }
 
-.Main {
+.RegisterBox {
     background-color: #212121 !important;
-   /*От всего экрана*/
-  height: 50%;
-  width: 35%;
-  margin: auto;
-  position: absolute;
+    height: 50%;
+    width: 35%;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 
 .Form {
@@ -73,12 +87,13 @@
 }
 
 .Go {
-    margin-left: 30%;
+    margin-top: 6%;
+    margin-left: 20%;
     position:relative;
-    width: 40%;
-    font-size: medium;
+    font-size: large;
     font-weight: bold;
-    height: 30%;
+    height: 60px;
+    width: 100px;
     color: #651fff;
     border-color: #b2ebf2;
     background-color: #b2dfdb;
