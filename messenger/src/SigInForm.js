@@ -250,8 +250,8 @@ class ChatRoom extends React.Component {
 
             this.setState(
                 {
-                    token: response.data.name,
-                    tokenExpired: response.data.id
+                    name: response.data.name,
+                    id: response.data.id
                 }
             );
 
@@ -262,7 +262,7 @@ class ChatRoom extends React.Component {
         }
 
         await axios({
-            method: 'post',
+            method: 'get',
             url: api + 'users/me',
             headers: { Authorization: `Bearer ${this.props.tokenInfo.token}` }
         }).then(onFulfied.bind(this), onReject.bind(this));
@@ -272,8 +272,10 @@ class ChatRoom extends React.Component {
 
         return (
             <Router>
-                <div className="ChatRoom" align="center">
-                        this.state.name
+                <div className="ChatRoom" >
+                    <div className="UserBox" align="center">
+                        UserName: {this.state.name}
+                    </div>
                 </div>
             </Router>
 

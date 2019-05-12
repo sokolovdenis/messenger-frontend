@@ -7,9 +7,21 @@
   margin-top: 7%;
 }
 
+.UserBox {
+    color: #03a9f4;
+    height: 5%;
+    width: 40%;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    font-size: x-large;
+}
+
 .ChatRoom {
     background-color: #212121 !important;
-    /*От всего экрана*/
     height: 80%;
     width: 70%;
     margin: auto;
