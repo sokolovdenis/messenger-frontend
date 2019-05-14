@@ -1,0 +1,16 @@
+
+.form-error{
+    text-align : center;
+    margin-top: 0rem;
+    margin-bottom: -1.5rem;
+    border-color: #f44336;
+    height: 1.5rem
+  }
+
+  .error-text {
+    color: #f44336;
+    font-size: 10px;
+    text-align : center;
+    margin-top: 0rem;
+    margin-bottom: 0rem;
+}

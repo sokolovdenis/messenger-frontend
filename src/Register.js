@@ -1,71 +1,92 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './Register.css';
-import { Auth } from './Utils'
-import { minLoginLength, maxLoginLength, minNameLength, maxNameLength, minPasswordLength, maxPasswordLength } from './Constants'
+import AuthService from './AuthService';
+import { minLoginLength, maxLoginLength, minNameLength, maxNameLength, minPasswordLength, maxPasswordLength } from './Constants';
+import { FormError } from "./FormError";
 
-export default class Register extends Component {
+export default class Register extends AuthService {
   constructor(props) {
     super(props)
     this.state = {
       login : "",
       name : "",
       password : "",
-      confirmedPassword : ""
+      confirmedPassword : "",
+      hasSubmit : false, // Не показываем сообщения о некорретных данных до первого submit.
+      formErrors : {
+        login : "",
+        name : "",
+        password : "",
+        confirmedPassword : "",
+      }
     };
+    this.isFormValid = this.isFormValid.bind(this);
     this.handleValidation = this.handleValidation.bind(this);
   }
 
-  handleValidation() {
-    let input = this.state;
-    let errors = {};
-    let inputIsValid = true;
-    
-    if(!input["login"]) {
-      inputIsValid = false;
-      errors["login"] = "Не может быть пустым.";
-    } else if( input["login"].length < minLoginLength || input["login"].length > maxLoginLength ) {
-      inputIsValid = false;
-      errors["login"] = `Некорректная длина логина. Длина должна быть не меньше ${minLoginLength} и не больше ${maxLoginLength}`;
+  handleValidation(name, value) {
+    let errors = this.state.formErrors;
+    switch(name) {
+      case "login":
+        if(value.length < minLoginLength || value.length > maxLoginLength ) {
+          errors["login"] = `Некорректная длина логина.\n
+          Длина должна быть не меньше ${minLoginLength} и не больше ${maxLoginLength}`;
+        } else {
+          errors["login"] = "";
+        }
+        // При смене логина убираем ошибку о повторном логине.
+        this.state.authError = "";
+        break;
+      case "name":
+        if(value.length < minNameLength || value.length > maxNameLength) {
+          errors["name"] = `Некорректная длина отображаемого имени.\n
+          "Длина должна быть не меньше ${minNameLength} и не больше ${maxNameLength}`;
+        } else {
+          errors["name"] = "";
+        }
+        break;
+      case "password":
+        if(value.length < minPasswordLength || value.length > maxPasswordLength) {
+          errors["password"] = `Некорректная длина пароля.\n
+          "Длина должна быть не меньше ${minPasswordLength} и не больше ${maxPasswordLength}`;
+        } else {
+          errors["password"] = "";
+        }
+      case "confirmedPassword":
+        if(this.state.password !== this.state.confirmedPassword) {
+          errors["confirmedPassword"] = "Пароль и подтверждение не совпадают";
+        } else {
+          errors["confirmedPassword"] = "";
+        }
+        break;
+      default:
+        break;
     }
-
-    if(!input["name"]) {
-      inputIsValid = false;
-      errors["name"] = "Не может быть пустым.";
-    } else if( input["name"].length < minNameLength || input["name"].length > maxNameLength ) {
-      inputIsValid = false;
-      errors["name"] = `Некорректная длина отображаемого имени.
-      "Длина должна быть не меньше ${minNameLength} и не больше ${maxNameLength}`;
-    }
-
-    if(!input["password"]) {
-      inputIsValid = false;
-      errors["password"] = "Не может быть пустым.";
-    } else if( input["login"].length < minPasswordLength || input["login"].length > maxPasswordLength ) {
-      inputIsValid = false;
-      errors["password"] = `Некорректная длина пароля.
-      "Длина должна быть не меньше ${minPasswordLength} и не больше ${maxPasswordLength}`;
-    } else if(input["password"] !== input['confirmedPassword']) {
-      inputIsValid = false;
-      errors["pasword"] = "Пароль и подтверждение не совпадаеют";
-    }
-
-    return inputIsValid;
+    this.setState({formErrors : errors});
   }
 
   handleInputChange = (event) => {
     const { value, name } = event.target;
-    this.setState({
-      [name]: value
-    });
+    this.setState({[name]: value},
+      () => {this.handleValidation(name, value)});
+  }
+
+  isFormValid() {
+    let errors = this.state.formErrors;
+    for(let key in errors) {
+      if(errors[key].length > 0) {
+        return false;
+      }
+    }
+    return true;
   }
 
   onSubmit = (event) => {
     event.preventDefault();
-    if(this.handleValidation()) {
-      Auth(this.state.login, this.state.password, this.state.name);
-    } else {
-
+    if(this.isFormValid()) {
+      super.Register(this.state.login, this.state.password, this.state.name);
     }
+    this.setState({hasSubmit : true});
   }
 
   render() {
@@ -84,6 +105,7 @@ export default class Register extends Component {
                 required
               /> 
             </div>
+            <FormError hasSubmit = {this.state.hasSubmit} error = {this.state.formErrors["login"]}/>
             <div>
               <input
                 className="form-item"
@@ -94,6 +116,7 @@ export default class Register extends Component {
                 required
               /> 
             </div>
+            <FormError hasSubmit = {this.state.hasSubmit} error = {this.state.formErrors["name"]}/>
             <div>
               <input
                 className="form-item"
@@ -104,6 +127,7 @@ export default class Register extends Component {
                 required
               /> 
             </div>
+            <FormError hasSubmit = {this.state.hasSubmit} error = {this.state.formErrors["password"]}/>
             <div>
               <input
                 className="form-item"
@@ -114,10 +138,11 @@ export default class Register extends Component {
                 required
               />
             </div>
+            <FormError hasSubmit = {this.state.hasSubmit} error = {this.state.formErrors["confirmedPassword"] + "\n"
+          + this.state.authError }/>
           <input className="form-submit" type="submit" value="Зарегистрировать"/>
           </form>
         </div>
-        
       </div>
     );
   }

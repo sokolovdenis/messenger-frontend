@@ -1,7 +1,7 @@
 // Константы.
 
-export const tokenStr = "token"
-export const expiresStr = "expires"
+export const tokenStr = "token";
+export const expiresStr = "expires";
 
 export const minLoginLength = 2;
 export const maxLoginLength = 50;

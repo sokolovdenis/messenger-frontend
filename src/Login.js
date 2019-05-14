@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './Login.css';
-import { Auth } from './Utils'
+import AuthSerivce from './AuthService'
 
 export default class Login extends Component {
   constructor(props) {
@@ -8,23 +8,26 @@ export default class Login extends Component {
     this.state = {
       remember : false
     };
+    this.Auth = new AuthSerivce();        
   }
+
   handleInputChange = (event) => {
     const { value, name } = event.target;
     this.setState({
       [name]: value
     });
   }
-  handleRememberChange = (event) => {
-    const { checked } = event.target;
+  handleCheckboxChange = (event) => {
+    console.log( this.state.remember );
+    const { checked, name } = event.target;
     this.setState ({
-      "remember" : checked
+      [name] : checked
     });
   }
 
   onSubmit = (event) => {
     event.preventDefault();
-    Auth(this.state.login, this.state.password, null, this.state.remember);
+    this.Auth.Login( this.state.login, this.state.password, this.state.remember);
   }
 
   render() {
@@ -59,7 +62,7 @@ export default class Login extends Component {
                 type="checkbox"
                 name="remember"
                 placeholder="Запомнить пользователя"
-                onChange={this.handleRememberChange}
+                onChange={this.handleCheckboxChange}
               />
             <label or="remember">Запомнить пользователя</label>
             </div>
