@@ -1,63 +1,68 @@
-# Курсовое задание по фронтенду
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Описание
+## Available Scripts
 
-Необходимо написать фронтенд для мессенджера.
+In the project directory, you can run:
 
-Результат предоставить в виде pull request в этот репозиторй.
+### `npm start`
 
-## Критерии приёмки
+Runs the app in the development mode.<br>
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-Для получения высшего балла должен быть реализован следующий функционал:
+The page will reload if you make edits.<br>
+You will also see any lint errors in the console.
 
-1. Регистрация и вход
-2. Поиск другого пользователя по имени
-3. Чат с другим пользователем
-4. Публичный чат со всеми пользователями
-5. Список всех своих чатов
+### `npm test`
 
-Нефункциональные требования:
-1. Приём сообщений должен быть реализован через WebSocket
-2. Корректное использование семантических HTML тегов
-3. Какое-то подобие дизайна
+Launches the test runner in the interactive watch mode.<br>
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
+### `npm run build`
 
-## Мотивация
+Builds the app for production to the `build` folder.<br>
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-Первые 5 студентов, выполнивших все функциональные и нефункциональные требования, получают высший балл автоматически, без явки на зачёт.
+The build is minified and the filenames include the hashes.<br>
+Your app is ready to be deployed!
 
-## REST API
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-http://messenger.westeurope.cloudapp.azure.com/swagger
+### `npm run eject`
 
-## Аутентификация
-Результатом вызова методов signup и signin является объект с полем token. 
-Подробнее об этих токенах: https://jwt.io/
+**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-При вызове всех остальных методов нужно подставлять полученный токен в заголовки запроса:
-```
-Authorization: Bearer eyJhbGciOiJ
-```
+If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-## Приём сообщений (push-уведомления)
+Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-WebSocket:
-ws://messenger.westeurope.cloudapp.azure.com/socket/messages?token={token}
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-Токен для аутентификации передаётся в queryString.
+## Learn More
 
-## Библиотеки
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-### Построение интерфейса
+To learn React, check out the [React documentation](https://reactjs.org/).
 
-React (обязательно): https://reactjs.org/
+### Code Splitting
 
-### Сборка фронтенда
-Можно выбрать любой:
-* Parcel: https://parceljs.org/
-* Webpack: https://webpack.js.org/
-* create-react-app: https://github.com/facebook/create-react-app/
+This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
 
-### Другие
+### Analyzing the Bundle Size
 
-По согласованию с преподавателем.
+This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+
+### Making a Progressive Web App
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+
+### Advanced Configuration
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+
+### Deployment
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+
+### `npm run build` fails to minify
+
+This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
