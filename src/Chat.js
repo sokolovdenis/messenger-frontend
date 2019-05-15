@@ -4,6 +4,7 @@ import API from './Api';
 import AuthService from './AuthService';
 import ChannelList from './ChannelList';
 import FindList from './FindList';
+import SendMessageForm from './SendMessageForm';
 
 class User {
     constructor(id, name) {
@@ -19,10 +20,12 @@ export default class Chat extends AuthService {
             search : "",
             foundUsers : [],
             channels : [],
-            activeChannel : "public",
+            added_channels : [],
+            activeChannel : new User("public", "public"),
             messages : [],
-
+            message : ""
         };
+
         this.componentWillMount = this.componentWillMount.bind(this);
         this.getActiveChannel = this.getActiveChannel.bind(this);
         this.setActiveChannel = this.setActiveChannel.bind(this);
@@ -31,6 +34,7 @@ export default class Chat extends AuthService {
         this.getFoundUsers = this.getFoundUsers.bind(this);
         this.addContact = this.addContact.bind(this);
         this.leftPane = this.leftPane.bind(this);
+        this.getMessage = this.getMessage.bind(this);
     }
 
     componentWillMount() {
@@ -44,13 +48,11 @@ export default class Chat extends AuthService {
                     channelsArray.push(new User(channels[i].id), channels[i].name);
                 }
                 this.setState({channels : channelsArray})
-                console.log( channels )
             })
             .catch(err => {
                 alert(err);
             })
         }
-        console.log(this.state.channels);
     }
     getActiveChannel() {
         return this.state.activeChannel;
@@ -87,8 +89,7 @@ export default class Chat extends AuthService {
     addContact(user) {
         let newChannels = this.state.channels;
         newChannels.push(user);
-        let activeChannel = user.name;
-        this.setState({channels : newChannels, activeChannel : activeChannel, search : ""});
+        this.setState({channels : newChannels, activeChannel : user, search : ""});
     }
 
     leftPane() {
@@ -100,27 +101,45 @@ export default class Chat extends AuthService {
     }
 
     handleFindChange = (event) => {
+        event.preventDefault()
         const { value, name } = event.target;
         this.setState({[name]: value});
         if(value) {
             this.findUsers(value);
         }
-      }
+    }
+
+    handleMessageChange = (event) => {
+        const { value, name } = event.target;
+        this.setState({[name]: value});
+    }
+
+    getMessage() { 
+        return this.state.message;
+    }
+
+    sendMessage = (event) => {
+        event.preventDefault();
+        super.Fetch(API.get_conversations + `/${this.state.activeChannel.id}/messages`, {content : this.state.message})
+        .catch(err=>{
+            alert(err);
+        })
+        event["value"] = "";
+        this.setState({message : ""})
+    }
 
     render() {
         return (
             <div className="chat">
                 <div className="find-form-div">
-                    <form className="find-form">
-                        <input
-                            className="find-form-input"
-                            type="text"
-                            name="search"
-                            placeholder="Поиск"
-                            onChange={this.handleFindChange}
-                            required
-                        /> 
-                    </form>
+                    <input
+                        className="find-form-input"
+                        type="text"
+                        name="search"
+                        value={this.state.search}
+                        placeholder="Поиск пользователя"
+                        onChange={this.handleFindChange}
+                    /> 
                 </div>
                 <div className="channel-list-div">
                 {
@@ -133,7 +152,7 @@ export default class Chat extends AuthService {
                 <div className="messages-div">
                 </div>
                 <div className="output-message-div">
-
+                    <SendMessageForm handleMessageChange={this.handleMessageChange} getMessage={this.getMessage} sendMessage={this.sendMessage}/>
                 </div>
             </div>
         );

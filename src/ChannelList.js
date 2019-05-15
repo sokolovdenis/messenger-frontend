@@ -15,7 +15,7 @@ export default class ChannelList extends Component {
             {           
                 this.getChannels().map(channel => {
                     if(channel) {
-                        if(channel.name === this.getActiveChannel()) {
+                        if(channel === this.getActiveChannel()) {
                             return (
                                 <li key={channel.name} className="channel">
                                     <p className="channel-name"><b>{channel.name}</b></p>
@@ -24,7 +24,7 @@ export default class ChannelList extends Component {
                         } else {
                             return (
                                 <li key={channel.name} className="channel">
-                                    <a onClick={()=>this.setActiveChannel(channel.name)} href="/chat#" className="channel-name">{channel.name}</a>
+                                    <a onClick={()=>this.setActiveChannel(channel)} href="/chat#" className="channel-name">{channel.name}</a>
                                 </li>
                             );
                         }
