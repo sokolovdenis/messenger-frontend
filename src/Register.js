@@ -4,6 +4,15 @@ import AuthService from './AuthService';
 import { minLoginLength, maxLoginLength, minNameLength, maxNameLength, minPasswordLength, maxPasswordLength } from './Constants';
 import { FormError } from "./FormError";
 
+function errorMessageFromCode(code) {
+  switch(code) {
+    case 409:
+      return "Логин занят другим пользователем.";
+    default:
+      return `Неизвестная ошибка. Код ${code}.`
+  }
+}
+
 export default class Register extends AuthService {
   constructor(props) {
     super(props)
@@ -18,10 +27,18 @@ export default class Register extends AuthService {
         name : "",
         password : "",
         confirmedPassword : "",
+        auth : "",
       }
     };
+    this.componentWillMount = this.componentWillMount.bind(this);
     this.isFormValid = this.isFormValid.bind(this);
     this.handleValidation = this.handleValidation.bind(this);
+  }
+
+  componentWillMount() {
+    if(super.IsLoggedIn()) {
+      this.props.history.replace("/chat");
+    }
   }
 
   handleValidation(name, value) {
@@ -35,7 +52,7 @@ export default class Register extends AuthService {
           errors["login"] = "";
         }
         // При смене логина убираем ошибку о повторном логине.
-        this.state.authError = "";
+        errors["auth"] = "";
         break;
       case "name":
         if(value.length < minNameLength || value.length > maxNameLength) {
@@ -84,7 +101,16 @@ export default class Register extends AuthService {
   onSubmit = (event) => {
     event.preventDefault();
     if(this.isFormValid()) {
-      super.Register(this.state.login, this.state.password, this.state.name);
+      super.Register(this.state.login, this.state.password, this.state.name)
+      .then( _ => {
+        this.props.history.replace("/chat");
+      })
+      .catch(err => {
+          let errors = this.state.formErrors;
+          errors["auth"] = errorMessageFromCode(err);
+          console.log(errors);
+          this.setState({formErrors : errors});
+      })
     }
     this.setState({hasSubmit : true});
   }
@@ -139,7 +165,7 @@ export default class Register extends AuthService {
               />
             </div>
             <FormError hasSubmit = {this.state.hasSubmit} error = {this.state.formErrors["confirmedPassword"] + "\n"
-          + this.state.authError }/>
+              + this.state.formErrors["auth"] }/>
           <input className="form-submit" type="submit" value="Зарегистрировать"/>
           </form>
         </div>

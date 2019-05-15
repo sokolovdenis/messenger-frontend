@@ -1,14 +1,32 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './Login.css';
-import AuthSerivce from './AuthService'
+import AuthSerivce from './AuthService';
+import { FormError } from './FormError';
 
-export default class Login extends Component {
+function errorMessageFromCode(code) {
+  switch(code) {
+    case 400:
+      return "Неверные логин/пароль.";
+    default:
+      return `Неизвестная ошибка. Код ${code}.`
+  }
+}
+
+export default class Login extends AuthSerivce {
   constructor(props) {
     super(props)
     this.state = {
+      hasSubmit : false,
+      authError : "",
       remember : false
     };
-    this.Auth = new AuthSerivce();        
+    this.componentWillMount = this.componentWillMount.bind(this);
+  }
+
+  componentWillMount() {
+    if(super.IsLoggedIn()) {
+      this.props.history.replace("/chat")
+    }
   }
 
   handleInputChange = (event) => {
@@ -17,6 +35,7 @@ export default class Login extends Component {
       [name]: value
     });
   }
+
   handleCheckboxChange = (event) => {
     console.log( this.state.remember );
     const { checked, name } = event.target;
@@ -27,7 +46,14 @@ export default class Login extends Component {
 
   onSubmit = (event) => {
     event.preventDefault();
-    this.Auth.Login( this.state.login, this.state.password, this.state.remember);
+    super.Login( this.state.login, this.state.password, this.state.remember)
+    .then(res => {
+      this.props.history.replace("/chat");
+    })
+    .catch(err => {
+       this.setState({authError: errorMessageFromCode(err)});
+    })
+    this.setState({hasSubmit : true});
   }
 
   render() {
@@ -66,18 +92,13 @@ export default class Login extends Component {
               />
             <label or="remember">Запомнить пользователя</label>
             </div>
+            <FormError hasSubmit = {this.state.hasSubmit} error = {this.state.authError}/>
           <input className="form-submit" type="submit" value="Войти"/>
           <p className="register-text">Впервые здесь? -&nbsp;
-            <a
-              href="\Register"
-              target="_blank"
-            >
-            регистрация
-            </a>
+            <a href="\Register">регистрация</a>
           </p>
           </form>
         </div>
-        
       </div>
     );
   }

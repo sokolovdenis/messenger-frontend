@@ -3,14 +3,14 @@ import {tokenStr, expiresStr} from './Constants';
 import API from './Api';
 
 function storageHasValidToken(storage) {
-    return storage.getItem(tokenStr) && (Date(storage.getItem(expiresStr)) > Date.new());
+    return storage.getItem(tokenStr) && (new Date((storage.getItem(expiresStr))) > Date.now());
 }
 
 function token() {
     if(storageHasValidToken(sessionStorage)) {
-        return sessionStorage.getItem(tokenStr);
+        return sessionStorage.getItem(tokenStr).token;
     } else if(storageHasValidToken(localStorage)) {
-        return localStorage.getItem(tokenStr);
+        return localStorage.getItem(tokenStr).token;
     }
     return null;
 }
@@ -27,35 +27,27 @@ function saveUser(token, expires, storage) {
     storage.setItem(expiresStr, expires);
 }
 
-function errorMessageFromStatus(errorStatus) {
-    switch(errorStatus) {
-        case 400:
-            return "Некорректные логин/пароль."
-        case 409:
-            return "Пользователь с таким логином уже существует."
-        default:
-            return "Непредвиденная ошибка. Попробуйте снова."
+function checkStatus(res) {
+    if(res.status !== 200) {
+        throw res.status;
     }
+
+    return res.json();
 }
 
 function auth(auth, login, password, name, remember = false ) {
-
-    fetch(name ? API.sign_up : API.sign_in, {
+    return fetch(name ? API.sign_up : API.sign_in, {
         method: 'POST',
         body: JSON.stringify(name ? {login, name, password} : {login, password}),
         headers: {
           'Content-Type': 'application/json'
         }
     })
-    .then(res => {
-        if(res.status === 200) {
-            let user = res.json;
-            saveUser(user.token, user.expires, sessionStorage);
-            if(remember) {
-                saveUser(user.token, user.expires, localStorage);
-            }
-        } else {
-            auth.setState({ authError : errorMessageFromStatus(res.status) } );
+    .then(checkStatus)
+    .then(user => {
+        saveUser(user.token, user.expires, sessionStorage);
+        if(remember) {
+            saveUser(user.token, user.expires, localStorage);
         }
     })
 }
@@ -63,9 +55,6 @@ function auth(auth, login, password, name, remember = false ) {
 export default class AuthService extends Component {
     constructor(props) {
         super(props)
-        this.state = {
-            authError : ""
-        };
         this.Register = this.Register.bind(this);
         this.Login = this.Login.bind(this);
         this.IsLoggedIn = this.IsLoggedIn.bind(this);
@@ -74,11 +63,11 @@ export default class AuthService extends Component {
     }
 
     Register(login, password, name) {
-        auth(this, login, password, name);
+        return auth(this, login, password, name);
     }
 
     Login(login, password, remember) {
-        auth(this, login, password, null, remember);
+        return auth(this, login, password, null, remember);
     }
 
     IsLoggedIn() {
