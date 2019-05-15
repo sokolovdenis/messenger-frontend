@@ -1,0 +1,14 @@
+.user-list {
+    margin-top : 0px;
+    padding-left: 20px;
+    list-style : circle;
+}
+
+.user-name {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 20px;
+    text-align : left;
+    color: black;
+}

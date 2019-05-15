@@ -8,9 +8,9 @@ function storageHasValidToken(storage) {
 
 function token() {
     if(storageHasValidToken(sessionStorage)) {
-        return sessionStorage.getItem(tokenStr).token;
+        return sessionStorage.getItem(tokenStr);
     } else if(storageHasValidToken(localStorage)) {
-        return localStorage.getItem(tokenStr).token;
+        return localStorage.getItem(tokenStr);
     }
     return null;
 }
@@ -35,7 +35,7 @@ function checkStatus(res) {
     return res.json();
 }
 
-function auth(auth, login, password, name, remember = false ) {
+function auth(login, password, name, remember = false ) {
     return fetch(name ? API.sign_up : API.sign_in, {
         method: 'POST',
         body: JSON.stringify(name ? {login, name, password} : {login, password}),
@@ -63,11 +63,11 @@ export default class AuthService extends Component {
     }
 
     Register(login, password, name) {
-        return auth(this, login, password, name);
+        return auth(login, password, name);
     }
 
     Login(login, password, remember) {
-        return auth(this, login, password, null, remember);
+        return auth(login, password, null, remember);
     }
 
     IsLoggedIn() {
@@ -77,6 +77,8 @@ export default class AuthService extends Component {
     Logout() {
         logoutFromStorage(sessionStorage);
         logoutFromStorage(localStorage);
+        
+        this.props.history.replace("/")
     }
 
     Fetch(url, options) {
@@ -88,15 +90,14 @@ export default class AuthService extends Component {
 
         // Setting Authorization header
         // Authorization: Bearer xxxxxxx.xxxxxxxx.xxxxxx
-        if (this.loggedIn()) {
-            headers['Authorization'] = 'Bearer ' + this.token();
+        if (this.IsLoggedIn()) {
+            headers['Authorization'] = 'Bearer ' + token();
         }
 
         return fetch(url, {
             headers,
             ...options
         })
-            .then(this._checkStatus)
-            .then(response => response.json)
+        .then(checkStatus);
     }
 }
