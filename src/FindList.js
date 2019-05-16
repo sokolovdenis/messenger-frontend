@@ -12,10 +12,10 @@ export default class ChannelList extends Component {
         return (
             <ul className="find-list">
             {           
-                this.getFoundUsers().map(user => {
+                this.getFoundUsers().map((user, index) => {
                     if(user) {
                         return (
-                            <li key={user.name} className="user">
+                            <li key={index} className="user">
                                 <a onClick={()=>this.addContact(user)} href="/chat#" className="user-name">{user.name}</a>
                             </li>
                         );

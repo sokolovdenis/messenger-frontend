@@ -84,7 +84,6 @@ export default class AuthService extends Component {
     Fetch(url, options) {
         // performs api calls sending the required authentication headers
         const headers = {
-            'Accept': 'application/json',
             'Content-Type': 'application/json'
         }
 

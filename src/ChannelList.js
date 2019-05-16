@@ -4,6 +4,7 @@ import './ChannelList.css';
 export default class ChannelList extends Component {
     constructor(props) {
         super(props);
+        this.getChatNameFromId = props.getChatNameFromId;
         this.getActiveChannel = props.getActiveChannel;
         this.setActiveChannel = props.setActiveChannel;
         this.getChannels = props.getChannels;
@@ -17,14 +18,14 @@ export default class ChannelList extends Component {
                     if(channel) {
                         if(channel === this.getActiveChannel()) {
                             return (
-                                <li key={channel.name} className="channel">
-                                    <p className="channel-name"><b>{channel.name}</b></p>
+                                <li key={channel} className="channel">
+                                    <p className="channel-name"><b>{this.getChatNameFromId(channel)}</b></p>
                                 </li>
                             );
                         } else {
                             return (
-                                <li key={channel.name} className="channel">
-                                    <a onClick={()=>this.setActiveChannel(channel)} href="/chat#" className="channel-name">{channel.name}</a>
+                                <li key={channel} className="channel">
+                                    <a onClick={()=>this.setActiveChannel(channel)} href="/chat#" className="channel-name">{this.getChatNameFromId(channel)}</a>
                                 </li>
                             );
                         }

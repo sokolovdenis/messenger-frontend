@@ -8,10 +8,6 @@ export default class SendMessageForm extends Component {
         this.sendMessage = props.sendMessage;
     }
 
-    submitMessage = (event) => {
-        event.value = "";
-    }
-
     render() {
         return (
           <form onSubmit={this.sendMessage} className='message-form'>
@@ -20,7 +16,7 @@ export default class SendMessageForm extends Component {
                     type="text"
                     name="message"
                     value={this.getMessage()}
-                    placeholder="Введите сообщение."
+                    placeholder="Введите сообщение"
                     onChange={this.handleMessageChange}
                     required
                 /> 
