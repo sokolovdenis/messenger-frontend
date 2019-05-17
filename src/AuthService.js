@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import {tokenStr, expiresStr} from './Constants';
-import API from './Api';
+import { API, WEBSOCKET } from './Api';
 
 function storageHasValidToken(storage) {
     return storage.getItem(tokenStr) && (new Date((storage.getItem(expiresStr))) > Date.now());
@@ -59,6 +59,7 @@ export default class AuthService extends Component {
         this.Login = this.Login.bind(this);
         this.IsLoggedIn = this.IsLoggedIn.bind(this);
         this.Logout = this.Logout.bind(this);
+        this.WebsocketUrl = this.WebsocketUrl.bind(this);
         this.Fetch = this.Fetch.bind(this);
     }
 
@@ -79,6 +80,10 @@ export default class AuthService extends Component {
         logoutFromStorage(localStorage);
         
         this.props.history.replace("/")
+    }
+
+    WebsocketUrl() {
+        return WEBSOCKET + `?token=${token()}`;
     }
 
     Fetch(url, options) {

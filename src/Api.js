@@ -2,7 +2,7 @@
 
 const API_BASE_PATH = "http://messenger.westeurope.cloudapp.azure.com/api";
 
-const API = { 
+export const API = { 
     sign_up : `${API_BASE_PATH}/authentication/signup`,
     sign_in : `${API_BASE_PATH}/authentication/signin`,
     get_conversations : `${API_BASE_PATH}/conversations`,
@@ -10,4 +10,4 @@ const API = {
     get_me : `${API_BASE_PATH}/users/me`
 };
 
-export default API;
+export const WEBSOCKET = "ws://messenger.westeurope.cloudapp.azure.com/socket/messages"

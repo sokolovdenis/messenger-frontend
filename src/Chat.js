@@ -1,7 +1,8 @@
 import React from 'react';
-import API from './Api';
+import {API} from './Api';
 import AuthService from './AuthService';
 import ChannelList from './ChannelList';
+import Websocket from 'react-websocket';
 import './Chat.css';
 import FindList from './FindList';
 import MessageList from './MessageList';
@@ -32,6 +33,7 @@ export default class Chat extends AuthService {
         this.getMessage = this.getMessage.bind(this);
         this.getMessages = this.getMessages.bind(this);
         this.getNameFromId = this.getNameFromId.bind(this);
+        this.onIncomingMessage = this.onIncomingMessage.bind(this);
     }
 
     componentWillMount() {
@@ -39,8 +41,7 @@ export default class Chat extends AuthService {
             this.props.history.replace("/");
         } else {
             super.Fetch(API.get_conversations)
-            .then(channels => {
-                let channelsArray = this.state.channels;
+            .then(channels => {let channelsArray = this.state.channels;
                 let updatedChatIdToName = this.state.chatIdToName;
                 for(let i = 0; i < channels.length; i++) {
                     channelsArray.push(channels[i].participant ? channels[i].participant : "public");
@@ -191,15 +192,51 @@ export default class Chat extends AuthService {
         .catch(err=>{
             alert(err);
         })
-        this.setState({message : ""})
+        let updatedMessages = this.state.messages;
+        updatedMessages.push({user : this.state.me.id, content : this.state.message});
+        this.setState({message : "", messages : updatedMessages});
     }
 
     getMessages() {
-        return this.state.messages.sort();
+        return this.state.messages;
     }
 
     getNameFromId(id) {
         return id === "public" ? "public" : (id in this.state.userIdToName ? this.state.userIdToName[id] : "Unknown");
+    }
+
+    onIncomingMessage(message) {
+        message = JSON.parse(message);
+        if(message.User === this.state.me) {
+            return;
+        }
+        // При смене чата заново грузим сообщения, есть смысл обрабатывать пуши только активной беседы.
+        // Ясное дело, что это не круто и можно накрутить что-то куда более разумное.
+        if(message.ConversationId === this.state.activeChannel // В случае Public-беседы
+            || message.User === this.state.activeChannel) //Для private
+        {
+            let updatedMessages = this.state.messages;
+            // Красивая капитализация у пушей!
+            updatedMessages.push({user : message.User, content : message.Content} );
+            this.setState({messages : updatedMessages});
+        } else if(message.ConversationId !== "public" // Если написал кто-то не из списка "контактов", отобразим его.
+            && this.state.channels.indexOf(message.User) === -1)
+        {
+            let updatedChannels = this.state.channels;
+            updatedChannels.push(message.User);
+            if(!(message.User in this.state.userIdToName)) {
+                super.Fetch(API.get_users + `/${message.User}`)
+                .then( user => {
+                    let updatedIdToName = this.state.userIdToName;
+                    updatedIdToName[user.id] = user.name;
+                    this.setState({userIdToName : updatedIdToName});
+                })
+                .catch(err => {
+                    alert(err);
+                })
+            }
+            this.setState({channels : updatedChannels});
+        }
     }
 
     render() {
@@ -216,9 +253,7 @@ export default class Chat extends AuthService {
                     /> 
                 </div>
                 <div className="channel-list-div">
-                {
-                    this.leftPane()
-                }
+                    {this.leftPane()}
                 </div>
                 <div className="signout-div">
                     <button className="signout-button" onClick={this.onLogout}>Выход</button>
@@ -230,6 +265,10 @@ export default class Chat extends AuthService {
                     getUserNameFromId={this.getNameFromId}
                     />
                 </div>
+                <Websocket
+                    url = {super.WebsocketUrl()}
+                    onMessage={this.onIncomingMessage}
+                />
                 <div className="output-message-div">
                     <SendMessageForm
                     handleMessageChange={this.handleMessageChange}
