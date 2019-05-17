@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import "./UserInfo.css"
 
 export default class UserInfo extends Component {
     constructor(props) {
@@ -8,8 +9,8 @@ export default class UserInfo extends Component {
 
     render() {
         return (
-            <div className="Main">
-                Hello {localStorage.getItem('my_name')}
+            <div className="Info">
+                Hello, {localStorage.getItem('my_name')}
             </div>
         );
     }

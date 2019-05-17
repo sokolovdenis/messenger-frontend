@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import {Button} from "react-bootstrap";
+import "./UserList.css"
 
 export default class UserList extends Component {
     constructor(props) {
@@ -72,20 +73,21 @@ export default class UserList extends Component {
 
                 </Form>
                 <b> {this.props.title} </b>
-                <section >
+
+                <li className="User-Item">
                     <b onClick={this.handleClick.bind(this, 'public')}>
                         Public Chat
                     </b>
 
-                </section>
+                </li>
                 {users.map(user=>
                     {
-                        return <li key={user}>
-                            <section>
-                                <b onClick={this.handleClick.bind(this, user)}>
-                                    {this.getUserName(user)}
-                                </b>
-                            </section>
+                        return <li key={user} className='User-Item'>
+
+                            <b onClick={this.handleClick.bind(this, user)}>
+                                {this.getUserName(user)}
+                            </b>
+
                         </li>
                     }
                 )

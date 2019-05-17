@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Button } from "react-bootstrap";
 import Form from 'react-bootstrap/Form'
 import "./Login.css";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
 
 export default class Login extends Component {
     constructor(props) {
@@ -74,25 +76,38 @@ export default class Login extends Component {
 
     render() {
         return (
-            <div className="Login">
-                <Form onSubmit={this.handleSubmit}>
-                    <Form.Group controlId="login">
-                        <Form.Label>Login</Form.Label>
-                        <Form.Control
-                            autoFocus
-                            type="login"
-                            value={this.state.login}
-                            onChange={this.handleChange}
-                        />
+            <div className="Login" >
+                <Form>
+                    <Form.Group as={Row} controlId="login">
+                        <Form.Label column sm="2">
+                            Login
+                        </Form.Label>
+                        <Col sm="10">
+                            <Form.Control
+                                plaintext
+                                type="login"
+                                placeholder="user_login"
+                                value = {this.state.login}
+                                onChange={this.handleChange}
+                            />
+                        </Col>
                     </Form.Group>
-                    <Form.Group controlId="password">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control
-                            value={this.state.password}
-                            onChange={this.handleChange}
-                            type="password"
-                        />
+
+                    <Form.Group as={Row} controlId="password">
+                        <Form.Label column sm="2">
+                            Password
+                        </Form.Label>
+                        <Col sm="10">
+                            <Form.Control
+                                type="password"
+                                placeholder="Password"
+                                value = {this.state.password}
+                                onChange={this.handleChange}
+                            />
+                        </Col>
                     </Form.Group>
+                </Form>
+                <Col sm="2">
                     <Button
                         block
                         disabled={!this.validateForm()}
@@ -109,7 +124,7 @@ export default class Login extends Component {
                     >
                         Register Page
                     </Button>
-                </Form>
+                </Col>
             </div>
         );
     }

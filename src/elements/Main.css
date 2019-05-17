@@ -2,12 +2,14 @@
     text-align: left;
     display: flex;
     flex-direction: row;
+    max-height: 100%;
 }
 
 
 .Main-user-list {
     background-color: darkslategray;
-    min-height: 20vh;
+    height: 95vh;
+    overflow-y: scroll;
     display: flex;
     flex-direction: column;
     font-size: 10px;
@@ -15,13 +17,27 @@
     width: 20%;
 }
 
+.Main-info {
+    min-height: 5vh;
+    max-height: 5vh;
+    width: 20%;
+    max-width: 20%;
+    display: flex;
+    flex-direction: column;
+    font-size: 10px;
+    color: white;
+}
+
 .Main-chat {
+    margin-top: 0vh;
     background-color: honeydew;
     min-height: 20vh;
+    height: 95vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    font-size: 10px;
+    overflow-y: scroll;
+    font-size: 15px;
     color: black;
     width: 80%;
 }

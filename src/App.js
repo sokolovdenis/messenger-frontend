@@ -30,8 +30,8 @@ export default class App extends Component{
             <header className="App-header">
                 Login into messenger
             </header>
-            <div>
-            <Login callback={this.updateLogin.bind(this)} />
+            <div className="App-logic">
+                <Login callback={this.updateLogin.bind(this)} />
             </div>
         </div>);
     }
@@ -41,7 +41,7 @@ export default class App extends Component{
             <header className="App-header">
                 Register new user
             </header>
-            <div>
+            <div className="App-logic">
                 <Register callback={this.updateLogin.bind(this)} />
             </div>
         </div>);

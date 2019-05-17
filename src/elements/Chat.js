@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
 import {Button} from "react-bootstrap";
+import "./Chat.css";
 
 export default class Chat extends Component {
     constructor(props) {
@@ -51,9 +52,16 @@ export default class Chat extends Component {
             <div className="Message-list">
                 {this.props.messages.map(message=>
                     {
-                        return (<li key={message.timestamp} onClick={this.handleClick.bind(this, message.user)}>
-                            {this.getUserName(message.user)} : {message.content}
-                        </li>);
+                        return (
+                            <div
+
+                                onClick={this.handleClick.bind(this, message.user)}
+                                className="Item"
+
+                            >
+                                {this.getUserName(message.user)} : {message.content}
+                            </div>
+                        );
                     }
                 )
                 }
@@ -75,7 +83,7 @@ export default class Chat extends Component {
                             disabled={!this.validateForm()}
                             type="submit"
                         >
-                            sendMessage
+                            Send Message
                         </Button>
 
                     </Form>

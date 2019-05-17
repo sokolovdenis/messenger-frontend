@@ -1,0 +1,10 @@
+.User-Item {
+    color: ivory;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    width: 100%;
+}
+
+.User-Item:hover {
+    color: yellowgreen;
+}

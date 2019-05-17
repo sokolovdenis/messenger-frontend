@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  background-color: coral;
 }
 
 
@@ -14,6 +15,12 @@
   color: white;
 }
 
+.App-logic {
+  display: flex;
+  background-color: #61dafb;
+  align-items: center;
+  justify-content: center;
+}
 .App-link {
   color: #61dafb;
 }

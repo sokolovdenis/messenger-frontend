@@ -396,9 +396,9 @@ export default class Main extends Component {
         let title = this.state.isInFindMode ? "Found Users" : "Conversation list";
         return (
             <div>
-                <div className="Main-info">
+                <header className="Main-info">
                     <UserInfo />
-                </div>
+                </header>
                 <div className="Main">
                     <div className="Main-user-list">
                         <UserList knownUserMap={this.knownUserMap}
