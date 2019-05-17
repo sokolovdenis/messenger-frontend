@@ -30,7 +30,7 @@ export default class Chat extends AuthService {
         this.getFoundUsers = this.getFoundUsers.bind(this);
         this.addContact = this.addContact.bind(this);
         this.leftPane = this.leftPane.bind(this);
-        this.getMessage = this.getMessage.bind(this);
+        this.sendMessage = this.sendMessage.bind(this);
         this.getMessages = this.getMessages.bind(this);
         this.getNameFromId = this.getNameFromId.bind(this);
         this.onIncomingMessage = this.onIncomingMessage.bind(this);
@@ -173,28 +173,18 @@ export default class Chat extends AuthService {
         }
     }
 
-    handleMessageChange = (event) => {
-        const { value, name } = event.target;
-        this.setState({[name]: value});
-    }
-
-    getMessage() { 
-        return this.state.message;
-    }
-
-    sendMessage = (event) => {
-        event.preventDefault();
+    sendMessage(message) {
         super.Fetch(
             API.get_conversations +
             `/${this.state.activeChannel}/messages`,
-            {method : "post", body: JSON.stringify({content: this.state.message})}
+            {method : "post", body: JSON.stringify({content: message})}
          )
         .catch(err=>{
             alert(err);
         })
         let updatedMessages = this.state.messages;
-        updatedMessages.push({user : this.state.me.id, content : this.state.message});
-        this.setState({message : "", messages : updatedMessages});
+        updatedMessages.push({user : this.state.me.id, content : message});
+        this.setState({messages : updatedMessages});
     }
 
     getMessages() {
@@ -207,7 +197,7 @@ export default class Chat extends AuthService {
 
     onIncomingMessage(message) {
         message = JSON.parse(message);
-        if(message.User === this.state.me) {
+        if(message.User === this.state.me.id) {
             return;
         }
         // При смене чата заново грузим сообщения, есть смысл обрабатывать пуши только активной беседы.
@@ -271,8 +261,6 @@ export default class Chat extends AuthService {
                 />
                 <div className="output-message-div">
                     <SendMessageForm
-                    handleMessageChange={this.handleMessageChange}
-                    getMessage={this.getMessage}
                     sendMessage={this.sendMessage}
                     />
                 </div>

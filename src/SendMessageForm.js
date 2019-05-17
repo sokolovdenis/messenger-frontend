@@ -3,19 +3,31 @@ import './SendMessageForm.css';
 export default class SendMessageForm extends Component {
     constructor(props) {
         super(props);
-        this.handleMessageChange = props.handleMessageChange;
-        this.getMessage = props.getMessage;
+        this.state = {
+            message : ""
+        }
         this.sendMessage = props.sendMessage;
+    }
+
+    handleMessageChange = (event) => {
+        const { value, name } = event.target;
+        this.setState({[name]: value});
+    }
+
+    onSubmit = (event) => {
+        event.preventDefault();
+        this.sendMessage(this.state.message);
+        this.setState({message : ""});
     }
 
     render() {
         return (
-          <form onSubmit={this.sendMessage} className='message-form'>
+          <form onSubmit={this.onSubmit} className='message-form'>
               <input
                     className="message-input"
                     type="text"
                     name="message"
-                    value={this.getMessage()}
+                    value={this.state.message}
                     placeholder="Введите сообщение"
                     onChange={this.handleMessageChange}
                     required
