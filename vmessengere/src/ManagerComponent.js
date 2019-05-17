@@ -4,7 +4,7 @@ import ChatList from "./ChatList.js"
 import Chat from "./Chat.js"
 import UserSearch from "./UserSearch.js"
 import { GetMe } from "./requests.js"
-import { Button } from "react-bootstrap";
+import { Button, Col, Row } from "react-bootstrap";
 import './App.css';
 
 export default class Manager extends Component {
@@ -55,8 +55,11 @@ export default class Manager extends Component {
       <div className="HolyGrail-body">
         <main className="HolyGrail-content">{
           this.state.current_chat == null
-            ? <p>Select chat</p>
-            : <Chat chatId={this.state.current_chat.participant} name={this.state.current_chat.name} />
+            ? <h1>Select chat</h1>
+            : <Chat userId={this.state.current_chat.participant}
+                chatId={this.state.current_chat.id}  
+                name={this.state.current_chat.name}
+                updateCallback={() => this.setState({})} />
         }</main>
         <nav className="HolyGrail-nav">
           <UserSearch callback={this.setChat} />
@@ -72,14 +75,15 @@ export default class Manager extends Component {
     return (
       <div className="HolyGrail">
         <header className="App-header">
-          <p style ={{display: "inline-block"}}>Welcome to VMessenger!</p>
-          {notSignedIn
+          <Row>
+          <Col><p style ={{display: "inline-block"}}>Welcome to VMessenger!</p></Col>
+          <Col>{notSignedIn
             ? <span>Anon</span>
             : <Button className="Btn-LogOut" variant="danger" type="submit" onClick={this.logOut}>
                 LogOut
               </Button>
-          }
-
+          }</Col>
+          </Row>
         </header>
         <div>
           {notSignedIn

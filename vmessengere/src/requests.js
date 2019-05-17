@@ -115,8 +115,6 @@ function SendPublicMessage(message) {
 }
 
 function SendPrivateMessage(message, chatId) {
-    console.log('send to');
-    console.log(chatId);
     let url = "http://messenger.westeurope.cloudapp.azure.com/api/conversations/" + chatId + "/messages";
     let token = localStorage.getItem("token");
 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { SendPublicMessage, SendPrivateMessage, LoadPublicMessages, LoadUserMessages, GetUserById, GetUserName } from './requests.js'
+import { Form, FormGroup, FormControl, Button, Row, Col } from "react-bootstrap";
 
 class Chat extends Component {
     constructor(props) {
@@ -7,11 +8,13 @@ class Chat extends Component {
 
         this.state = {
             message: "",
+            userId: props.userId,
             chatId: props.chatId,
             name: props.name == null ? "Public" : props.name,
             messages: [],
             loaded: true,
-            socket: null
+            socket: null, 
+            updateCallback: props.updateCallback
         }
 
         this.getMessages();
@@ -22,20 +25,25 @@ class Chat extends Component {
             let messages = this.state.messages;
             let newMessage = this.convertMessage(JSON.parse(e.data));
             console.log(newMessage);
-            this.setUserName(newMessage);
-            messages.push(newMessage);
-            this.setState({ "messages": messages }, () => {
-                let objDiv = document.getElementById(this.state.messages[this.state.messages.length - 1].hasOwnProperty('Id') ?
-                    this.state.messages[this.state.messages.length - 1].Id :
-                    this.state.messages[this.state.messages.length - 1].id);
-                objDiv.scrollIntoView({ behavior: "smooth" });
-            });
+            if (this.state.chatId == null && newMessage.user === localStorage.getItem("MyId")) {
+                this.setState({chatId: newMessage.id});
+                this.state.updateCallback();
+            }
+            if (newMessage.id === this.state.chatId) {
+                this.setUserName(newMessage);
+                messages.push(newMessage);
+                this.setState({ "messages": messages }, () => {
+                    let objDiv = document.getElementById(this.state.messages[this.state.messages.length - 1].id);
+                    objDiv.scrollIntoView({ behavior: "smooth" });
+                });
+            }
         }
     }
 
     componentWillReceiveProps(props) {
         this.setState({
             message: "",
+            userId: props.userId,
             chatId: props.chatId,
             name: props.name == null ? "Public" : props.name,
             messages: [],
@@ -75,7 +83,7 @@ class Chat extends Component {
             promise = LoadPublicMessages();
             console.log("load public");
         } else {
-            promise = LoadUserMessages(this.state.chatId);
+            promise = LoadUserMessages(this.state.userId);
         }
         promise.then(
             json => {
@@ -88,31 +96,14 @@ class Chat extends Component {
     }
 
     isPublic() {
-        return this.state.chatId == null;
+        return this.state.userId == null;
     }
 
     handleChange = (e) => {
+        console.log(e.target.value);
         this.setState({
             "message": e.target.value
         });
-    }
-
-    setUserName2(message) {
-        message.userName = localStorage.getItem(message.user);
-        if (message.userName === null) {
-            console.log('unk');
-            localStorage.setItem(message.user, "Loading");
-            message.userName = "Loading";
-            let promise = GetUserById(message.user);
-            promise.then(
-                json => {
-                    localStorage.setItem(message.user, json.name);
-                    let m = this.state.messages.find(mes => mes.id === message.id);
-                    m.userName = json.name;
-                    this.setState({});
-                }
-            );
-        }
     }
 
     setUserName(message) {
@@ -142,7 +133,7 @@ class Chat extends Component {
 
         }
         else {
-            SendPrivateMessage(this.state.message, this.state.chatId);
+            SendPrivateMessage(this.state.message, this.state.userId);
             /*.then(resp => {
                 if (resp.ok) {
                     this.state.socket.send(JSON.stringify(model));
@@ -150,7 +141,6 @@ class Chat extends Component {
             })*/
         }
 
-        document.getElementById("form").focus();
         this.setState({ "message": "" });
     }
 
@@ -167,10 +157,16 @@ class Chat extends Component {
                             </div>)
                     }
                 </div>
-                <form id="form" onSubmit={this.handleSubmit}>
-                    <input type="text" value={this.state.message} onChange={this.handleChange} />
-                    <input type="submit" value="Send" />
-                </form>
+                <Form onSubmit={this.handleSubmit}>
+                    <Row>
+                        <Col>
+                            <FormControl type="text" value={this.state.message} onChange={this.handleChange}></FormControl>
+                        </Col>
+                        <Col>
+                            <Button type="submit">Send</Button>
+                        </Col>
+                    </Row>
+                </Form>
             </div>
         )
     }

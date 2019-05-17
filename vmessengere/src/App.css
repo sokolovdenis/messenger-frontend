@@ -26,7 +26,9 @@
 .Chat {
   overflow-y: scroll;
   overflow-x: hidden;
-  height: 400px;
+  height: 600px;
+  border: solid;
+  border-color: darkgrey;
 }
 
 body {
@@ -64,11 +66,13 @@ body {
     flex: 1;
   }
   .HolyGrail-content {
+    padding: 10px;
     flex: 1;
   }
   .HolyGrail-nav, .HolyGrail-ads {
     /* 12em is the width of the columns */
-    flex: 0 0 12em;
+    flex: 0 0 16em;
+    padding: 5px;
   }
 }
 
@@ -79,6 +83,7 @@ body {
 
 .SignUp {
   display: inline-block;
+  align-content: center;
 }
 
 .Btn-LogOut {

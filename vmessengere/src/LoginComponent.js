@@ -198,7 +198,7 @@ export default class LoginComponent extends Component {
   render() {
     return (
     <div className="SignUp" >
-      <ButtonToolbar>
+      <ButtonToolbar style={{display: "block"}}>
         <Button variant="primary" onClick={this.switchToLogin}> Login </Button>
         <Button variant="success" onClick={this.switchToSignUp}> SignUp </Button>
       </ButtonToolbar>
