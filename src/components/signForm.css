@@ -1,0 +1,10 @@
+.signForm {
+  border: 4px;
+  border-style: solid;
+  border-radius: 10px;
+  border-color: blueviolet;
+  text-align: center;
+  margin-top: 150px;
+  padding: 10px;
+  padding-bottom: 15px
+}

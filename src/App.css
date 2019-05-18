@@ -1,0 +1,45 @@
+.container {
+  display: grid;
+  grid-template-columns: 10% auto 15%;
+  grid-template-rows: 50px auto 60px;
+  grid-template-areas:
+    "header header header"
+    "navigation main sidebar"
+    "footer footer footer";
+  height: 100vh;
+}
+
+.LogOut {
+  font-size: 14px;
+  float: right;
+  color:rgb(102, 102, 102);
+  border-radius: 5px;
+}
+
+.header {
+  font-size: 24px;
+  float: left;
+  color:rgb(167, 102, 158);
+  background: lightblue;
+  grid-area: header;
+  padding: 14px
+}
+
+.footer {
+  background: lightgoldenrodyellow;
+  grid-area: footer;
+}
+
+.navigation {
+  grid-area: navigation;
+}
+
+.sidebar {
+  grid-area: sidebar;
+}
+
+.main {
+  grid-area: main;
+  padding-top: 25px;
+  padding-bottom: 5px
+}
