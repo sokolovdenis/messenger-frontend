@@ -66,19 +66,23 @@ export function getPublicMessages(token, from, count) {
     });
 }
 
-export function getPrivateMessages(token, user_id, from, count) {
+export function getPrivateMessages(user_id, from, count) {
     let url = api + `api/conversations/${user_id}/messages?from=${from}&count=${count}`;
-
+    let token = localStorage.getItem("token");
     return fetch(url, {
         method: "GET",
         headers: {
             "Authorization": `Bearer ${token}`,
         },
-    }).then(function (response){
-        if(response.status >= 200 && response.status <= 299)
+    }).then(response => {
+        if(response.status >= 200 && response.status <= 299) {
+            console.log("All correct");
             return response.json();
-        else
+        }
+        else {
             console.log('error');
+            localStorage.token = "";
+        }
     });
 }
 

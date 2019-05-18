@@ -18,25 +18,20 @@ class AllChats extends Component {
 
     updateChats() {
         getAllChats().then(chats => {
-            this.setState({chats: chats});
             chats.map(chat => {
                 getUser(chat.participant).then(name => {
                     var names = this.state.names;
-                    names.set(chat.id, name.name);
-                    // chat.id = name.name;
+                    names.set(chat.participant, name.name);
+                    chat.id = name.name;
                     this.setState({names: names});
                 });
-
             });
-
+            this.setState({chats: chats});
         });
     }
 
     componentDidMount() {
-        setInterval(
-            () => this.updateChats(),
-            500,
-        );
+        this.updateChats();
     }
 
     render() {
@@ -46,7 +41,7 @@ class AllChats extends Component {
                 {
                     this.state.chats.map(chat => {
                         return (
-                            <div className="Chat_css" key={chat.id} onClick={() => this.props.onChatClick(chat.participant, this.state.names.get(chat.id))} >
+                            <div className="Chat_css" key={chat.id} onClick={() => this.props.onChatClick(chat.participant, this.state.names.get(chat.participant))} >
                                 <text>{chat.id}</text>
                                 <Message user={chat.lastMessage.user} msg={chat.lastMessage.content} time={chat.lastMessage.timestamp} />
                             </div>
