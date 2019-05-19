@@ -26,10 +26,7 @@ export default class App extends Component {
         return (
             <div className="App">
                 <div className="container">
-                    <div className="col-sm-8 col-sm-offset-2">
-                        {alert.message &&
-                        <div className={`alert ${alert.type}`}>{alert.message}</div>
-                        }
+                    <div>
                         <Router history={this.state.history}>
                             <div>
                                 <PrivateRoute exact path="/" component={Profile} />
@@ -49,10 +46,5 @@ export default class App extends Component {
                 </div>
             </div>
         )
-    }
-    tokenHandler(token) {
-        localStorage.setItem("user-token", token);
-        alert(token);
-        history.push('/');
     }
 }

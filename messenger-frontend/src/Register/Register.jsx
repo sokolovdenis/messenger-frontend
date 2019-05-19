@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import LOGIN_URL from '../helpers/consts';
 import {HidingAlert} from "../components/HidingAlert";
 import { Link } from 'react-router-dom';
+import {history} from "../helpers/history";
 
 export class Register extends Component {
 
@@ -60,11 +61,12 @@ export class Register extends Component {
                 throw error
             }
         }).then((json) => {return json.token})
-            .then((token) => this.props.handleToken(token))
+            .then((token) => this.setToken(token))
             .catch(err => {
                 Promise.resolve(err.response.text()).then(value => {this.setState({error: value});alert(value);});
             })
     }
+
 
     render() {
         return (
@@ -86,7 +88,7 @@ export class Register extends Component {
                                 </div>
                                 <div className="form-group">
                                     <label>Your password</label>
-                                    <input type="text" className="form-control" placeholder="********" name="password" value={this.state.password} onChange={this.handleChange} />
+                                    <input type="password" className="form-control" placeholder="********" name="password" value={this.state.password} onChange={this.handleChange} />
                                 </div>
                                 <div className="form-group">
                                     <button type="submit" className="btn btn-success btn-block"> Register</button>
@@ -98,5 +100,10 @@ export class Register extends Component {
                 </div>
             </div>
         )
+    }
+
+    setToken(token) {
+        localStorage.setItem("user-token", token);
+        history.push('/');
     }
 }
