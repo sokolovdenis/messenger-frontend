@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import { Router, Route } from 'react-router-dom';
-import { createBrowserHistory } from 'history';
+import { history } from './helpers/history';
 import logo from './logo.svg';
 
 import './App.css';
-import {PrivateRoute} from "./helpers/PrivateRoute";
+import {PrivateRoute} from "./components/PrivateRoute";
 import {Profile} from "./Profile/Profile";
 import {Login} from "./Login";
+import {Register} from "./Register";
 
 export default class App extends Component {
 
@@ -14,11 +15,12 @@ export default class App extends Component {
         super();
 
         this.state = {
-            history: createBrowserHistory()
+            history: history,
         };
 
-        //this.tokenRecieveHandler = this.tokenRecieveHandler.bind(this);
     }
+
+
 
     render() {
         return (
@@ -31,13 +33,26 @@ export default class App extends Component {
                         <Router history={this.state.history}>
                             <div>
                                 <PrivateRoute exact path="/" component={Profile} />
-                                <Route path="/login" component={Login} />
-
+                                <Route path="/login"
+                                       render={(routeProps) => (
+                                           <Login handleToken={(token) => this.tokenHandler(token)} />
+                                       )}
+                                />
+                                <Route path="/register"
+                                       render={(routeProps) => (
+                                           <Register handleToken={(token) => this.tokenHandler(token)} />
+                                       )}
+                                />
                             </div>
                         </Router>
                     </div>
                 </div>
             </div>
         )
+    }
+    tokenHandler(token) {
+        localStorage.setItem("user-token", token);
+        alert(token);
+        history.push('/');
     }
 }

@@ -1,4 +1,4 @@
-npm install --save bootstrap{
+{
   "name": "messenger-frontend",
   "version": "0.1.0",
   "private": true,
