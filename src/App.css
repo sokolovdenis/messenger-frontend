@@ -1,0 +1,93 @@
+.App {
+    width: 400px;
+}
+
+.Messenger {
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+    width: inherit;
+    background-color: azure;
+    border: 3px solid lightgray;
+}
+
+.SignIn {
+    width: inherit;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-content: center;
+    text-align: center;
+    background-color: azure;
+    border: 3px solid lightgray;
+}
+
+.SignForm {
+    width: inherit;
+    display: flex;
+    flex-direction: column;
+}
+
+.SignUp {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: inherit;
+    align-content: center;
+    text-align: center;
+    background-color: azure;
+    border: 3px solid lightgray;
+}
+
+.MessengerHeader {
+    font-size: 50px;
+    font-style: oblique;
+    color: dimgrey;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.PostForm {
+    align-content: center;
+    width: inherit;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    margin-bottom: 5%;
+    margin-top: 5%;
+}
+
+#element {
+    align-content: center;
+    height: 30px;
+    margin: 1% 5%;
+}
+
+.Message {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    margin-left: 5%;
+    margin-right: 5%;
+    border: 1px solid lightgray;
+    height: fit-content;
+}
+
+.MessageHeader {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    font-weight: bold;
+    color: cadetblue;
+}
+
+.Conversation {
+    width: inherit;
+    display: flex;
+    flex-direction: column;
+}
+
+#content {
+    font-size: 26px;
+}
