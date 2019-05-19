@@ -1,0 +1,25 @@
+.message-list {
+    position: relative;
+}
+
+.message-list-history {
+    height: 79vh;
+    padding: 0px 20px 0px 20px;
+    overflow-y: auto;
+}
+
+.message-list-header {
+    height: 7vh;
+    padding: 2vh 0px 0px 20px; 
+    overflow:hidden; 
+    border-bottom:1px solid #c4c4c4;
+}
+
+.message-list-header p {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 200%;
+}
+
+.message-list-header p:first-letter {
+    text-transform: uppercase;
+}

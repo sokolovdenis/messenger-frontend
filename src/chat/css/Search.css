@@ -1,0 +1,23 @@
+.search {
+    height: 7vh;
+    padding:2vh 29px 10px 20px; 
+    overflow:hidden; 
+    border-bottom:1px solid #cdcdcd;
+    background: #ffffff;
+
+}
+
+.search_form {
+    display: inline-block;
+    text-align: left;
+    width: 100%;
+    padding: 2px 0 4px 6px;
+  }
+
+.search_bar {
+    border:1px solid #cdcdcd;
+    border-width:0 0 1px 0;
+    width:80%;
+    padding:2px 0 4px 6px;
+    background: #ffffff;
+}

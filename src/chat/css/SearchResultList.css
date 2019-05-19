@@ -1,0 +1,4 @@
+.inbox-chat {
+    height: 86vh;
+    overflow-y: scroll;
+}
