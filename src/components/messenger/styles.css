@@ -1,0 +1,116 @@
+.Message {
+    display: flex;
+    flex-direction: column;
+    margin: 1em 2em;
+    background-color: #e1e1e1;
+    border-radius: 1em;
+    padding: 0.2em 0.5em;
+    width: fit-content;
+    min-width: 20em;
+    max-width: 50em;
+    align-items: flex-start;
+}
+
+.Me {
+    align-self: flex-end;
+    background-color: #c1cdff;
+}
+
+.Message-User {
+    color: #4f70fb;
+    margin: 0.3em 1em;
+}
+
+.Message-Time {
+    margin: 0.3em 1em;
+    align-self: flex-end;
+    color: #959595;
+}
+
+.Message-Content {
+    margin: 0.3em 1em;
+    text-after-overflow: 0;
+}
+
+.Message-List {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow-y: scroll;
+    font-size: 1rem;
+}
+
+.Message-List::-webkit-scrollbar {
+    width: 0;
+}
+
+.Chat {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    flex-grow: 1;
+}
+
+.Message-Text-Area {
+    display: flex;
+    justify-content: center;
+    margin: 0 0;
+    background: #393939;
+    padding: 2rem;
+}
+
+.Message-Input {
+    min-width: 90%;
+    max-width: 90%;
+    min-height: 2rem;
+    height: fit-content;
+    font-size: 1.2rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    border-width: 1px;
+    overflow-y: scroll;
+}
+
+.Message-Input::-webkit-scrollbar {
+    width: 0;
+}
+
+.Message-Input:focus {
+    outline: none;
+}
+
+.Messenger {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+}
+
+.Conversation-List {
+    background-color: #393939;
+    overflow-y: scroll;
+    width: 25rem;
+}
+
+.Conversation-List::-webkit-scrollbar {
+    width: 0;
+}
+
+.Conversation {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.7rem;
+    margin: 0.7em 0.7em;
+    padding: 0.3em 0;
+    background-color: #6a6a6a;
+}
+
+.Conversation:hover {
+    background-color: #4f70fb;
+}
+
+.Participant {
+    color: #d9d9d9;
+    text-align: center;
+    font-size: 1.3em;
+    margin: 0.2em 1em;
+}

@@ -1,0 +1,19 @@
+.App {
+
+}
+
+.App-header {
+    height: 4rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.App-body {
+    position: absolute;
+    top: 4rem;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
