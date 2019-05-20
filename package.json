@@ -1,0 +1,20 @@
+{
+  "name": "my-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-native": "^0.59.8",
+    "react-router-dom": "^5.0.0",
+    "react-scripts": "0.9.5",
+    "react-holy-grail-layout": "latest"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
