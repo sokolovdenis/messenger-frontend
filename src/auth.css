@@ -1,0 +1,47 @@
+#auth-block {
+    margin-top: 40px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 20px;
+}
+
+.input-name {
+    font-size: 15px;
+    left: 0px;
+}
+
+.input-field {
+    font-size: 20px;
+    background-color: #20051c;
+    color: #ffffff;
+}
+
+#password-field {
+    -webkit-text-security: circle;
+}
+
+#sign-in-button {
+    padding: 10px;
+    background-color: #20051c;
+    width: 100px;
+    margin-top: 20px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#sign-in-button:hover {
+    background-color: #ff2e00;
+    cursor: pointer;
+}
+
+#sign-up-button {
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+#sign-up-button:hover {
+    cursor: pointer;
+    color: #ff2e00;
+}

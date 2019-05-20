@@ -1,0 +1,28 @@
+#main {
+    margin-top: 40px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 20px;
+}
+
+.button {
+    margin: 5px;
+    padding: 10px;
+    width: 300px;
+    background-color: #20051c;
+    color: white;
+    text-decoration: none;
+}
+
+.button:hover {
+    cursor: pointer;
+    background-color: #ff2e00;
+}
+
+#search-field {
+    font-size: 20px;
+    margin: 5px;
+    background-color: #20051c;
+    color: white;
+}
