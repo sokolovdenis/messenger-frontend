@@ -1,0 +1,42 @@
+.container {
+  padding-top: 66px;
+}
+
+.__conversation__card__list {
+  height: 80vh;
+  overflow-y: auto;
+}
+
+.__find__user__list {
+  height: 10vh;
+  overflow-y: auto;
+}
+
+.__messages {
+  height: 79vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.__send__message {
+  padding-top: 1vh;
+  height: 10vh;
+}
+
+.__message,
+.__conversation__card,
+.__find__user__result {
+  background: #343a40;
+  color: #FFFFFF;
+  padding: 4px;
+  margin: 4px;
+  text-align: left;
+  position: relative;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
+
+.__date {
+  text-align: right;
+}
