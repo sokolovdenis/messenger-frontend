@@ -45,7 +45,71 @@ class SignUp extends Component {
     render() {
 
         return (
-            <form onSubmit={this.handleSubmit} className="signForm">
+            <form autoComplete='off' className='form' onSubmit={this.handleSubmit}>
+                <div className='control'>
+                    <h1>
+                        Sign Up
+                    </h1>
+                </div>
+                <div className='control block-cube block-input'>
+                    <input name='username' placeholder='Login' type='text' onChange={this.handleLoginChange}/>
+                    <div className='bg-top'>
+                        <div className='bg-inner'></div>
+                    </div>
+                    <div className='bg-right'>
+                        <div className='bg-inner'></div>
+                    </div>
+                    <div className='bg'>
+                        <div className='bg-inner'></div>
+                    </div>
+                </div>
+                <div className='control block-cube block-input'>
+                    <input name='password' placeholder='Password' type='password' onChange={this.handlePasswordChange}/>
+                    <div className='bg-top'>
+                        <div className='bg-inner'></div>
+                    </div>
+                    <div className='bg-right'>
+                        <div className='bg-inner'></div>
+                    </div>
+                    <div className='bg'>
+                        <div className='bg-inner'></div>
+                    </div>
+                </div>
+                <div className='control block-cube block-input'>
+                    <input name='name' placeholder='Username' type='text' onChange={this.handleNameChange}/>
+                    <div className='bg-top'>
+                        <div className='bg-inner'></div>
+                    </div>
+                    <div className='bg-right'>
+                        <div className='bg-inner'></div>
+                    </div>
+                    <div className='bg'>
+                        <div className='bg-inner'></div>
+                    </div>
+                </div>
+                <button className='btn block-cube block-cube-hover' type='submit'>
+                    <div className='bg-top'>
+                        <div className='bg-inner'></div>
+                    </div>
+                    <div className='bg-right'>
+                        <div className='bg-inner'></div>
+                    </div>
+                    <div className='bg'>
+                        <div className='bg-inner'></div>
+                    </div>
+                    <div className='text'>
+                        Sign Up
+                    </div>
+                </button>
+            </form>
+        );
+
+    }
+}
+
+
+/*
+<form onSubmit={this.handleSubmit} className="signForm">
                 <h3>Sign up, please</h3>
                 <label>
                     Login:
@@ -80,9 +144,5 @@ class SignUp extends Component {
                 <br />
                 <input type="submit" value='Sign up!'/>
             </form>
-        );
-
-    }
-}
-
+ */
 export default SignUp;

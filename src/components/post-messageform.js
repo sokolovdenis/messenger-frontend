@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {postPublicMessage} from "./api";
+import './post-messageform.css'
 
 class PostMessageForm extends Component {
     constructor(props) {
@@ -19,18 +20,18 @@ class PostMessageForm extends Component {
     handleSubmit(event) {
         event.preventDefault();
 
-        postPublicMessage(this.props.token, this.state.value).then(msg => {
+        postPublicMessage(this.props.token, this.state.message).then(message => {
             this.setState({
-                message: ''
+                message: message
             })
         })
     }
 
     render() {
         return (
-            <form onSubmit={this.handleSubmit}>
-                <input type='text' value={this.state.message} onChange={this.handleChange} required autoFocus/>
-                <input type='submit' value='Send!'/>
+            <form className={'postBox'} onSubmit={this.handleSubmit}>
+                <input className={'messageInput'} placeholder='Enter your message' type='text' value={this.state.message} onChange={this.handleChange} required autoFocus />
+                <input className={'messageSendButton'} type='submit' value='Send!'/>
             </form>
         );
     }

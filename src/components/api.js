@@ -16,9 +16,9 @@ export function postPublicMessage(token, content) {
         body: JSON.stringify(model),
     }).then(response => {
         if (response.status >= 200 && response.status <= 299) {
-            console.log("Message is posted");
+            console.log("postPublicMessage Ok");
         } else {
-            console.log("Error while posting public msg");
+            console.log("postPublicMessage Not Ok");
         }
     });
 }
@@ -34,9 +34,10 @@ export function getPublicMessages(token, from, count) {
         },
     }).then(response => {
             if (response.status >= 200 && response.status <= 299) {
+                console.log("getPublicMessagesOK");
                 return response.json();
             } else {
-                console.log("getPublicMessages()->fetch(): response status is NOT ok" );
+                console.log("getPublicMessages not OK");
             }
         })
 }
@@ -49,12 +50,7 @@ export function signin(login, password) {
         "password": password,
     };
 
-    console.log('signin() -> model: ', model);
-
     let url = api + 'api/authentication/signin';
-
-    console.log('signin() -> url: ', url);
-
 
     return fetch(url, {
         method: 'POST',
@@ -64,10 +60,10 @@ export function signin(login, password) {
         body: JSON.stringify(model),
     }).then(response => {
         if (response.status >= 200 && response.status <= 299) {
-            console.log("All correct");
+            console.log("signin OK");
             return response.json();
         } else {
-            console.log("We have some bugs, try later");
+            console.log("signin Not OK");
         }
     }).then(json => {
         console.log(json.token);
@@ -94,10 +90,10 @@ export function signup(login, password, name) {
         body: JSON.stringify(model),
     }).then(function (response) {
         if (response.status >= 200 && response.status <= 299) {
-            console.log("All correct");
+            console.log("Signup OK");
             return response.json();
         } else {
-            console.log("We have some bugs, try later");
+            console.log("Signup not OK");
         }
     }).then(json => {
         return json.token;
@@ -113,15 +109,16 @@ export function getUserInfo(userId) {
     return fetch(url, {
         method: "GET",
         headers:  {
-            'Authorization': 'Bearer ' + token,
+            "Authorization": `Bearer ${token}`,
             'content-type': 'application/json'
         }
     })
         .then(response => {
             if (response.status >= 200 && response.status <= 299) {
+                console.log("GetUserInfo OK");
                 return response.json();
             } else {
-                return "";
+                console.log("GetUserInfo not OK");
             }
         })
 }

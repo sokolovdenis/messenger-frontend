@@ -8,10 +8,8 @@ class App extends Component {
         super(props);
         this.state = {
             token: localStorage.getItem('token'),
-            hasAccount: false
         };
 
-        console.log("App -> constructor(): state.token = " + this.state.token);
         this.tokenReceiveHandler = this.tokenReceiveHandler.bind(this);
         this.tokenRemoveHandler = this.tokenRemoveHandler.bind(this);
     }
@@ -21,7 +19,6 @@ class App extends Component {
             token: token,
         });
         localStorage.setItem('token', token);
-        console.log("App -> tokenReceiveHandler(token) with token = " + token);
     }
 
     tokenRemoveHandler() {
@@ -33,43 +30,29 @@ class App extends Component {
     }
 
     render() {
-        console.log("App -> render() -> this.state.token " + this.state.token);
+
+        let isSignedIn = (this.state.token !== null);
 
         return (
-            <div className="container">
-                <div className="header">
-                    <strong>Best chat ever</strong>
-                    <button className="LogOut" onClick={this.tokenRemoveHandler}>
-                        LogOut
-                    </button>
-                </div>
-                <div class="navigation"></div>
-                <div class="sidebar"></div>
-                <div className="main">
-                    {
-                        this.state.token !== null ?
-                            <Messenger token={this.state.token} /> :
-                            <div>
-                                {
-                                    this.state.hasAccount ?
-                                        <div>
-                                            <SignIn onTokenReceive={this.tokenReceiveHandler} />
-                                            <button onClick={() => {this.setState({hasAccount: false})}}> {"SignUp"} </button>
-                                        </div> :
-                                        <div>
-                                            <SignUp onTokenReceive={this.tokenReceiveHandler} />
-                                            <button onClick={() => {this.setState({hasAccount: true})}}> {
-                                                <label>
-                                                    SignIn
-                                                </label>
-                                            } </button>
-                                        </div>
-                                }
-                            </div>
-                    }
-                </div>
-                <div className="footer"></div>
+        <div>
+            <div>
+                {
+                    isSignedIn ?
+                        <Messenger token={this.state.token} onTokenRemove={this.tokenRemoveHandler}/> :
+                        <div>
+                            <SignIn onTokenReceive={this.tokenReceiveHandler}/>
+                            <SignUp onTokenReceive={this.tokenReceiveHandler}/>
+                        </div>
+                }
             </div>
+
+            <div className="LogOutButton">
+            {
+                isSignedIn ?
+                    <button onClick={this.tokenRemoveHandler}> {"SignOut"} </button> : ""
+            }
+            </div>
+        </div>
         )
     }
 }

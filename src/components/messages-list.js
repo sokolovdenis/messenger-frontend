@@ -18,7 +18,6 @@ class MessagesList extends Component {
         this.socket = new WebSocket(`ws://messenger.westeurope.cloudapp.azure.com/socket/messages?token=${this.props.token}`);
 
         this.socket.onmessage = (event) => {
-            console.log("MessagesList -> socket.onmessage");
             let oldMessages = this.state.messages;
             let newMessage = JSON.parse(event.data);
             newMessage = {
@@ -47,9 +46,6 @@ class MessagesList extends Component {
     }
 
     componentDidMount() {
-        // setInterval(() => {
-        //     this.loadNewMessages(this.props.token)
-        // }, 10000);
         this.loadNewMessages(this.props.token)
         console.log("MessagesList -> componentDidMount()");
     }

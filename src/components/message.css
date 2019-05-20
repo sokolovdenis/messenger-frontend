@@ -1,0 +1,27 @@
+.container {
+    border: 2px solid #dedede;
+    background-color: #212121;
+    border-radius: 0px;
+
+    padding: 10px;
+    margin: 10px 0;
+
+    color: #fff;
+    font-family: monospace, serif;
+    letter-spacing: 0.05em;
+    font-size: 16px;
+}
+
+.time-right {
+    float: right;
+    color: #fff;
+    font-family: monospace, serif;
+    letter-spacing: 0.05em;
+    font-size: 16px;
+}
+
+.container::after {
+    content: "";
+    clear: both;
+    display: table;
+}
