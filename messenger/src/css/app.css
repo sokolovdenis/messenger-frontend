@@ -1,4 +1,49 @@
 @import "https://fonts.googleapis.com/css?family=Roboto:400,700";
+@font-face {
+  font-family: "chatapp";
+  src: url("./fonts/chatapp.eot");
+  src: url("./fonts/chatapp.eot?#iefix") format("embedded-opentype"), url("./fonts/chatapp.woff") format("woff"), url("./fonts/chatapp.ttf") format("truetype"), url("./fonts/chatapp.svg#chatapp") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+[data-icon]:before {
+  font-family: "chatapp" !important;
+  content: attr(data-icon);
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+[class^=icon-]:before,
+[class*=" icon-"]:before {
+  font-family: "chatapp" !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-edit-modify-streamline:before {
+  content: "a";
+}
+
+.icon-settings-streamline-1:before {
+  content: "c";
+}
+
+.icon-paperplane:before {
+  content: "b";
+}
+
 body, html {
   margin: 0;
   padding: 0;
@@ -24,14 +69,35 @@ body {
 .app-messenger .header {
   display: flex;
   height: 50px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 .app-messenger .header .left {
   width: 20%;
+  position: relative;
 }
-.app-messenger .header .left .actions {
+.app-messenger .header .left .left-action {
+  position: absolute;
+  left: 8px;
+  top: 0;
+}
+.app-messenger .header .left .right-action {
+  position: absolute;
+  right: 8px;
+  top: 0;
+}
+.app-messenger .header .left h2 {
   line-height: 50px;
-  padding: 0 10px;
+  font-size: 20px;
+  font-weight: 600;
+  display: block;
+  text-align: center;
+}
+.app-messenger .header .left button {
+  background: none;
+  line-height: 50px;
+  border: 0 none;
+  font-size: 20px;
+  cursor: pointer;
 }
 .app-messenger .header .content {
   flex-grow: 1;
@@ -68,9 +134,10 @@ body {
 }
 .app-messenger .main .sidebar-left {
   width: 20%;
-  border-right: 1px solid rgba(0, 0, 0, 0.5);
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
 }
 .app-messenger .main .content {
+  max-width: 60%;
   flex-grow: 1;
   overflow: hidden;
   display: flex;
@@ -80,7 +147,7 @@ body {
   flex-grow: 1;
 }
 .app-messenger .main .content .messenger-input {
-  border-top: 1px solid rgba(0, 0, 0, 0.5);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
   height: 80px;
   display: flex;
   flex-direction: row;
@@ -92,6 +159,7 @@ body {
   width: 100%;
   height: 80px;
   border: 0 none;
+  font-size: 14px;
 }
 .app-messenger .main .content .messenger-input .actions button.send {
   background: #76b852;
@@ -102,7 +170,7 @@ body {
 }
 .app-messenger .main .sidebar-right {
   width: 20%;
-  border-left: 1px solid rgba(0, 0, 0, 0.5);
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .messages {
@@ -112,36 +180,53 @@ body {
   height: 100%;
 }
 .messages .message {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  margin: 15px;
-  padding: 20px;
-}
-.messages .message .message-user-image img {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
+  padding: 10px;
+  align-self: end;
 }
 .messages .message .message-body {
+  display: flex;
   padding-left: 10px;
 }
+.messages .message .message-body .message-user-image {
+  float: left;
+}
+.messages .message .message-body .message-user-image img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+.messages .message .message-body .message-author {
+  padding-left: 10px;
+}
+.messages .message .message-body .time {
+  padding-left: 10px;
+  font-size: 10px;
+}
 .messages .message .message-body .message-text {
+  padding-left: 10px;
+  border: solid;
   background: #2c3e50;
   color: #FFF;
   padding: 10px;
   border-radius: 10px;
+  font-size: 14px;
 }
 .messages .message.me {
-  justify-content: flex-start;
+  text-align: start;
+  float: right;
 }
 .messages .message.me .message-body .message-text {
   background: #76b852;
 }
 
+.channels {
+  overflow-y: auto;
+  height: 100%;
+}
 .channels .channel {
+  cursor: pointer;
   display: flex;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   padding: 5px 0;
 }
 .channels .channel .channel-image img {
@@ -155,35 +240,185 @@ body {
   padding-left: 10px;
 }
 .channels .channel .channel-info h2 {
-  font-size: 14px;
+  font-size: 16px;
 }
-.channels .channel .channel-info p {
+.channels .channel .channel-info .time {
+  float: right;
   font-size: 10px;
 }
-
-.members .member {
+.channels .channel .channel-info .bottom {
   display: flex;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.5);
-  padding: 5px 0;
 }
-.members .member .member-image {
-  padding-left: 8px;
+.channels .channel .channel-info .bottom .author.me {
+  border: solid;
+  background: #76b852;
+  color: #FFF;
+  padding-left: 2px;
+  border-radius: 5px;
+  font-size: 12px;
 }
-.members .member .member-image img {
+.channels .channel .channel-info .bottom p {
+  border: 4px solid rgba(0, 0, 0, 0.01);
+  border-radius: 5px;
+  font-size: 12px;
+}
+.channels .channel.active {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.toolbar {
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+}
+.toolbar label {
+  line-height: 50px;
+}
+.toolbar input {
+  height: 30px;
+  line-height: 30px;
+  margin-top: 10px;
+  border: 0 none;
+}
+.toolbar .search-user {
+  min-width: 180px;
+  position: absolute;
+  left: 0;
+  top: 50px;
+  z-index: 1;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: 0 none;
+}
+.toolbar .search-user .user-list {
+  display: flex;
+  flex-direction: column;
+}
+.toolbar .search-user .user-list .user {
+  display: flex;
+  flex-direction: row;
+  padding: 5px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  background: #FFFFFF;
+  cursor: pointer;
+}
+.toolbar .search-user .user-list .user img {
   width: 30px;
   height: 30px;
   border-radius: 50%;
   margin-top: 10px;
 }
-.members .member .member-info {
+.toolbar .search-user .user-list .user h2 {
+  padding-left: 8px;
   flex-grow: 1;
-  padding-left: 10px;
-}
-.members .member .member-info h2 {
   font-size: 14px;
 }
-.members .member .member-info p {
-  font-size: 10px;
+
+.user-bar {
+  position: relative;
+}
+.user-bar button.login-btn {
+  height: 50px;
+  border: 0 none;
+  background: none;
+  color: #76b852;
+  font-weight: 600;
+  font-size: 14px;
+}
+.user-bar .user-form {
+  background: #FFF;
+  box-shadow: -1px 1px 1px rgba(0, 0, 0, 0.09);
+  position: absolute;
+  top: 50px;
+  right: 0;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: 0 none;
+  padding: 10px;
+}
+.user-bar .user-form .form-item label {
+  line-height: 30px;
+  min-width: 75px;
+  text-align: right;
+  margin-right: 8px;
+}
+.user-bar .user-form .form-item input[type=login], .user-bar .user-form .form-item input[type=password], .user-bar .user-form .form-item input[type=text] {
+  height: 30px;
+  line-height: 30px;
+}
+.user-bar .user-form .form-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+.user-bar .profile-name {
+  font-size: 16px;
+}
+.user-bar .user-menu {
+  background: #FFF;
+  box-shadow: -1px 1px 1px rgba(0, 0, 0, 0.09);
+  min-width: 200px;
+  position: absolute;
+  right: 0;
+  top: 50px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: 0 none;
+}
+.user-bar .user-menu ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.user-bar .user-menu ul li {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 8px;
+}
+.user-bar .user-menu ul li button {
+  background: none;
+  border: 0 none;
+  display: block;
+  cursor: pointer;
+  text-align: center;
+  width: 100%;
+}
+.user-bar .user-menu ul li:hover {
+  background: rgba(0, 0, 0, 0.09);
+}
+
+.form-item {
+  display: flex;
+  margin-bottom: 10px;
+}
+.form-item label {
+  font-weight: 600;
+}
+.form-item input[type=login], .form-item input[type=password], .form-item input[type=text] {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 3px 8px;
+}
+
+.form-actions button {
+  border: 0 none;
+  padding: 7px 15px;
+  text-align: center;
+}
+.form-actions button.primary {
+  background: #76b852;
+  color: #FFF;
+}
+
+.app-message {
+  line-height: 1.5em;
+  padding: 10px;
+  font-size: 12px;
+  text-align: center;
+  border: 1px solid #76b852;
+  border-radius: 5px;
+  margin: 0 0 10px 0;
+}
+.app-message.error {
+  background: #e74c3c;
+  color: #FFF;
+  border-color: #e74c3c;
 }
 
 /*# sourceMappingURL=app.css.map */
