@@ -69,34 +69,36 @@ export class Login extends Component {
 
     render() {
         return (
-            <div className="row">
-                <div className="col-md-6 mx-auto my-auto">
-                    <div className="card">
-                        <article className="card-body">
-                            <Link to="/register" className="float-right btn btn-outline-primary">Register</Link>
-                            <h4 className="card-title mb-4 mt-1">Sign in</h4>
-                            <form name="form" onSubmit={this.handleSubmit}>
-                                <div className="form-group">
-                                    <label>Your username</label>
-                                    <input type="text" class="form-control" placeholder="Username" name="username" value={this.state.username} onChange={this.handleChange} />
-                                </div>
-                                <div className="form-group">
-                                    <label>Your password</label>
-                                    <input type="password" className="form-control" placeholder="********" name="password" value={this.state.password} onChange={this.handleChange} />
-                                </div>
-                                <div className="form-group">
-                                    <button type="submit" className="btn btn-primary btn-block"> Login</button>
-                                </div>
-                                <HidingAlert msg={this.state.error} />
-                            </form>
-                        </article>
+            <main>
+                <div className="row">
+                    <div className="col-md-6 mx-auto my-auto">
+                        <div className="card">
+                            <article className="card-body">
+                                <Link to="/register" className="float-right btn btn-outline-primary">Register</Link>
+                                <h4 className="card-title mb-4 mt-1">Sign in</h4>
+                                <form name="form" onSubmit={this.handleSubmit}>
+                                    <div className="form-group">
+                                        <label>Your username</label>
+                                        <input type="text" class="form-control" placeholder="Username" name="username" value={this.state.username} onChange={this.handleChange} />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Your password</label>
+                                        <input type="password" className="form-control" placeholder="********" name="password" value={this.state.password} onChange={this.handleChange} />
+                                    </div>
+                                    <div className="form-group">
+                                        <button type="submit" className="btn btn-primary btn-block"> Login</button>
+                                    </div>
+                                    <HidingAlert msg={this.state.error} />
+                                </form>
+                            </article>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </main>
+
         )
     }
     setToken(token) {
-        localStorage.setItem("user-token", token);
-        history.push('/');
+        this.props.handleToken(token);
     }
 }

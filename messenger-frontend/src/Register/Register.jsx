@@ -70,40 +70,41 @@ export class Register extends Component {
 
     render() {
         return (
-            <div className="row">
-                <div className="col-md-6 mx-auto my-auto">
-                    <div className="card">
-                        <article className="card-body">
-                            <Link to="/login" className="float-right btn btn-outline-success">Log in</Link>
-                            <h4 className="card-title mb-4 mt-1">Register</h4>
-                            <form name="form" onSubmit={this.handleSubmit}>
-                                <div className="form-group">
-                                    <label>Your name</label>
-                                    <input type="text" className="form-control" placeholder="John Smith" name="name"
-                                           value={this.state.name} onChange={this.handleChange}/>
-                                </div>
-                                <div className="form-group">
-                                    <label>Your username</label>
-                                    <input type="text" class="form-control" placeholder="username" name="username" value={this.state.username} onChange={this.handleChange} />
-                                </div>
-                                <div className="form-group">
-                                    <label>Your password</label>
-                                    <input type="password" className="form-control" placeholder="********" name="password" value={this.state.password} onChange={this.handleChange} />
-                                </div>
-                                <div className="form-group">
-                                    <button type="submit" className="btn btn-success btn-block"> Register</button>
-                                </div>
-                                <HidingAlert msg={this.state.error} />
-                            </form>
-                        </article>
+            <main>
+                <div className="row">
+                    <div className="col-md-6 mx-auto my-auto">
+                        <div className="card">
+                            <article className="card-body">
+                                <Link to="/login" className="float-right btn btn-outline-success">Log in</Link>
+                                <h4 className="card-title mb-4 mt-1">Register</h4>
+                                <form name="form" onSubmit={this.handleSubmit}>
+                                    <div className="form-group">
+                                        <label>Your name</label>
+                                        <input type="text" className="form-control" placeholder="John Smith" name="name"
+                                               value={this.state.name} onChange={this.handleChange}/>
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Your username</label>
+                                        <input type="text" className="form-control" placeholder="username" name="username" value={this.state.username} onChange={this.handleChange} />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Your password</label>
+                                        <input type="password" className="form-control" placeholder="********" name="password" value={this.state.password} onChange={this.handleChange} />
+                                    </div>
+                                    <div className="form-group">
+                                        <button type="submit" className="btn btn-success btn-block"> Register</button>
+                                    </div>
+                                    <HidingAlert msg={this.state.error} />
+                                </form>
+                            </article>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </main>
         )
     }
 
     setToken(token) {
-        localStorage.setItem("user-token", token);
-        history.push('/');
+        this.props.handleToken(token);
     }
 }
