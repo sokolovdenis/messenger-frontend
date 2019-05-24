@@ -1,0 +1,34 @@
+body, html {
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+
+.MessengerContainer {
+    height: 100%;
+}
+
+
+
+.ChatContainer {
+    padding: 0px;
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+}
+.ChatListContainer {
+    height: 100%;
+    padding: 0px;
+}
+
+.ChatMessagesContainer {
+    flex-grow : 1;
+    overflow: auto;
+    padding: 0px;
+    margin: 0px;
+    margin-bottom: 3px;
+}
+
+.ChatTextFieldContainer {
+    height: 100px;
+}

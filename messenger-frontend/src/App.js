@@ -35,9 +35,8 @@ export default class App extends Component {
 
     render() {
         return (
-            <div className="App">
+            <div className="App h-100">
                 <Router history={this.state.history}>
-                    <div>
                         <PrivateRoute exact path="/" component={Messenger} token={this.state.token}/>
                         <Route path="/login"
                                render={(routeProps) => (
@@ -49,7 +48,6 @@ export default class App extends Component {
                                    <Register handleToken={(token) => this.tokenHandler(token)} />
                                )}
                         />
-                    </div>
                 </Router>
             </div>
         )

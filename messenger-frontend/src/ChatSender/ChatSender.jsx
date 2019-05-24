@@ -19,7 +19,7 @@ export class ChatSender extends Component {
     handleSubmit(e) {
         e.preventDefault();
         this.props.handleSendMessage(this.state.message);
-        this.state.message = '';
+        this.setState({message:''});
     }
 
     render() {

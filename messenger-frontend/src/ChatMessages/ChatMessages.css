@@ -1,0 +1,23 @@
+.speech-bubble-me {
+    position: relative;
+    background: lightgreen;
+    border-radius: .4em;
+    width: 30%;
+    padding-left: 3px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    margin: 3px;
+}
+.speech-bubble-other {
+    position: relative;
+    background: lightgray;
+    border-radius: .4em;
+    width: 30%;
+    padding-left: 3px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    margin: 3px;
+}
+.userCaption {
+    color: grey;
+}
