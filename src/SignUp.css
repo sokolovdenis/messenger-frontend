@@ -1,0 +1,18 @@
+.SignUp {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-around;
+    color: white;
+    margin-right: 170px;
+}
+
+.inputSignUp {
+    margin-bottom: 10px;
+}
+
+.inputSignUp_error {
+    margin-bottom: 10px;
+    background: rgb(187, 94, 94);
+}

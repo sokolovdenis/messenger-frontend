@@ -1,0 +1,26 @@
+.Message-container {
+    margin-top: 15px;
+    border: 1px solid #FFC107;
+    border-radius: 8px;
+    padding: 10px 25px;
+    width: 100%;
+    color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+.User {
+    align-self: flex-start;
+}
+
+.Content {
+    align-self: center;
+    word-break: break-all;
+}
+
+.Time {
+    align-self: flex-end;
+}
+
+
+

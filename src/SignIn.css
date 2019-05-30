@@ -1,0 +1,17 @@
+.SignIn {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-around;
+    color: white;
+}
+
+.inputSignIn {
+    margin-bottom: 10px;
+}
+
+.inputSignIn_error {
+    margin-bottom: 10px;
+    background: rgb(187, 94, 94);
+}
