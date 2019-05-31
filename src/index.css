@@ -1,0 +1,194 @@
+body {
+  font: 14px "Century Gothic", Futura, sans-serif;
+  margin: 20px;
+}
+
+.logoImg {
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+}
+
+.profileImg {
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+}
+
+header{
+    display:flex;
+    flex-direction:row;
+}
+
+div {
+    border-radius: 10px;
+}
+
+button {
+    border-radius: 10px;
+}
+
+.inputText{
+
+  border-radius: 10px;
+  width: 200px;
+  height: 20px;
+}
+
+.submitButton{
+  border-radius: 10px;
+  width: 90%;
+  height: auto;
+  margin-left: 5%;
+  margin-top: 5%;
+}
+
+.logout {
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    align-content: center;
+}
+
+.bodyLike{
+    display:flex;
+    flex-direction:row;
+}
+.dialog{
+    width: 100px;
+    flex-direction:column;
+}
+.dialogButton{
+    height: 40px;
+    width: 100%;
+}
+
+.block-name{
+
+}
+
+.message-block{
+    display: grid;
+    grid-template-columns: 40px auto;
+    grid-template-rows: 50% 50%;
+    grid-template-areas:
+        "logo name"
+        "logo text1";
+}
+
+.logo {grid-area: logo}
+.block-name {grid-area: name}
+.block-text {grid-area: text1}
+
+
+
+
+.message-activity{
+    background-color: lightgray;
+    padding: 10px 10px 10px 10px;
+    width: 250px;
+    height: auto;
+    border-radius: 10px;
+}
+
+.message-part{
+    padding: 10px 10px 10px 10px;
+    width: auto;
+    height: 50%;
+}
+
+.writing-message{
+    background-color: indianred;
+    padding: 10px 10px 10px 10px;
+    width: auto;
+    height: auto;
+}
+
+.message-block{
+    background-color: aliceblue;
+    padding: 10px 10px 10px 10px;
+    width: auto;
+    height: auto;
+    border-color: black;
+}
+
+.registration1{
+    background-color: lightgray;
+    width: 250px;
+    height: auto;
+    border-radius: 10px;
+}
+
+
+.reg2{
+    padding: 10px 10px 10px 10px;
+    display: grid;
+    grid-template-columns: 70px auto;
+    grid-template-rows: 25px 25px 25px 25px 25px 25px;
+    grid-template-areas:
+            "regLogo regLogo"
+            "regMail regMailText"
+            "regPass regPassText"
+            "regName regNameText"
+            "regDate regDateText"
+            "regSubmit regSubmit";
+    width: 100px;
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+}
+
+.reg2 > input {
+
+    border-radius: 10px;
+    border-color: #8fd19e;
+}
+.regMessengerLogo{grid-area: regLogo}
+.formText1{grid-area: regMail}
+.inputText1{grid-area: regMailText}
+.formText2{grid-area: regPass}
+.inputText2{grid-area: regPassText}
+.formText3{grid-area: regName}
+.inputText3{grid-area: regNameText}
+.formText4{grid-area: regDate}
+.inputText4{grid-area: regDateText}
+.regSubmitButton{grid-area: regSubmit}
+.regMessengerLogo{
+    grid-area: regLogo;
+    text-align: center;
+}
+
+
+.profile-page{
+    padding: 10px 10px 10px 10px;
+    background-color: lightgray;
+    width: 120px;
+    height: auto;
+
+    display: grid;
+    grid-template-columns: 70px auto;
+    grid-template-rows: 25px 25px auto;
+    grid-template-areas:
+            "userLogo userName"
+            "moveToDialog userAge"
+            "userInfo userInfo";
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+}
+
+.userLogo{grid-area: userLogo}
+.userName{grid-area: userName}
+.userAge{grid-area: userAge}
+.userInfo{grid-area: userInfo}
+
+.moveToDialog{
+    grid-area: moveToDialog;
+    background-color: lightslategrey; /* Green */
+    border: none;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 10px;
+}
+
+
